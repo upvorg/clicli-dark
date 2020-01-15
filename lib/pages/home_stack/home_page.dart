@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:clicili_dark/api/post.dart';
-import 'package:clicili_dark/pages/home_stack/post_card.dart';
+import 'package:clicili_dark/pages/search_page.dart';
+import 'package:clicili_dark/widgets//post_card.dart';
 import 'package:clicili_dark/widgets/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -95,25 +96,23 @@ class _HomePageState extends State<HomePage>
     if (data.length < 1) {
       return Center(child: CircularProgressIndicator());
     }
-    return
-      RefreshIndicator(
-          key: k,
-          onRefresh: _refreshData,
-          child: GridView.builder(
-            itemBuilder: (BuildContext ctx, int i) {
-              return PostCard(data[i]);
-            },
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisSpacing: 15.0,
-              mainAxisSpacing: 20.0,
-              crossAxisCount: 2,
+    return RefreshIndicator(
+        key: k,
+        onRefresh: _refreshData,
+        child: GridView.builder(
+          itemBuilder: (BuildContext ctx, int i) {
+            return PostCard(data[i]);
+          },
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisSpacing: 15.0,
+            mainAxisSpacing: 20.0,
+            crossAxisCount: 2,
 //              childAspectRatio: 2 / 1.7,
-            ),
-            itemCount: data.length,
-            controller: _scrollController,
-            padding: EdgeInsets.all(10.0),
-          ));
-
+          ),
+          itemCount: data.length,
+          controller: _scrollController,
+          padding: EdgeInsets.all(10.0),
+        ));
   }
 
   get appbar => FixedAppBar(
@@ -121,6 +120,7 @@ class _HomePageState extends State<HomePage>
         title: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               TabBar(
                 controller: _tabController,
@@ -141,6 +141,18 @@ class _HomePageState extends State<HomePage>
                   (index) => Tab(text: tabs[index]),
                 ),
               ),
+              IconButton(
+                icon: Icon(
+                  Icons.search,
+                  color: Theme.of(context).primaryColor,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => SearchPage()));
+                },
+              )
             ],
           ),
         ),

@@ -31,7 +31,7 @@ dev_dependencies:
   fluttertoast: any
   flutter_svg: any
   dio: any
-  cached_network_image: ^2.0.0
+  cached_network_image: any
   video_player: any
   chewie: any
 

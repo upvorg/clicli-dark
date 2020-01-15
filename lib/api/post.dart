@@ -22,6 +22,10 @@ getVideoList(int pid) {
       'https://api.clicli.us/videos?pid=$pid&page=1&pageSize=150');
 }
 
-Future<Response>  getPlayUrl(String url) {
+Future<Response> getPlayUrl(String url) {
   return NetUtils.get('https://jx.clicli.us/jx?url=$url');
+}
+
+getSearch(key) {
+  return NetUtils.get('https://api.clicli.us/search/posts?key=$key');
 }

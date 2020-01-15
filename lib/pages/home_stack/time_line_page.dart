@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:clicili_dark/api/post.dart';
-import 'package:clicili_dark/pages/home_stack/post_card.dart';
+import 'package:clicili_dark/widgets//post_card.dart';
 import 'package:clicili_dark/widgets/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
