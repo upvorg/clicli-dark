@@ -58,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<bool> doubleBackExit() {
     int now = DateTime.now().millisecondsSinceEpoch;
-    if (now - lastBack > 800) {
+    if (now - lastBack > 1000) {
       showShortToast("再按一次退出应用");
       lastBack = DateTime.now().millisecondsSinceEpoch;
     } else {

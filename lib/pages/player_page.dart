@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:chewie/chewie.dart';
 import 'package:clicili_dark/api/post.dart';
 import 'package:clicili_dark/utils/reg_utils.dart';
+import 'package:clicili_dark/utils/toast_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,6 +28,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
 
   Map detail;
   List videoList;
+  Map videoSrc = {};
   int currPlayIndex = 0;
   bool isLoading = true;
 
@@ -45,16 +47,41 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
     detail = res;
     isLoading = false;
 
-    print(res['uqq']);
     setState(() {});
     initPlayer();
   }
 
-  initPlayer() {
-    final src = videoList[currPlayIndex]['content'];
+  initPlayer() async {
+    final _src = videoList[currPlayIndex]['content'];
+
+    debugPrint('start playing origin $currPlayIndex $_src');
+
+    if (videoSrc[currPlayIndex] == null) {
+      final _videoSrc = (await getPlayUrl(_src)).data['url'];
+      videoSrc[currPlayIndex] = _videoSrc;
+    }
+    final src = videoSrc[currPlayIndex];
+
+    if (src == null ||
+        (src is String && (src.length < 1 || src.endsWith('.m3u8')))) {
+      showCenterErrorShortToast('视频地址错误');
+    }
+
+    debugPrint('start playing $currPlayIndex $src');
 
     //https://vt1.doubanio.com/201902111139/0c06a85c600b915d8c9cbdbbaf06ba9f/view/movie/M/302420330.mp4
     _videoPlayerController = VideoPlayerController.network(src);
+
+    _videoPlayerController.addListener(() {
+      final int pos =
+          _videoPlayerController.value.position?.inMilliseconds ?? 0;
+      final int total =
+          _videoPlayerController.value.duration?.inMilliseconds ?? 0;
+
+      if (pos - total > 0) {
+        toggleVideo(currPlayIndex + 1);
+      }
+    });
 
     _chewieController = ChewieController(
       videoPlayerController: _videoPlayerController,
@@ -80,10 +107,12 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
         ]);
       }
     });
+    setState(() {});
   }
 
   toggleVideo(int i) {
-    if (i == currPlayIndex) return;
+    if (i == currPlayIndex || i > videoList.length - 1) return;
+
     if (_videoPlayerController != null) {
       _videoPlayerController.pause();
       _videoPlayerController.seekTo(Duration(seconds: 0));
@@ -133,7 +162,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
               children: <Widget>[
                 Theme(
                   data: ThemeData(
-                    dialogBackgroundColor: Colors.white.withOpacity(0.2),
+                    dialogBackgroundColor: Colors.transparent,
                     primarySwatch: Colors.purple,
                     iconTheme: Theme.of(context)
                         .iconTheme
@@ -202,10 +231,11 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
           Text(
             detail['title'],
           ),
+          SizedBox(height: 10),
           Row(
             children: <Widget>[
               Text(
-                '${widget.id}  ',
+                'gv ${widget.id}  ',
                 style: Theme.of(context).textTheme.caption,
               ),
               Text(
@@ -244,7 +274,9 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
                     toggleVideo(i);
                   },
                   child: Container(
-                    color: Color.fromRGBO(148, 108, 230, 0.2),
+                    color: i == currPlayIndex
+                        ? Color.fromRGBO(148, 108, 230, 0.5)
+                        : Color.fromRGBO(148, 108, 230, 0.2),
                     child: Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 15),
