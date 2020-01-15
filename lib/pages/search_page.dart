@@ -19,6 +19,7 @@ class _SearchPageState extends State<SearchPage> {
   int page = 1;
   List data;
   String key;
+  bool isLoading = false;
 
   Duration durationTime = Duration(milliseconds: 500);
   Timer timer;
@@ -36,11 +37,14 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<void> _loadData({reset = false}) async {
-    print('load');
     if (key.length < 1) {
       data = [];
       return;
     }
+
+    setState(() {
+      isLoading = true;
+    });
 
     final _page = reset ? 1 : page + 1;
     final res = (await getSearch(key)).data;
@@ -52,7 +56,7 @@ class _SearchPageState extends State<SearchPage> {
       data.addAll(jsonDecode(res)['posts']);
       page = _page;
     }
-
+    isLoading = false;
     setState(() {});
   }
 
@@ -99,20 +103,28 @@ class _SearchPageState extends State<SearchPage> {
                 ],
               ),
             ),
-            Expanded(
-              child: data == null
-                  ? Container()
-                  : data.length > 1
-                      ? GridView.count(
-                          controller: _scrollController,
-                          crossAxisSpacing: 15.0,
-                          mainAxisSpacing: 20.0,
-                          padding: EdgeInsets.all(10.0),
-                          crossAxisCount: 2,
-                          children: data.map((f) => PostCard(f)).toList(),
-                        )
-                      : Center(child: Text('这里什么都没有')),
-            )
+            if (data != null)
+              Expanded(
+                child: isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : data.length > 1
+                        ? GridView.count(
+                            controller: _scrollController,
+                            crossAxisSpacing: 15.0,
+                            mainAxisSpacing: 20.0,
+                            padding: EdgeInsets.all(10.0),
+                            crossAxisCount: 2,
+                            children: data.map((f) => PostCard(f)).toList(),
+                          )
+                        : Center(
+                            child: Text(
+                            '这里什么都没有 (⊙x⊙;)',
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 16,
+                            ),
+                          )),
+              )
           ],
         ),
       ),
