@@ -45,7 +45,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
     final videoRes = jsonDecode((await getVideoList(widget.id)).data)['videos'];
     final res = jsonDecode((await getPostDetail(widget.id)).data)['result'];
 
-    videoList = videoRes;
+    videoList = videoRes ?? [];
     detail = res;
     isLoading = false;
 
@@ -54,6 +54,8 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
   }
 
   initPlayer() async {
+    if (videoList.length < 1) return;
+
     final _src = videoList[currPlayIndex]['content'];
 
     debugPrint('start playing origin $currPlayIndex $_src');
@@ -75,16 +77,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
     //https://vt1.doubanio.com/201902111139/0c06a85c600b915d8c9cbdbbaf06ba9f/view/movie/M/302420330.mp4
     _videoPlayerController = VideoPlayerController.network(src);
 
-    _videoPlayerController.addListener(() {
-      final int pos =
-          _videoPlayerController.value.position?.inMilliseconds ?? 0;
-      final int total =
-          _videoPlayerController.value.duration?.inMilliseconds ?? 0;
-
-      if (pos - total > 0) {
-        toggleVideo(currPlayIndex + 1);
-      }
-    });
+    _videoPlayerController.addListener(autoNextLis);
 
     _chewieController = ChewieController(
       videoPlayerController: _videoPlayerController,
@@ -102,15 +95,27 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
       looping: false,
     );
 
-    _chewieController.addListener(() {
-      if (!_chewieController.isFullScreen) {
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.portraitUp,
-          DeviceOrientation.portraitDown,
-        ]);
-      }
-    });
+    _chewieController.addListener(fullScreenLis);
     setState(() {});
+  }
+
+  fullScreenLis() {
+    if (!_chewieController.isFullScreen) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
+    }
+  }
+
+  autoNextLis() {
+    final int pos = _videoPlayerController.value.position?.inMilliseconds ?? 0;
+    final int total =
+        _videoPlayerController.value.duration?.inMilliseconds ?? 0;
+
+    if (pos - total > 0) {
+      toggleVideo(currPlayIndex + 1);
+    }
   }
 
   toggleVideo(int i) {
@@ -131,6 +136,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
 
   disposeV() {
     Wakelock.disable();
+    _chewieController.removeListener(fullScreenLis);
     _videoPlayerController?.dispose();
     _chewieController?.dispose();
     _chewieController = _videoPlayerController = null;
@@ -141,6 +147,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
     super.dispose();
     disposeV();
 
+    _videoPlayerController.removeListener(autoNextLis);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
@@ -308,6 +315,6 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
   }
 
   Widget buildComments() {
-    return Center(child: Text('敬请期待'));
+    return Center(child: Text('根据法律法规, 禁止访问 (○｀ 3′○)'));
   }
 }

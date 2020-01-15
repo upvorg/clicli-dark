@@ -29,3 +29,7 @@ Future<Response> getPlayUrl(String url) {
 getSearch(key) {
   return NetUtils.get('https://api.clicli.us/search/posts?key=$key');
 }
+
+getRank(key) {
+  return NetUtils.get('https://api.clicli.us/rank');
+}

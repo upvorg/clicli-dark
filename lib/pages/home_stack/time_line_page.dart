@@ -35,7 +35,6 @@ class _TimeLineState extends State<TimeLinePage> {
       final t = f['time'] + ''.replaceAll('-', '/');
       final day = DateTime.parse(t).weekday - 1;
 
-      print('$day $f');
       if (data[day] == null) data[day] = [];
       data[day].add(f);
     });

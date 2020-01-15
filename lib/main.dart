@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Future.value(false);
   }
 
-  Widget get comingSoon => Center(child: Text('敬 请 期 待'));
+  Widget get comingSoon => Center(child: Text('根据法律法规, 禁止访问 (○｀ 3′○)'));
 
   @override
   void initState() {

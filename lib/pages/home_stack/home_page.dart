@@ -141,17 +141,33 @@ class _HomePageState extends State<HomePage>
                   (index) => Tab(text: tabs[index]),
                 ),
               ),
-              IconButton(
-                icon: Icon(
-                  Icons.search,
-                  color: Theme.of(context).primaryColor,
-                ),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => SearchPage()));
-                },
+              Row(
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(
+                      Icons.show_chart,
+                      color: Theme.of(context).primaryColor,
+                    ),
+//                    onPressed: () {
+//                      Navigator.push(
+//                          context,
+//                          MaterialPageRoute(
+//                              builder: (BuildContext context) => SearchPage()));
+//                    },
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.search,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => SearchPage()));
+                    },
+                  ),
+                ],
               )
             ],
           ),

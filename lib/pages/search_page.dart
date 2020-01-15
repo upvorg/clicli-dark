@@ -81,15 +81,20 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                   Expanded(
                       child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 5),
+                    margin: EdgeInsets.fromLTRB(0, 5, 15, 5),
+                    height: 40,
                     decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                      color: Theme.of(context).primaryColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
                     child: TextField(
+                      maxLines: 1,
+                      autofocus: true,
                       decoration: InputDecoration(
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 5, horizontal: 10)),
+                        border: InputBorder.none,
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                      ),
                       onChanged: (v) {
                         key = v;
                         timer?.cancel();
