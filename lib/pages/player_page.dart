@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
+import 'package:wakelock/wakelock.dart';
 
 //https://stackoverflow.com/questions/52431109/flutter-video-player-fullscreen
 class PlayerPage extends StatefulWidget {
@@ -35,6 +36,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
+    Wakelock.enable();
     getDetail();
     super.initState();
   }
@@ -65,6 +67,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
     if (src == null ||
         (src is String && (src.length < 1 || src.endsWith('.m3u8')))) {
       showCenterErrorShortToast('视频地址错误');
+      return;
     }
 
     debugPrint('start playing $currPlayIndex $src');
@@ -127,6 +130,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
   }
 
   disposeV() {
+    Wakelock.disable();
     _videoPlayerController?.dispose();
     _chewieController?.dispose();
     _chewieController = _videoPlayerController = null;

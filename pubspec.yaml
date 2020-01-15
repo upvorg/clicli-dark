@@ -34,6 +34,7 @@ dev_dependencies:
   cached_network_image: any
   video_player: any
   chewie: any
+  wakelock: any
 
 
 # For information on the generic Dart part of this file, see the
