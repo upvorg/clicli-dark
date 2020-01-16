@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:clicili_dark/pages/home_stack/home_page.dart';
 import 'package:clicili_dark/pages/home_stack/time_line_page.dart';
-import 'package:clicili_dark/pages/home_stack/ugc_page.dart';
 import 'package:clicili_dark/utils/dio_utils.dart';
 import 'package:clicili_dark/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +23,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'CLICLI Dark',
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
@@ -39,7 +37,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  static final List<String> pagesTitle = ['首页', '应用', '消息', '我的'];
   static final List<String> pagesIcon = [
     'assets/home.svg',
     'assets/time.svg',
@@ -68,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Future.value(false);
   }
 
-  Widget get comingSoon => Center(child: Text('根据法律法规, 禁止访问 (○｀ 3′○)'));
+  static Widget get comingSoon => Center(child: Text('根据法律法规, 禁止访问 (○｀ 3′○)'));
 
   @override
   void initState() {
@@ -83,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Scaffold(
         body: IndexedStack(
           // TODO 懒加载
-          children: <Widget>[HomePage(), TimeLinePage(), UGCPage(), comingSoon],
+          children: <Widget>[HomePage(), TimeLinePage()],
           index: _tabIndex,
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -91,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
           onTap: _selectedTab,
           type: BottomNavigationBarType.fixed,
           items: [
-            for (int i = 0; i < pagesTitle.length; i++)
+            for (int i = 0; i < pagesIcon.length; i++)
               BottomNavigationBarItem(
                 title: SizedBox.shrink(),
                 icon: SvgPicture.asset(
