@@ -45,10 +45,10 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    super.initState();
     _tabController = TabController(length: 2, vsync: this);
     Wakelock.enable();
     getDetail();
-    super.initState();
   }
 
   getDetail() async {
@@ -59,13 +59,13 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
     detail = res;
     isLoading = false;
 
+    setState(() {});
     initPlayer();
   }
 
   initPlayer() async {
     if (videoList.length < 1) {
       playerLoaded = true;
-      setState(() {});
       return;
     }
 
@@ -76,13 +76,10 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
         (src is String && (src.length < 1 || src.endsWith('.m3u8')))) {
       showCenterErrorShortToast('视频地址错误');
       playerLoaded = true;
-      setState(() {});
       return;
     }
 
-    setState(() {
-      playerLoading = true;
-    });
+    playerLoading = true;
 
     debugPrint('start playing $currPlayIndex $src');
 
@@ -218,6 +215,14 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
                               aspectRatio: 16 / 9,
                               child: Container(
                                 color: Colors.black,
+                                child: Center(
+                                  child: const Text(
+                                    '加载中···',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                     ),
