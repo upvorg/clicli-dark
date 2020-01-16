@@ -40,23 +40,19 @@ class NetUtils {
         queryParameters: data,
       );
 
-  static Future<Response> getWithHeaderSet(String url, {
+  static Future<Response> getWithHeaderSet(
+    String url, {
     data,
     headers,
   }) async =>
       await dio.get(
         url,
         queryParameters: data,
-        options: Options(
-
-        ),
+        options: Options(),
       );
 
-
-  static Future<Response> post(String url, {data}) async =>
-      await dio.post(
+  static Future<Response> post(String url, {data}) async => await dio.post(
         url,
         data: data,
       );
-
 }

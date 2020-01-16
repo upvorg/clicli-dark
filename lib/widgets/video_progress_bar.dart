@@ -2,18 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'dart:math' as math;
-
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
-
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
-import 'package:flutter/material.dart';
 
 const double _kLinearProgressIndicatorHeight = 6.0;
 const double _kMinCircularProgressIndicatorSize = 36.0;
@@ -168,11 +164,11 @@ class _LinearProgressIndicatorPainter extends CustomPainter {
       ..color = backgroundColor
       ..style = PaintingStyle.fill;
     //绘制背景长条
-    canvas.drawRect(Offset(0 , 0.0 + size.height / 3) & Size(size.width, size.height / 3), paint);
+    canvas.drawRect(
+        Offset(0, 0.0 + size.height / 3) & Size(size.width, size.height / 3),
+        paint);
 
     paint.color = valueColor;
-
-
 
     void drawBar(double x, double width) {
       if (width <= 0.0) return;
@@ -186,11 +182,13 @@ class _LinearProgressIndicatorPainter extends CustomPainter {
           left = x;
           break;
       }
-      canvas.drawRect(Offset(left , 0.0 + size.height / 3) & Size(width, size.height / 3), paint);
+      canvas.drawRect(
+          Offset(left, 0.0 + size.height / 3) & Size(width, size.height / 3),
+          paint);
     }
 
-    double bigCircleRadius =  size.height;
-    double smallCircleRadius =  size.height / 2;
+    double bigCircleRadius = size.height;
+    double smallCircleRadius = size.height / 2;
 
     if (value != null) {
       drawBar(0.0, value.clamp(0.0, 1.0) * (size.width - bigCircleRadius));
@@ -207,17 +205,25 @@ class _LinearProgressIndicatorPainter extends CustomPainter {
       drawBar(x2, width2 - bigCircleRadius);
     }
 
-    if(value != null && value > 0.0){
+    if (value != null && value > 0.0) {
       //绘制大圆圈
-      paint.color = Color.fromARGB(190, paint.color.red, paint.color.green, paint.color.blue);
-      canvas.drawCircle(Offset(value.clamp(0.0, 1.0) * size.width - bigCircleRadius / 2, size.height / 2), bigCircleRadius, paint);
+      paint.color = Color.fromARGB(
+          190, paint.color.red, paint.color.green, paint.color.blue);
+      canvas.drawCircle(
+          Offset(value.clamp(0.0, 1.0) * size.width - bigCircleRadius / 2,
+              size.height / 2),
+          bigCircleRadius,
+          paint);
       //绘制白色圆圈
       paint.color = Colors.white;
-      canvas.drawCircle(Offset(value.clamp(0.0, 1.0) * size.width - bigCircleRadius / 2, size.height / 2), smallCircleRadius, paint);
+      canvas.drawCircle(
+          Offset(value.clamp(0.0, 1.0) * size.width - bigCircleRadius / 2,
+              size.height / 2),
+          smallCircleRadius,
+          paint);
       //重置颜色
       paint.color = valueColor;
     }
-
   }
 
   @override
@@ -264,13 +270,13 @@ class MyLinearProgressIndicator extends ProgressIndicator {
     String semanticsLabel,
     String semanticsValue,
   }) : super(
-    key: key,
-    value: value,
-    backgroundColor: backgroundColor,
-    valueColor: valueColor,
-    semanticsLabel: semanticsLabel,
-    semanticsValue: semanticsValue,
-  );
+          key: key,
+          value: value,
+          backgroundColor: backgroundColor,
+          valueColor: valueColor,
+          semanticsLabel: semanticsLabel,
+          semanticsValue: semanticsValue,
+        );
 
   @override
   _LinearProgressIndicatorState createState() =>
@@ -349,7 +355,6 @@ class _LinearProgressIndicatorState extends State<MyLinearProgressIndicator>
 // Copyright 2017 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-
 
 final MethodChannel _channel = const MethodChannel('flutter.io/videoPlayer')
 // This will clear all open videos on the platform when a full restart is
@@ -431,7 +436,9 @@ class VideoPlayerValue {
   final Size size;
 
   bool get initialized => duration != null;
+
   bool get hasError => errorDescription != null;
+
   double get aspectRatio => size != null ? size.width / size.height : 1.0;
 
   VideoPlayerValue copyWith({
@@ -682,7 +689,7 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
       );
       _timer = Timer.periodic(
         const Duration(milliseconds: 500),
-            (Timer timer) async {
+        (Timer timer) async {
           if (_isDisposed) {
             return;
           }
@@ -930,11 +937,11 @@ class _VideoScrubberState extends State<_VideoScrubber> {
 /// that will also detect the gestures.
 class VideoProgressIndicator extends StatefulWidget {
   VideoProgressIndicator(
-      this.controller, {
-        VideoProgressColors colors,
-        this.allowScrubbing,
-        this.padding = const EdgeInsets.only(top: 5.0),
-      }) : colors = colors ?? VideoProgressColors();
+    this.controller, {
+    VideoProgressColors colors,
+    this.allowScrubbing,
+    this.padding = const EdgeInsets.only(top: 5.0),
+  }) : colors = colors ?? VideoProgressColors();
 
   final VideoPlayerController controller;
   final VideoProgressColors colors;

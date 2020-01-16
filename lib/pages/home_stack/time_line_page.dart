@@ -100,27 +100,10 @@ class _TimeLineState extends State<TimeLinePage> {
                                       : Expanded(
                                           child: Container(),
                                         )
-
-//                                  PostCard(data[i][(j+1)*2-2]),
-//                                    PostCard(data[i][(j+1)*2-2])
                                 ],
                               )
                           ],
                         )
-//                        Expanded(
-//                            child: Column(
-//                          children: <Widget>[
-//                            Text(week[i]),
-//                            GridView.count(
-//                              crossAxisSpacing: 15.0,
-//                              mainAxisSpacing: 20.0,
-//                              padding: EdgeInsets.all(10.0),
-//                              crossAxisCount: 2,
-//                              children:
-//                                  data[i].map((f) => PostCard(f)).toList(),
-//                            ),
-//                          ],
-//                        ))
                     ],
                   ),
                 )
@@ -130,27 +113,3 @@ class _TimeLineState extends State<TimeLinePage> {
     ]));
   }
 }
-/*
-
-  Column(
-                children: data.map((f) {
-                  return Row(
-                    children: <Widget>[
-                      Center(
-                        child: Text(f['title']),
-                      ),
-                      GridView.count(
-                        controller: _scrollController,
-                        crossAxisSpacing: 15.0,
-                        mainAxisSpacing: 20.0,
-                        padding: EdgeInsets.all(10.0),
-                        crossAxisCount: 2,
-                        childAspectRatio: 2 / 1.7,
-                        children: f['data'].map((f) => PostCard(f)).toList(),
-                      )
-                    ],
-                  );
-                }).toList(),
-              )),      ],
-
- */
