@@ -4,7 +4,7 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="clicili dark"
+        android:label="CliCli Dark"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"
         android:largeHeap="true">

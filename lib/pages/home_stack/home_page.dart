@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:clicili_dark/api/post.dart';
 import 'package:clicili_dark/pages/search_page.dart';
+import 'package:clicili_dark/utils/toast_utils.dart';
 import 'package:clicili_dark/widgets//post_card.dart';
 import 'package:clicili_dark/widgets/appbar.dart';
 import 'package:clicili_dark/widgets/refresh.dart';
@@ -134,12 +135,13 @@ class _HomePageState extends State<HomePage>
                       Icons.show_chart,
                       color: Theme.of(context).primaryColor,
                     ),
-//                    onPressed: () {
-//                      Navigator.push(
-//                          context,
-//                          MaterialPageRoute(
-//                              builder: (BuildContext context) => SearchPage()));
-//                    },
+                    onPressed: () {
+                      showCenterErrorShortToast('这里不可以哦 ~');
+                      //  Navigator.push(
+                      //      context,
+                      //      MaterialPageRoute(
+                      //          builder: (BuildContext context) => SearchPage()));
+                    },
                   ),
                   IconButton(
                     icon: Icon(
