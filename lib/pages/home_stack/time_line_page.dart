@@ -18,7 +18,6 @@ class _TimeLineState extends State<TimeLinePage> {
 
   bool hasLoad = false;
   List<List> data = List(7);
-  int page = 1;
 
   @override
   void initState() {
@@ -28,7 +27,7 @@ class _TimeLineState extends State<TimeLinePage> {
 
   Future<void> getUGC() async {
     data = List(7);
-    final res = (await getPost('新番', '', page, 100)).data;
+    final res = (await getPost('新番', 'nowait', 1, 100)).data;
     final List _res = jsonDecode(res)['posts'];
 
     _res.forEach((f) {
@@ -80,9 +79,7 @@ class _TimeLineState extends State<TimeLinePage> {
                                                 data[i][(j + 1) * 2 - 1]),
                                           ),
                                         )
-                                      : Expanded(
-                                          child: Container(),
-                                        )
+                                      : Expanded(child: Container())
                                 ],
                               )
                           ],
@@ -90,9 +87,7 @@ class _TimeLineState extends State<TimeLinePage> {
                     ],
                   ),
                 )
-              : Center(
-                  child: CircularProgressIndicator(),
-                ))
+              : Center(child: CircularProgressIndicator()))
     ]));
   }
 }

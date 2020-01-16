@@ -150,9 +150,11 @@ class _HomePageState extends State<HomePage>
                     ),
                     onPressed: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => SearchPage()));
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => SearchPage(),
+                        ),
+                      );
                     },
                   ),
                 ],

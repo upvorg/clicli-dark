@@ -40,8 +40,8 @@ class _MyHomePageState extends State<MyHomePage> {
   static final List<String> pagesIcon = [
     'assets/home.svg',
     'assets/time.svg',
-    'assets/other.svg',
-    'assets/user.svg'
+    // 'assets/other.svg',
+    // 'assets/user.svg'
   ];
   int _tabIndex = 0;
 
