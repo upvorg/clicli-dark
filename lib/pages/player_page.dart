@@ -32,7 +32,16 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
   Map videoSrc = {};
   int currPlayIndex = 0;
   bool isLoading = true;
+  bool playerLoading = false;
   bool playerLoaded = false;
+
+  Future<String> getVideoSrc(String _src) async {
+    if (videoSrc[currPlayIndex] == null) {
+      final _videoSrc = (await getPlayUrl(_src)).data['url'];
+      videoSrc[currPlayIndex] = _videoSrc;
+    }
+    return videoSrc[currPlayIndex];
+  }
 
   @override
   void initState() {
@@ -60,16 +69,9 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
       return;
     }
 
-    final _src = videoList[currPlayIndex]['content'];
+    if (playerLoading) return;
 
-    debugPrint('start playing origin $currPlayIndex $_src');
-
-    if (videoSrc[currPlayIndex] == null) {
-      final _videoSrc = (await getPlayUrl(_src)).data['url'];
-      videoSrc[currPlayIndex] = _videoSrc;
-    }
-    final src = videoSrc[currPlayIndex];
-
+    final String src = await getVideoSrc(videoList[currPlayIndex]['content']);
     if (src == null ||
         (src is String && (src.length < 1 || src.endsWith('.m3u8')))) {
       showCenterErrorShortToast('视频地址错误');
@@ -77,6 +79,10 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
       setState(() {});
       return;
     }
+
+    setState(() {
+      playerLoading = true;
+    });
 
     debugPrint('start playing $currPlayIndex $src');
 
@@ -101,13 +107,16 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
         handleColor: Color.fromRGBO(200, 200, 200, 1.0),
       ),
       aspectRatio: 16 / 9,
-      autoInitialize: true,
-      autoPlay: true,
+//      autoInitialize: true,
+//      autoPlay: true,
       looping: false,
     );
-
     _chewieController.addListener(fullScreenLis);
+    await _videoPlayerController.initialize();
+    _chewieController.play();
+
     playerLoaded = true;
+    playerLoading = false;
     setState(() {});
   }
 
@@ -121,47 +130,42 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
   }
 
   autoNextLis() {
-    int total = _videoPlayerController.value.duration?.inMilliseconds ?? 0;
+    int total = _videoPlayerController.value.duration?.inMilliseconds;
     final int pos = _videoPlayerController.value.position?.inMilliseconds ?? 0;
 
-    if (total == 0) total = 100;
+    if (total == null) total = 1;
     if (total - pos <= 0) {
       _videoPlayerController.removeListener(autoNextLis);
-      toggleVideo(currPlayIndex + 1);
+      if (currPlayIndex + 1 < videoList.length) toggleVideo(currPlayIndex + 1);
     }
   }
 
   toggleVideo(int i) {
     if (i == currPlayIndex || i > videoList.length - 1) return;
 
-    if (_videoPlayerController != null) {
-      _videoPlayerController?.pause();
-      _videoPlayerController?.seekTo(Duration(seconds: 0));
-    }
-//    if (_chewieController != null) {
-//      print('dis chewie');
-//      _chewieController?.dispose();
-//    }
+//    _videoPlayerController?.pause();
+    _chewieController?.pause();
+    _chewieController?.seekTo(Duration(seconds: 0));
+//    _videoPlayerController?.seekTo(Duration(seconds: 0));
+
+//    _chewieController?.dispose();
 
     currPlayIndex = i;
     initPlayer();
   }
 
-  disposeV() {
+  disposeControllers() {
     Wakelock.disable();
     _chewieController?.removeListener(fullScreenLis);
-    _videoPlayerController?.dispose();
     _chewieController?.dispose();
-    _chewieController = _videoPlayerController = null;
+    _videoPlayerController?.dispose();
   }
 
   @override
   void dispose() {
-    disposeV();
+    disposeControllers();
     _videoPlayerController?.removeListener(autoNextLis);
     SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
@@ -212,6 +216,9 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
                             )
                           : AspectRatio(
                               aspectRatio: 16 / 9,
+                              child: Container(
+                                color: Colors.black,
+                              ),
                             ),
                     ),
                   ),
@@ -261,24 +268,17 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
   }
 
   Widget buildProfile() {
+    final caption = Theme.of(context).textTheme.caption;
     return Container(
         child: ListView(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
             children: <Widget>[
-          Text(
-            detail['title'],
-          ),
+          Text(detail['title']),
           SizedBox(height: 10),
           Row(
             children: <Widget>[
-              Text(
-                'gv ${widget.id}  ',
-                style: Theme.of(context).textTheme.caption,
-              ),
-              Text(
-                detail['time'],
-                style: Theme.of(context).textTheme.caption,
-              ),
+              Text('gv ${widget.id}  ', style: caption),
+              Text(detail['time'], style: caption),
             ],
           ),
           SizedBox(height: 10),
@@ -292,10 +292,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
                 ),
               ),
               SizedBox(width: 15),
-              Text(
-                detail['uname'],
-                style: Theme.of(context).textTheme.caption,
-              ),
+              Text(detail['uname'], style: caption),
             ],
           ),
           SizedBox(height: 25),

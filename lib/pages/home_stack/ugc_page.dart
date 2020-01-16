@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:clicili_dark/api/post.dart';
 import 'package:clicili_dark/widgets//post_card.dart';
 import 'package:clicili_dark/widgets/appbar.dart';
+import 'package:clicili_dark/widgets/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -20,14 +21,8 @@ class _UGCPageState extends State<UGCPage> {
 
   @override
   void initState() {
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        getUGC();
-      }
-    });
-    getUGC();
     super.initState();
+    getUGC();
   }
 
   Future<void> getUGC() async {
@@ -42,37 +37,21 @@ class _UGCPageState extends State<UGCPage> {
     return Scaffold(
         body: Column(
       children: <Widget>[
-        FixedAppBar(
-          automaticallyImplyLeading: false,
-          title: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: <Widget>[
-                  Tab(
-                    child: Text(
-                      'UGC',
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: 24,
-                      ),
-                    ),
-                  )
-                ],
-              )),
-        ),
+        HomeStackTitleAppbar('UGC'),
         Expanded(
-          child: RefreshIndicator(
-            onRefresh: getUGC,
-            child: GridView.count(
-              controller: _scrollController,
-              crossAxisSpacing: 15.0,
-              mainAxisSpacing: 20.0,
-              padding: EdgeInsets.all(10.0),
-              crossAxisCount: 2,
-              children: data.map((f) => PostCard(f)).toList(),
-            ),
+            child: RefreshWrapper(
+          onLoadMore: getUGC,
+          onRefresh: getUGC,
+          scrollController: _scrollController,
+          child: GridView.count(
+            controller: _scrollController,
+            crossAxisSpacing: 15.0,
+            mainAxisSpacing: 20.0,
+            padding: EdgeInsets.all(10.0),
+            crossAxisCount: 2,
+            children: data.map((f) => PostCard(f)).toList(),
           ),
-        )
+        ))
       ],
     ));
   }

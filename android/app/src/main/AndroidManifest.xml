@@ -6,7 +6,8 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="clicili dark"
         android:icon="@mipmap/ic_launcher"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:largeHeap="true">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

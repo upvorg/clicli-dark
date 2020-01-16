@@ -4,6 +4,7 @@ import 'package:clicili_dark/api/post.dart';
 import 'package:clicili_dark/pages/search_page.dart';
 import 'package:clicili_dark/widgets//post_card.dart';
 import 'package:clicili_dark/widgets/appbar.dart';
+import 'package:clicili_dark/widgets/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -17,10 +18,6 @@ class _HomePageState extends State<HomePage>
   final List<String> tabs = ["推荐", "最新"];
 
   TabController _tabController;
-  final GlobalKey<RefreshIndicatorState> refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
-  final GlobalKey<RefreshIndicatorState> refreshIndicatorKey1 =
-      GlobalKey<RefreshIndicatorState>();
   ScrollController _scrollController = new ScrollController();
 
   List<int> page = [1, 1];
@@ -29,29 +26,13 @@ class _HomePageState extends State<HomePage>
 
   @override
   void initState() {
+    super.initState();
     _tabController = TabController(
       initialIndex: 0,
       length: tabs.length,
       vsync: this,
     );
-
-//    _tabController.addListener(() {
-//      _refreshData();
-//    });
-
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        _loadData();
-      }
-    });
-
     initLoad();
-    super.initState();
-  }
-
-  Future<void> _refreshData({bool needLoader = false}) async {
-    await _loadData(reset: true);
   }
 
   Future<void> initLoad() async {
@@ -64,9 +45,9 @@ class _HomePageState extends State<HomePage>
   }
 
   Future<void> _loadData({reset = false}) async {
+    var res;
     final index = _tabController.index;
     final _page = reset ? 1 : page[index] + 1;
-    var res;
 
     if (index == 0) {
       res = (await getPost('', tabs[0], _page, 10)).data;
@@ -74,45 +55,50 @@ class _HomePageState extends State<HomePage>
       res = (await getPost('bgm', '', _page, 10)).data;
     }
 
+    final List posts = jsonDecode(res)['posts'] ?? [];
     if (reset) {
       if (index == 0) {
-        _reList = jsonDecode(res)['posts'];
+        _reList = posts;
       } else {
-        _newList = jsonDecode(res)['posts'];
+        _newList = posts;
       }
       page[index] = 1;
     } else {
       if (index == 0) {
-        _reList.addAll(jsonDecode(res)['posts']);
+        _reList.addAll(posts);
       } else {
-        _newList.addAll(jsonDecode(res)['posts']);
+        _newList.addAll(posts);
       }
       page[index] = _page;
     }
     setState(() {});
   }
 
-  Widget getTabPage(List data, GlobalKey k) {
+  Widget getTabPage(List data) {
     if (data.length < 1) {
       return Center(child: CircularProgressIndicator());
     }
-    return RefreshIndicator(
-        key: k,
-        onRefresh: _refreshData,
-        child: GridView.builder(
-          itemBuilder: (BuildContext ctx, int i) {
-            return PostCard(data[i]);
-          },
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisSpacing: 15.0,
-            mainAxisSpacing: 20.0,
-            crossAxisCount: 2,
-//              childAspectRatio: 2 / 1.7,
-          ),
-          itemCount: data.length,
-          controller: _scrollController,
-          padding: EdgeInsets.all(10.0),
-        ));
+    return RefreshWrapper(
+      onLoadMore: _loadData,
+      onRefresh: () async {
+        await _loadData(reset: true);
+      },
+      scrollController: _scrollController,
+      child: GridView.builder(
+        itemBuilder: (BuildContext ctx, int i) {
+          return PostCard(data[i]);
+        },
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisSpacing: 15.0,
+          mainAxisSpacing: 20.0,
+          crossAxisCount: 2,
+          childAspectRatio: 2 / 2,
+        ),
+        itemCount: data.length,
+        controller: _scrollController,
+        padding: EdgeInsets.all(10.0),
+      ),
+    );
   }
 
   get appbar => FixedAppBar(
@@ -184,8 +170,8 @@ class _HomePageState extends State<HomePage>
             child: TabBarView(
               controller: _tabController,
               children: <Widget>[
-                getTabPage(_reList, refreshIndicatorKey),
-                getTabPage(_newList, refreshIndicatorKey1),
+                getTabPage(_reList),
+                getTabPage(_newList),
               ],
             ),
           )

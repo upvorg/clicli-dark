@@ -47,24 +47,7 @@ class _TimeLineState extends State<TimeLinePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Column(children: <Widget>[
-      FixedAppBar(
-        automaticallyImplyLeading: false,
-        title: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: <Widget>[
-                Tab(
-                  child: Text(
-                    '更新表',
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 24,
-                    ),
-                  ),
-                )
-              ],
-            )),
-      ),
+      HomeStackTitleAppbar('更新表'),
       Expanded(
           child: hasLoad
               ? RefreshIndicator(

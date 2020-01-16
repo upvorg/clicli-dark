@@ -58,6 +58,27 @@ class FixedAppBar extends StatelessWidget {
   }
 }
 
+class HomeStackTitleAppbar extends StatelessWidget {
+  final String title;
+
+  HomeStackTitleAppbar(this.title);
+
+  @override
+  Widget build(BuildContext context) {
+    final textStyle =
+        TextStyle(color: Theme.of(context).primaryColor, fontSize: 24);
+    return FixedAppBar(
+      automaticallyImplyLeading: false,
+      title: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          children: <Widget>[Tab(child: Text(title, style: textStyle))],
+        ),
+      ),
+    );
+  }
+}
+
 class SliverFixedAppBarDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
