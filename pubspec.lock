@@ -43,13 +43,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.1.2"
-  chewie:
-    dependency: "direct dev"
-    description:
-      name: chewie
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.9.8+1"
   collection:
     dependency: transitive
     description:
@@ -157,7 +150,7 @@ packages:
     source: hosted
     version: "1.1.8"
   open_iconic_flutter:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: open_iconic_flutter
       url: "https://pub.flutter-io.cn"
@@ -219,13 +212,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.5"
-  screen:
-    dependency: transitive
-    description:
-      name: screen
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.0.5"
   sky_engine:
     dependency: transitive
     description: flutter

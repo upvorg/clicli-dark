@@ -20,8 +20,8 @@ dev_dependencies:
   dio: any
   cached_network_image: any
   video_player: any
-  chewie: any
   wakelock: any
+  open_iconic_flutter: any
 
 flutter:
   uses-material-design: true

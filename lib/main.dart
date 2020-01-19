@@ -79,7 +79,6 @@ class _MyHomePageState extends State<MyHomePage> {
       onWillPop: doubleBackExit,
       child: Scaffold(
         body: IndexedStack(
-          // TODO 懒加载
           children: <Widget>[HomePage(), TimeLinePage()],
           index: _tabIndex,
         ),

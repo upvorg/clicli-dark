@@ -1,9 +1,8 @@
 import 'dart:convert';
 
-import 'package:chewie/chewie.dart';
 import 'package:clicili_dark/api/post.dart';
+import 'package:clicili_dark/pkg/chewie/chewie.dart';
 import 'package:clicili_dark/utils/reg_utils.dart';
-import 'package:clicili_dark/utils/toast_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,18 +21,17 @@ class PlayerPage extends StatefulWidget {
   }
 }
 
+//https://vt1.doubanio.com/201902111139/0c06a85c600b915d8c9cbdbbaf06ba9f/view/movie/M/302420330.mp4
 class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
   VideoPlayerController _videoPlayerController;
   ChewieController _chewieController;
   TabController _tabController;
 
+  bool isLoading = true;
   Map detail;
   List videoList;
   Map videoSrc = {};
   int currPlayIndex = 0;
-  bool isLoading = true;
-  bool playerLoading = false;
-  bool playerLoaded = false;
 
   Future<String> getVideoSrc(String _src) async {
     if (videoSrc[currPlayIndex] == null) {
@@ -41,14 +39,6 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
       videoSrc[currPlayIndex] = _videoSrc;
     }
     return videoSrc[currPlayIndex];
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-    Wakelock.enable();
-    getDetail();
   }
 
   getDetail() async {
@@ -59,74 +49,41 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
     detail = res;
     isLoading = false;
 
-    setState(() {});
-    initPlayer();
+    if (mounted) {
+      setState(() {});
+      await initPlayer();
+    }
   }
 
   initPlayer() async {
-    if (videoList.length < 1) {
-      playerLoaded = true;
-      return;
-    }
-
-    if (playerLoading) return;
+    if (videoList.length < 1) return;
 
     final String src = await getVideoSrc(videoList[currPlayIndex]['content']);
-    if (src == null ||
-        (src is String && (src.length < 1 || src.endsWith('.m3u8')))) {
-      showCenterErrorShortToast('视频地址错误');
-      playerLoaded = true;
-      return;
-    }
-
-    playerLoading = true;
 
     debugPrint('start playing $currPlayIndex $src');
 
-    //https://vt1.doubanio.com/201902111139/0c06a85c600b915d8c9cbdbbaf06ba9f/view/movie/M/302420330.mp4
     _videoPlayerController = VideoPlayerController.network(src);
     _videoPlayerController.addListener(autoNextLis);
 
     _chewieController = ChewieController(
       videoPlayerController: _videoPlayerController,
+      aspectRatio: 16 / 9,
+      autoPlay: true,
+      looping: false,
       allowedScreenSleep: false,
       allowFullScreen: true,
-      deviceOrientationsAfterFullScreen: [
-        DeviceOrientation.landscapeRight,
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ],
-      materialProgressColors: ChewieProgressColors(
-        backgroundColor: Colors.purple.withOpacity(0.2),
-        playedColor: Colors.purple.withOpacity(0.7),
-        bufferedColor: Colors.purple.withOpacity(0.4),
-        handleColor: Color.fromRGBO(200, 200, 200, 1.0),
-      ),
-      aspectRatio: 16 / 9,
-//      autoInitialize: true,
-//      autoPlay: true,
-      looping: false,
     );
-    _chewieController.addListener(fullScreenLis);
-    await _videoPlayerController.initialize();
-    _chewieController.play();
-
-    playerLoaded = true;
-    playerLoading = false;
     setState(() {});
   }
 
-  fullScreenLis() {
-    if (!_chewieController.isFullScreen) {
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ]);
-    }
-  }
-
   autoNextLis() {
+    if (!mounted) {
+      _chewieController?.dispose();
+      _videoPlayerController.removeListener(autoNextLis);
+      _videoPlayerController?.dispose();
+      return;
+    }
+
     int total = _videoPlayerController.value.duration?.inMilliseconds;
     final int pos = _videoPlayerController.value.position?.inMilliseconds ?? 0;
 
@@ -137,137 +94,98 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
     }
   }
 
-  toggleVideo(int i) {
+  toggleVideo(int i) async {
     if (i == currPlayIndex || i > videoList.length - 1) return;
-
-//    _videoPlayerController?.pause();
-    _chewieController?.pause();
-    _chewieController?.seekTo(Duration(seconds: 0));
-//    _videoPlayerController?.seekTo(Duration(seconds: 0));
-
-//    _chewieController?.dispose();
-
+    await _videoPlayerController.pause();
     currPlayIndex = i;
-    initPlayer();
+    await initPlayer();
   }
 
-  disposeControllers() {
-    Wakelock.disable();
-    _chewieController?.removeListener(fullScreenLis);
-    _chewieController?.dispose();
-    _videoPlayerController?.dispose();
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    Wakelock.enable();
+    getDetail();
   }
 
   @override
   void dispose() {
-    disposeControllers();
-    _videoPlayerController?.removeListener(autoNextLis);
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    _chewieController?.dispose();
+    _videoPlayerController?.dispose();
     super.dispose();
-  }
-
-  Future<bool> _onWillPop() {
-    if (isLoading || !playerLoaded) {
-      showCenterErrorShortToast('请等待播放器加载完毕');
-      return Future.value(false);
-    }
-    return Future.value(true);
   }
 
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return WillPopScope(
-        onWillPop: _onWillPop,
-        child: Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(),
-          ),
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
         ),
       );
     }
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-        body: SafeArea(
-          child: Column(
+    return Scaffold(
+      body: Column(
+        children: <Widget>[
+          Stack(
             children: <Widget>[
-              Stack(
-                children: <Widget>[
-                  Theme(
-                    data: ThemeData(
-                      dialogBackgroundColor: Colors.transparent,
-                      primarySwatch: Colors.purple,
-                      iconTheme: Theme.of(context)
-                          .iconTheme
-                          .copyWith(color: Colors.white),
-                    ),
-                    child: DefaultTextStyle(
-                      style: TextStyle(color: Colors.white),
-                      child: _chewieController != null
-                          ? Chewie(
-                              controller: _chewieController,
-                            )
-                          : AspectRatio(
-                              aspectRatio: 16 / 9,
-                              child: Container(
-                                color: Colors.black,
-                                child: Center(
-                                  child: const Text(
-                                    '加载中···',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                    ),
-                  ),
-                  Positioned(
-                    child: IconButton(
-                        icon: Icon(
-                          Icons.arrow_back_ios,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        }),
-                  ),
-                ],
-              ),
-              Container(
-                width: double.infinity,
-                alignment: Alignment.center,
-                child: TabBar(
-                  tabs: <Widget>[Tab(text: '简介'), Tab(text: '评论')],
-                  controller: _tabController,
-                  isScrollable: true,
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  indicatorPadding:
-                      EdgeInsets.symmetric(horizontal: 25, vertical: 0),
-                  labelColor: Theme.of(context).primaryColor,
-                  labelStyle: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  unselectedLabelStyle: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.normal,
-                  ),
+              Theme(
+                data: ThemeData(
+                  dialogBackgroundColor: Colors.transparent,
+                  primarySwatch: Colors.purple,
+                  iconTheme:
+                      Theme.of(context).iconTheme.copyWith(color: Colors.white),
                 ),
+                child: DefaultTextStyle(
+                    style: TextStyle(color: Colors.white),
+                    child: _chewieController != null
+                        ? Chewie(controller: _chewieController)
+                        : AspectRatio(
+                            aspectRatio: 16 / 9,
+                            child: Container(color: Colors.black),
+                          )),
               ),
-              Expanded(
-                  child: TabBarView(
-                controller: _tabController,
-                children: <Widget>[buildProfile(), buildComments()],
-              ))
+              Positioned(
+                child: IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }),
+              ),
             ],
           ),
-        ),
+          Container(
+            width: double.infinity,
+            alignment: Alignment.center,
+            child: TabBar(
+              tabs: <Widget>[Tab(text: '简介'), Tab(text: '评论')],
+              controller: _tabController,
+              isScrollable: true,
+              indicatorSize: TabBarIndicatorSize.tab,
+              indicatorPadding:
+                  EdgeInsets.symmetric(horizontal: 25, vertical: 0),
+              labelColor: Theme.of(context).primaryColor,
+              labelStyle: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+              unselectedLabelStyle: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: <Widget>[buildProfile(), buildComments()],
+            ),
+          )
+        ],
       ),
     );
   }
