@@ -5,7 +5,6 @@ import 'package:clicili_dark/pkg/chewie/chewie.dart';
 import 'package:clicili_dark/utils/reg_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
 
