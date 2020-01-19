@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:clicili_dark/api/post.dart';
+import 'package:clicili_dark/pages/rank_page.dart';
 import 'package:clicili_dark/pages/search_page.dart';
-import 'package:clicili_dark/utils/toast_utils.dart';
 import 'package:clicili_dark/widgets//post_card.dart';
 import 'package:clicili_dark/widgets/appbar.dart';
 import 'package:clicili_dark/widgets/refresh.dart';
@@ -88,6 +88,7 @@ class _HomePageState extends State<HomePage>
       },
       scrollController: c,
       child: GridView.builder(
+        physics: BouncingScrollPhysics(),
         itemBuilder: (BuildContext ctx, int i) {
           return PostCard(data[i]);
         },
@@ -138,11 +139,10 @@ class _HomePageState extends State<HomePage>
                       color: Theme.of(context).primaryColor,
                     ),
                     onPressed: () {
-                      showCenterErrorShortToast('这里不可以哦 ~');
-                      //  Navigator.push(
-                      //      context,
-                      //      MaterialPageRoute(
-                      //          builder: (BuildContext context) => SearchPage()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => RankPage()));
                     },
                   ),
                   IconButton(

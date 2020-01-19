@@ -52,6 +52,7 @@ class _TimeLineState extends State<TimeLinePage> {
               ? RefreshIndicator(
                   onRefresh: getUGC,
                   child: ListView(
+                    physics: BouncingScrollPhysics(),
                     padding: EdgeInsets.all(0),
                     children: [
                       for (int i = 0; i < data.length; i++)

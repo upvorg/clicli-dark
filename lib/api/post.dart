@@ -26,10 +26,10 @@ Future<Response> getPlayUrl(String url) {
   return NetUtils.get('https://jx.clicli.us/jx?url=$url');
 }
 
-getSearch(key) {
+getSearch(String key) {
   return NetUtils.get('https://api.clicli.us/search/posts?key=$key');
 }
 
-getRank(key) {
+getRank() {
   return NetUtils.get('https://api.clicli.us/rank');
 }

@@ -44,6 +44,7 @@ class _UGCPageState extends State<UGCPage> {
           onRefresh: getUGC,
           scrollController: _scrollController,
           child: GridView.count(
+            physics: BouncingScrollPhysics(),
             controller: _scrollController,
             crossAxisSpacing: 15.0,
             mainAxisSpacing: 20.0,

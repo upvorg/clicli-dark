@@ -107,20 +107,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
 /*
 
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
-class Page extends StatefulWidget{
+class RankPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() {
-    return PageState();
-  }
+  _RankPageState createState() => _RankPageState();
 }
 
-class PageState extends State<age>{
+class _RankPageState extends State<RankPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-
-    return null;
+    return Scaffold();
   }
 }
+
 */

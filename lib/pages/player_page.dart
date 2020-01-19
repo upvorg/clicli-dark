@@ -142,7 +142,13 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
                         ? Chewie(controller: _chewieController)
                         : AspectRatio(
                             aspectRatio: 16 / 9,
-                            child: Container(color: Colors.black),
+                            child: Container(
+                              color: Colors.black,
+                              child: Text(
+                                'loading ···',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
                           )),
               ),
               Positioned(
