@@ -19,7 +19,10 @@ class _HomePageState extends State<HomePage>
   final List<String> tabs = ["推荐", "最新"];
 
   TabController _tabController;
-  ScrollController _scrollController = new ScrollController();
+  ScrollController _scrollController =
+      new ScrollController(keepScrollOffset: true);
+  ScrollController _scrollController1 =
+      new ScrollController(keepScrollOffset: true);
 
   List<int> page = [1, 1];
   List _reList = [];
@@ -75,16 +78,15 @@ class _HomePageState extends State<HomePage>
     setState(() {});
   }
 
-  Widget getTabPage(List data) {
-    if (data.length < 1) {
-      return Center(child: CircularProgressIndicator());
-    }
+  Widget getTabPage(List data, ScrollController c) {
+    if (data.length < 1) Center(child: CircularProgressIndicator());
+
     return RefreshWrapper(
       onLoadMore: _loadData,
       onRefresh: () async {
         await _loadData(reset: true);
       },
-      scrollController: _scrollController,
+      scrollController: c,
       child: GridView.builder(
         itemBuilder: (BuildContext ctx, int i) {
           return PostCard(data[i]);
@@ -96,7 +98,7 @@ class _HomePageState extends State<HomePage>
           childAspectRatio: 2 / 2,
         ),
         itemCount: data.length,
-        controller: _scrollController,
+        controller: c,
         padding: EdgeInsets.all(10.0),
       ),
     );
@@ -174,8 +176,8 @@ class _HomePageState extends State<HomePage>
             child: TabBarView(
               controller: _tabController,
               children: <Widget>[
-                getTabPage(_reList),
-                getTabPage(_newList),
+                getTabPage(_reList, _scrollController),
+                getTabPage(_newList, _scrollController1),
               ],
             ),
           )

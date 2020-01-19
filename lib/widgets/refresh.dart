@@ -22,10 +22,14 @@ class RefreshWrapper extends StatefulWidget {
   }
 }
 
-class _RefreshWrapperState extends State<RefreshWrapper> {
+class _RefreshWrapperState extends State<RefreshWrapper>
+    with AutomaticKeepAliveClientMixin {
   final GlobalKey<RefreshIndicatorState> refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
   bool _isLoading = false;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -49,6 +53,7 @@ class _RefreshWrapperState extends State<RefreshWrapper> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return RefreshIndicator(
       key: refreshIndicatorKey,
       onRefresh: widget.onRefresh,
