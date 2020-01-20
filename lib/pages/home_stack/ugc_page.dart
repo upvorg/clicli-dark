@@ -6,6 +6,7 @@ import 'package:clicili_dark/widgets/appbar.dart';
 import 'package:clicili_dark/widgets/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:extended_list/extended_list.dart';
 
 class UGCPage extends StatefulWidget {
   @override
@@ -43,13 +44,16 @@ class _UGCPageState extends State<UGCPage> {
           onLoadMore: getUGC,
           onRefresh: getUGC,
           scrollController: _scrollController,
-          child: GridView.count(
+          child: ExtendedGridView(
             physics: BouncingScrollPhysics(),
             controller: _scrollController,
-            crossAxisSpacing: 15.0,
-            mainAxisSpacing: 20.0,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisSpacing: 15.0,
+              mainAxisSpacing: 20.0,
+              crossAxisCount: 2,
+              childAspectRatio: 2 / 2,
+            ),
             padding: EdgeInsets.all(10.0),
-            crossAxisCount: 2,
             children: data.map((f) => PostCard(f)).toList(),
           ),
         ))

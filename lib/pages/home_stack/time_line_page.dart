@@ -5,6 +5,7 @@ import 'package:clicili_dark/widgets//post_card.dart';
 import 'package:clicili_dark/widgets/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:extended_list/extended_list.dart';
 
 class TimeLinePage extends StatefulWidget {
   @override
@@ -17,7 +18,7 @@ class _TimeLineState extends State<TimeLinePage> {
   final List week = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 
   bool hasLoad = false;
-  List<List> data = List(7);
+  List<List> data = [[], [], [], [], [], [], []];
 
   @override
   void initState() {
@@ -26,7 +27,6 @@ class _TimeLineState extends State<TimeLinePage> {
   }
 
   Future<void> getUGC() async {
-    data = List(7);
     final res = (await getPost('新番', '', 1, 100)).data;
     final List _res = jsonDecode(res)['posts'];
 
@@ -51,7 +51,7 @@ class _TimeLineState extends State<TimeLinePage> {
           child: hasLoad
               ? RefreshIndicator(
                   onRefresh: getUGC,
-                  child: ListView(
+                  child: ExtendedListView(
                     physics: BouncingScrollPhysics(),
                     padding: EdgeInsets.all(0),
                     children: [

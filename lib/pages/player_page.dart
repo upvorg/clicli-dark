@@ -71,6 +71,12 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
       looping: false,
       allowedScreenSleep: false,
       allowFullScreen: true,
+      videoTitle: Text(
+        videoList[currPlayIndex]['title'],
+        style:
+            Theme.of(context).textTheme.subhead.copyWith(color: Colors.white),
+      ),
+      fontColor: Colors.white,
     );
     setState(() {});
   }
@@ -78,7 +84,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
   autoNextLis() {
     if (!mounted) {
       _chewieController?.dispose();
-      _videoPlayerController.removeListener(autoNextLis);
+      _videoPlayerController?.removeListener(autoNextLis);
       _videoPlayerController?.dispose();
       return;
     }
@@ -111,6 +117,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
   @override
   void dispose() {
     _chewieController?.dispose();
+    _videoPlayerController?.removeListener(autoNextLis);
     _videoPlayerController?.dispose();
     super.dispose();
   }
@@ -125,44 +132,18 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
       );
     }
     return Scaffold(
-      body: Column(
+        body: SafeArea(
+      child: Column(
         children: <Widget>[
-          Stack(
-            children: <Widget>[
-              Theme(
-                data: ThemeData(
-                  dialogBackgroundColor: Colors.transparent,
-                  primarySwatch: Colors.purple,
-                  iconTheme:
-                      Theme.of(context).iconTheme.copyWith(color: Colors.white),
+          _chewieController != null
+              ? Chewie(controller: _chewieController)
+              : AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Container(
+                    color: Colors.black,
+                    child: Center(child: Text('loading ···')),
+                  ),
                 ),
-                child: DefaultTextStyle(
-                    style: TextStyle(color: Colors.white),
-                    child: _chewieController != null
-                        ? Chewie(controller: _chewieController)
-                        : AspectRatio(
-                            aspectRatio: 16 / 9,
-                            child: Container(
-                              color: Colors.black,
-                              child: Text(
-                                'loading ···',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          )),
-              ),
-              Positioned(
-                child: IconButton(
-                    icon: Icon(
-                      Icons.arrow_back_ios,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    }),
-              ),
-            ],
-          ),
           Container(
             width: double.infinity,
             alignment: Alignment.center,
@@ -192,7 +173,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
           )
         ],
       ),
-    );
+    ));
   }
 
   Widget buildProfile() {
