@@ -14,7 +14,11 @@ class TimeLinePage extends StatefulWidget {
   }
 }
 
-class _TimeLineState extends State<TimeLinePage> {
+class _TimeLineState extends State<TimeLinePage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   final List week = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 
   bool hasLoad = false;

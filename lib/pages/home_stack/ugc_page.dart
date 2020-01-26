@@ -15,7 +15,10 @@ class UGCPage extends StatefulWidget {
   }
 }
 
-class _UGCPageState extends State<UGCPage> {
+class _UGCPageState extends State<UGCPage> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   ScrollController _scrollController = new ScrollController();
   List data = [];
   int page = 1;

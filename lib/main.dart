@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:clicili_dark/pages/home_stack/home_page.dart';
 import 'package:clicili_dark/pages/home_stack/time_line_page.dart';
+import 'package:clicili_dark/pages/home_stack/ugc_page.dart';
 import 'package:clicili_dark/utils/dio_utils.dart';
 import 'package:clicili_dark/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
@@ -40,14 +41,16 @@ class _MyHomePageState extends State<MyHomePage> {
   static final List<String> pagesIcon = [
     'assets/home.svg',
     'assets/time.svg',
-    // 'assets/other.svg',
+    'assets/other.svg',
     // 'assets/user.svg'
   ];
-  int _tabIndex = 0;
 
-  void _selectedTab(int index) {
+  int _currentPageIndex = 0;
+  final _pageController = PageController();
+
+  void _onPageChange(int index) {
     setState(() {
-      _tabIndex = index;
+      _currentPageIndex = index;
     });
   }
 
@@ -78,13 +81,15 @@ class _MyHomePageState extends State<MyHomePage> {
     return WillPopScope(
       onWillPop: doubleBackExit,
       child: Scaffold(
-        body: IndexedStack(
-          children: <Widget>[HomePage(), TimeLinePage()],
-          index: _tabIndex,
+        body: PageView(
+          controller: _pageController,
+          onPageChanged: _onPageChange,
+          children: [HomePage(), TimeLinePage(), UGCPage()],
+          physics: NeverScrollableScrollPhysics(),
         ),
         bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _tabIndex,
-          onTap: _selectedTab,
+          currentIndex: _currentPageIndex,
+          onTap: _onPageChange,
           type: BottomNavigationBarType.fixed,
           items: [
             for (int i = 0; i < pagesIcon.length; i++)
@@ -92,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 title: SizedBox.shrink(),
                 icon: SvgPicture.asset(
                   pagesIcon[i],
-                  color: _tabIndex == i
+                  color: _currentPageIndex == i
                       ? Theme.of(context).primaryColor
                       : Colors.grey,
                   height: 28,
