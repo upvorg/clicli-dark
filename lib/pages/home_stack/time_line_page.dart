@@ -5,7 +5,6 @@ import 'package:clicili_dark/widgets//post_card.dart';
 import 'package:clicili_dark/widgets/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:extended_list/extended_list.dart';
 
 class TimeLinePage extends StatefulWidget {
   @override
@@ -48,6 +47,7 @@ class _TimeLineState extends State<TimeLinePage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
         body: Column(children: <Widget>[
       HomeStackTitleAppbar('时间表'),
@@ -55,7 +55,7 @@ class _TimeLineState extends State<TimeLinePage>
           child: hasLoad
               ? RefreshIndicator(
                   onRefresh: getUGC,
-                  child: ExtendedListView(
+                  child: ListView(
                     physics: BouncingScrollPhysics(),
                     padding: EdgeInsets.all(0),
                     children: [

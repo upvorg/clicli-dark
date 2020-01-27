@@ -8,7 +8,6 @@ import 'package:clicili_dark/widgets/appbar.dart';
 import 'package:clicili_dark/widgets/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:extended_list/extended_list.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -79,52 +78,30 @@ class _HomePageState extends State<HomePage>
     setState(() {});
   }
 
-  // ImageCache get imageCache => PaintingBinding
-
   Widget getTabPage(List data, ScrollController c) {
     if (data.length < 1) Center(child: CircularProgressIndicator());
-
     return RefreshWrapper(
-        onLoadMore: _loadData,
-        onRefresh: () async {
-          await _loadData(reset: true);
+      onLoadMore: _loadData,
+      onRefresh: () async {
+        await _loadData(reset: true);
+      },
+      scrollController: c,
+      child: GridView.builder(
+        physics: BouncingScrollPhysics(),
+        itemBuilder: (BuildContext ctx, int i) {
+          return PostCard(data[i]);
         },
-        scrollController: c,
-        child: ExtendedGridView.builder(
-          controller: c,
-          physics: BouncingScrollPhysics(),
-          padding: EdgeInsets.all(10.0),
-          extendedListDelegate: ExtendedListDelegate(
-            collectGarbage: (List<int> garbages) {
-              print("collect garbage : $garbages");
-            },
-          ),
-          itemBuilder: (ctx, i) => PostCard(data[i]),
-          itemCount: data.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisSpacing: 15.0,
-            mainAxisSpacing: 20.0,
-            crossAxisCount: 2,
-            childAspectRatio: 2 / 2,
-          ),
-        )
-
-        //  GridView.builder(
-        //   physics: BouncingScrollPhysics(),
-        //   itemBuilder: (BuildContext ctx, int i) {
-        //     return PostCard(data[i]);
-        //   },
-        //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        //     crossAxisSpacing: 15.0,
-        //     mainAxisSpacing: 20.0,
-        //     crossAxisCount: 2,
-        //     childAspectRatio: 2 / 2,
-        //   ),
-        //   itemCount: data.length,
-        //   controller: c,
-        //   padding: EdgeInsets.all(10.0),
-        // ),
-        );
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisSpacing: 15.0,
+          mainAxisSpacing: 20.0,
+          crossAxisCount: 2,
+          childAspectRatio: 2 / 2,
+        ),
+        itemCount: data.length,
+        controller: c,
+        padding: EdgeInsets.all(10.0),
+      ),
+    );
   }
 
   get appbar => FixedAppBar(

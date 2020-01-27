@@ -27,6 +27,7 @@ class _RefreshWrapperState extends State<RefreshWrapper>
   final GlobalKey<RefreshIndicatorState> refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
   bool _isLoading = false;
+  bool firstLoaded = false;
 
   @override
   bool get wantKeepAlive => true;
@@ -35,6 +36,7 @@ class _RefreshWrapperState extends State<RefreshWrapper>
   void initState() {
     super.initState();
 
+    _onRefresh();
     widget.scrollController.addListener(() {
       if (widget.scrollController.position.pixels ==
           widget.scrollController.position.maxScrollExtent) {
@@ -49,15 +51,29 @@ class _RefreshWrapperState extends State<RefreshWrapper>
     _isLoading = false;
   }
 
+  Future<void> _onRefresh() async {
+    _isLoading = true;
+    await widget.onLoadMore();
+    _isLoading = false;
+
+    if (!firstLoaded) {
+      setState(() {
+        firstLoaded = true;
+      });
+    }
+  }
+
   bool get isLoading => _isLoading;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return RefreshIndicator(
-      key: refreshIndicatorKey,
-      onRefresh: widget.onRefresh,
-      child: widget.child,
-    );
+    return firstLoaded
+        ? RefreshIndicator(
+            key: refreshIndicatorKey,
+            onRefresh: _onRefresh,
+            child: widget.child,
+          )
+        : Center(child: CircularProgressIndicator());
   }
 }

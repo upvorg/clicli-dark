@@ -6,7 +6,6 @@ import 'package:clicili_dark/widgets/appbar.dart';
 import 'package:clicili_dark/widgets/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:extended_list/extended_list.dart';
 
 class UGCPage extends StatefulWidget {
   @override
@@ -23,12 +22,6 @@ class _UGCPageState extends State<UGCPage> with AutomaticKeepAliveClientMixin {
   List data = [];
   int page = 1;
 
-  @override
-  void initState() {
-    super.initState();
-    getUGC();
-  }
-
   Future<void> getUGC() async {
     final res = (await getPost('原创', '', page, 10)).data;
     data.addAll(jsonDecode(res)['posts']);
@@ -38,6 +31,7 @@ class _UGCPageState extends State<UGCPage> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
         body: Column(
       children: <Widget>[
@@ -47,7 +41,7 @@ class _UGCPageState extends State<UGCPage> with AutomaticKeepAliveClientMixin {
           onLoadMore: getUGC,
           onRefresh: getUGC,
           scrollController: _scrollController,
-          child: ExtendedGridView(
+          child: GridView(
             physics: BouncingScrollPhysics(),
             controller: _scrollController,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

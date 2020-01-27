@@ -51,6 +51,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void _onPageChange(int index) {
     setState(() {
       _currentPageIndex = index;
+      _pageController.animateToPage(index,
+          duration: const Duration(milliseconds: 1), curve: Curves.ease);
     });
   }
 
@@ -68,8 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return Future.value(false);
   }
 
-  static Widget get comingSoon => Center(child: Text('根据法律法规, 禁止访问 (○｀ 3′○)'));
-
   @override
   void initState() {
     super.initState();
@@ -83,7 +83,6 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Scaffold(
         body: PageView(
           controller: _pageController,
-          onPageChanged: _onPageChange,
           children: [HomePage(), TimeLinePage(), UGCPage()],
           physics: NeverScrollableScrollPhysics(),
         ),
