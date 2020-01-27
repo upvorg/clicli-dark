@@ -95,7 +95,6 @@ class _HomePageState extends State<HomePage>
           crossAxisSpacing: 15.0,
           mainAxisSpacing: 20.0,
           crossAxisCount: 2,
-          childAspectRatio: 2 / 2,
         ),
         itemCount: data.length,
         controller: c,

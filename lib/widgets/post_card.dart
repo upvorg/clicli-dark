@@ -43,10 +43,21 @@ class _PostCardState extends State<PostCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             CachedNetworkImage(
+              //TODO 回收图片内存
               imageUrl: getSuo(widget.data['content']),
+              placeholder: (ctx, url) => SizedBox(
+                height: 115,
+                width: double.infinity,
+                child: Center(child: CircularProgressIndicator()),
+              ),
               height: 115,
               width: double.infinity,
               fit: BoxFit.cover,
+              errorWidget: (_, __, ___) => SizedBox(
+                height: 115,
+                width: double.infinity,
+                child: Center(child: Icon(Icons.error_outline)),
+              ),
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
