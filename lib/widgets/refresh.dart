@@ -53,7 +53,7 @@ class _RefreshWrapperState extends State<RefreshWrapper>
 
   Future<void> _onRefresh() async {
     _isLoading = true;
-    await widget.onLoadMore();
+    await widget.onRefresh();
     _isLoading = false;
 
     if (!firstLoaded) {

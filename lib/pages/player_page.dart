@@ -100,7 +100,9 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
   }
 
   toggleVideo(int i) async {
-    if (i == currPlayIndex || i > videoList.length - 1) return;
+    if (i == currPlayIndex ||
+        i > videoList.length - 1 ||
+        !_videoPlayerController.value.initialized) return;
     await _videoPlayerController.pause();
     currPlayIndex = i;
     await initPlayer();
