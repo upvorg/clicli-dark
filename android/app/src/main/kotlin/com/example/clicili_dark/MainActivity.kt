@@ -1,4 +1,4 @@
-package com.example.clicili_dark
+package com.cy.clicili_dark
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
