@@ -5,6 +5,7 @@ import 'package:clicili_dark/pkg/chewie/chewie.dart';
 import 'package:clicili_dark/utils/reg_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -116,6 +117,14 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
     _tabController = TabController(length: 2, vsync: this);
     Wakelock.enable();
     getDetail();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.white,
+      systemNavigationBarDividerColor: null,
+      statusBarColor: null,
+      systemNavigationBarIconBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.dark,
+    ));
   }
 
   @override
@@ -137,8 +146,13 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
     }
     return Scaffold(
         body: SafeArea(
+      top: false,
       child: Column(
         children: <Widget>[
+          Container(
+            color: Colors.black,
+            height: MediaQuery.of(context).padding.top,
+          ),
           _chewieController != null
               ? Chewie(controller: _chewieController)
               : AspectRatio(

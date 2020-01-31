@@ -65,7 +65,8 @@ class _MyHomePageState extends State<MyHomePage> {
       lastBack = DateTime.now().millisecondsSinceEpoch;
     } else {
       cancelToast();
-      SystemNavigator.pop();
+      //  SystemNavigator.pop();
+      return Future.value(true);
     }
     return Future.value(false);
   }
