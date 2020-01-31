@@ -28,6 +28,7 @@ class _RefreshWrapperState extends State<RefreshWrapper>
       GlobalKey<RefreshIndicatorState>();
   bool _isLoading = false;
   bool firstLoaded = false;
+  bool isLoadMore = false;
 
   @override
   bool get wantKeepAlive => true;
@@ -46,12 +47,17 @@ class _RefreshWrapperState extends State<RefreshWrapper>
   }
 
   Future<void> _onLoadMore() async {
+    isLoadMore = true;
+    setState(() {});
+
     _isLoading = true;
     await widget.onLoadMore();
     _isLoading = false;
+    isLoadMore = false;
   }
 
   Future<void> _onRefresh() async {
+    if (isLoading) return;
     _isLoading = true;
     await widget.onRefresh();
     _isLoading = false;
@@ -72,7 +78,32 @@ class _RefreshWrapperState extends State<RefreshWrapper>
         ? RefreshIndicator(
             key: refreshIndicatorKey,
             onRefresh: _onRefresh,
-            child: widget.child,
+            child: Stack(
+              children: <Widget>[
+                widget.child,
+                if (isLoadMore)
+                  Positioned(
+                      top: 15,
+                      left: MediaQuery.of(context).size.width / 2 - 17.5,
+                      child: Opacity(
+                        opacity: isLoadMore ? 1 : 0,
+                        child: Container(
+                          width: 35,
+                          height: 35,
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(100))),
+                          child: SizedBox(
+                            child: CircularProgressIndicator(
+                              strokeWidth: 3,
+                            ),
+                          ),
+                        ),
+                      ))
+              ],
+            ),
           )
         : Center(child: CircularProgressIndicator());
   }

@@ -28,7 +28,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
 
   bool isLoading = true;
   Map detail;
-  List videoList;
+  List videoList = [];
   Map videoSrc = {};
   int currPlayIndex = 0;
 
@@ -41,12 +41,13 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
   }
 
   getDetail() async {
-    final videoRes = jsonDecode((await getVideoList(widget.id)).data)['videos'];
     final res = jsonDecode((await getPostDetail(widget.id)).data)['result'];
-
-    videoList = videoRes ?? [];
     detail = res;
     isLoading = false;
+    setState(() {});
+
+    final videoRes = jsonDecode((await getVideoList(widget.id)).data)['videos'];
+    videoList = videoRes ?? [];
 
     if (mounted) {
       setState(() {});
@@ -144,7 +145,11 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
                   aspectRatio: 16 / 9,
                   child: Container(
                     color: Colors.black,
-                    child: Center(child: Text('loading ···')),
+                    child: Center(
+                        child: Text(
+                      'loading ···',
+                      style: TextStyle(color: Colors.white),
+                    )),
                   ),
                 ),
           Container(

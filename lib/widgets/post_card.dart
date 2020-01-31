@@ -62,17 +62,18 @@ class _PostCardState extends State<PostCard> {
             Padding(
               padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 5),
                     child: Text(
-                      widget.data['title'].trimLeft(),
+                      widget.data['title'],
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   Text(
-                    widget.data['time']?.trimLeft() ?? '',
+                    widget.data['time'],
                     style: Theme.of(context).textTheme.caption,
                   ),
                 ],
