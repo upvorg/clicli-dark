@@ -77,8 +77,11 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
         videoList[currPlayIndex]['title'],
         style:
             Theme.of(context).textTheme.subhead.copyWith(color: Colors.white),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
       fontColor: Colors.white,
+      allowMuting: false,
     );
     setState(() {});
   }
@@ -129,8 +132,8 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    _chewieController?.dispose();
     _videoPlayerController?.removeListener(autoNextLis);
+    _chewieController?.dispose();
     _videoPlayerController?.dispose();
     super.dispose();
   }
