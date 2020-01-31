@@ -84,17 +84,23 @@ class _RefreshWrapperState extends State<RefreshWrapper>
                 if (isLoadMore)
                   Positioned(
                       top: 15,
-                      left: MediaQuery.of(context).size.width / 2 - 17.5,
+                      left: MediaQuery.of(context).size.width / 2 - 20,
                       child: Opacity(
                         opacity: isLoadMore ? 1 : 0,
                         child: Container(
-                          width: 35,
-                          height: 35,
+                          width: 40,
+                          height: 40,
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(100))),
+                                  BorderRadius.all(Radius.circular(100)),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey,
+                                    offset: Offset(1, 1),
+                                    blurRadius: 2)
+                              ]),
                           child: SizedBox(
                             child: CircularProgressIndicator(
                               strokeWidth: 3,
