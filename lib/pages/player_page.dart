@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:clicili_dark/api/post.dart';
-import 'package:clicili_dark/pkg/chewie/chewie.dart';
-import 'package:clicili_dark/utils/reg_utils.dart';
+import 'package:clicli_dark/api/post.dart';
+import 'package:clicli_dark/pkg/chewie/chewie.dart';
+import 'package:clicli_dark/utils/reg_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

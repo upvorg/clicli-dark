@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:clicili_dark/api/post.dart';
-import 'package:clicili_dark/pages/rank_page.dart';
-import 'package:clicili_dark/pages/search_page.dart';
-import 'package:clicili_dark/widgets//post_card.dart';
-import 'package:clicili_dark/widgets/appbar.dart';
-import 'package:clicili_dark/widgets/refresh.dart';
+import 'package:clicli_dark/api/post.dart';
+import 'package:clicli_dark/pages/rank_page.dart';
+import 'package:clicli_dark/pages/search_page.dart';
+import 'package:clicli_dark/widgets//post_card.dart';
+import 'package:clicli_dark/widgets/appbar.dart';
+import 'package:clicli_dark/widgets/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

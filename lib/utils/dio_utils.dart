@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+//import 'package:flutter/foundation.dart';
 
 BaseOptions baseOptions = BaseOptions(
 //  baseUrl: Constants.BASE_URL,
@@ -20,7 +20,7 @@ class NetUtils {
   static void initConfig() async {
     dio.interceptors.add(InterceptorsWrapper(
       onError: (DioError e) async {
-        debugPrint("DioError: ${e.message}");
+        // debugPrint("DioError: ${e.message}");
         if (e?.response?.statusCode == 401) {}
         return e;
       },
@@ -28,7 +28,7 @@ class NetUtils {
 
     tokenDio.interceptors.add(InterceptorsWrapper(
       onError: (DioError e) async {
-        debugPrint("Token DioError: ${e.message}");
+        // debugPrint("Token DioError: ${e.message}");
         return e;
       },
     ));

@@ -85,8 +85,9 @@ class _RefreshWrapperState extends State<RefreshWrapper>
                   Positioned(
                       top: 15,
                       left: MediaQuery.of(context).size.width / 2 - 20,
-                      child: Opacity(
+                      child: AnimatedOpacity(
                         opacity: isLoadMore ? 1 : 0,
+                        duration: Duration(milliseconds: 300),
                         child: Container(
                           width: 40,
                           height: 40,

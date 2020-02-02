@@ -1,4 +1,4 @@
-import 'package:clicili_dark/utils/dio_utils.dart';
+import 'package:clicli_dark/utils/dio_utils.dart';
 import 'package:dio/dio.dart';
 
 getPost(

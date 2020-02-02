@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clicili_dark/pages/player_page.dart';
-import 'package:clicili_dark/utils/reg_utils.dart';
+import 'package:clicli_dark/pages/player_page.dart';
+import 'package:clicli_dark/utils/reg_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
