@@ -2,7 +2,7 @@
 
 <p align='center'> :zap: CliCli 纯黑 | <a href='https://github.com/cliclitv/clicli-dark/releases'>Download</a></p>
 
-## devp
+## Current Flutter Version
 
 > Flutter 1.12.13+hotfix.7 • channel stable • https://github.com/flutter/flutter.git
 > Framework • revision 9f5ff2306b (7 days ago) • 2020-01-26 22:38:26 -0800

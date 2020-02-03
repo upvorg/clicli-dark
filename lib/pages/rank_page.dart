@@ -1,12 +1,12 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clicli_dark/api/post.dart';
 import 'package:clicli_dark/pages/player_page.dart';
 import 'package:clicli_dark/utils/reg_utils.dart';
 import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class RankPage extends StatefulWidget {
   @override
@@ -21,6 +21,7 @@ class _RankPageState extends State<RankPage> {
   }
 
   List rankList = [];
+
   getRankInfo() async {
     rankList = jsonDecode((await getRank()).data)['posts'];
     setState(() {});

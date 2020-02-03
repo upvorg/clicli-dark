@@ -21,7 +21,6 @@ dev_dependencies:
   cached_network_image: any
   video_player: any
   wakelock: any
-  open_iconic_flutter: any
   screen: any
 
 flutter:
