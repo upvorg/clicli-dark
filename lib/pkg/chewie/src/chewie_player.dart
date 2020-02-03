@@ -166,38 +166,40 @@ class ChewieState extends State<Chewie> {
 /// player, please use the standard information provided by the
 /// `VideoPlayerController`.
 class ChewieController extends ChangeNotifier {
-  ChewieController(
-      {this.videoPlayerController,
-      this.aspectRatio,
-      this.autoInitialize = false,
-      this.autoPlay = false,
-      this.startAt,
-      this.looping = false,
-      this.fullScreenByDefault = false,
-      this.cupertinoProgressColors,
-      this.materialProgressColors,
-      this.placeholder,
-      this.overlay,
-      this.showControlsOnInitialize = true,
-      this.showControls = true,
-      this.customControls,
-      this.errorBuilder,
-      this.allowedScreenSleep = true,
-      this.isLive = false,
-      this.allowFullScreen = true,
-      this.allowMuting = true,
-      this.systemOverlaysAfterFullScreen = SystemUiOverlay.values,
-      this.deviceOrientationsAfterFullScreen = const [
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ],
-      this.routePageBuilder,
-      this.videoTitle,
-      this.controllerBackGroundColor = Colors.transparent,
-      this.fontColor = Colors.white})
-      : assert(videoPlayerController != null,
+  ChewieController({
+    this.videoPlayerController,
+    this.aspectRatio,
+    this.autoInitialize = false,
+    this.autoPlay = false,
+    this.startAt,
+    this.looping = false,
+    this.fullScreenByDefault = false,
+    this.cupertinoProgressColors,
+    this.materialProgressColors,
+    this.placeholder,
+    this.overlay,
+    this.showControlsOnInitialize = true,
+    this.showControls = true,
+    this.customControls,
+    this.errorBuilder,
+    this.allowedScreenSleep = true,
+    this.isLive = false,
+    this.allowFullScreen = true,
+    this.allowMuting = true,
+    this.systemOverlaysAfterFullScreen = SystemUiOverlay.values,
+    this.deviceOrientationsAfterFullScreen = const [
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ],
+    this.routePageBuilder,
+    this.videoTitle,
+    this.thumbnail,
+    this.controllerBackGroundColor = Colors.black,
+    this.fontColor = Colors.white,
+    this.enableDLNA = false,
+  }) : assert(videoPlayerController != null,
             'You must provide a controller to play a video') {
     _initialize();
   }
@@ -280,7 +282,13 @@ class ChewieController extends ChangeNotifier {
 
   final Color fontColor;
 
-  final Widget videoTitle;
+  final String videoTitle;
+
+  final String thumbnail;
+
+  final bool enableDLNA;
+
+  List devices = [];
 
   static ChewieController of(BuildContext context) {
     final chewieControllerProvider =

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:screen/screen.dart';
 import 'package:video_player/video_player.dart';
@@ -61,6 +62,8 @@ class _MaterialControlsState extends State<MaterialControls> {
   bool _dragging = false;
   bool _displayTapped = false;
 
+  // bool showPop = false;
+
   final barHeight = 48.0;
   final marginSize = 5.0;
 
@@ -89,6 +92,29 @@ class _MaterialControlsState extends State<MaterialControls> {
             );
     }
 
+    if (_latestValue != null &&
+            !_latestValue.isPlaying &&
+            _latestValue.duration == null ||
+        _latestValue.isBuffering)
+      return Column(
+        children: [
+          Expanded(
+              child: Container(
+            decoration: chewieController.thumbnail != null
+                ? BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(chewieController.thumbnail),
+                    ),
+                  )
+                : null,
+            child: const Center(
+              child: const CircularProgressIndicator(),
+            ),
+          ))
+        ],
+      );
+
     return MouseRegion(
       onHover: (_) {
         _cancelAndRestartTimer();
@@ -109,22 +135,14 @@ class _MaterialControlsState extends State<MaterialControls> {
         child: AbsorbPointer(
           absorbing: _hideStuff,
           child: Column(
-            children: _latestValue != null &&
-                        !_latestValue.isPlaying &&
-                        _latestValue.duration == null ||
-                    _latestValue.isBuffering
-                ? [
-                    const Expanded(
-                      child: const Center(
-                        child: const CircularProgressIndicator(),
-                      ),
-                    )
-                  ]
-                : <Widget>[
-                    _buildVideoBar(),
-                    _buildHitArea(),
-                    _buildBottomBar(context),
-                  ],
+            children: <Widget>[
+              _buildVideoBar(),
+              // showPop && chewieController.enableDLNA
+              //     ? Expanded(child: _buildDlna())
+              //     : _buildHitArea(),
+              _buildHitArea(),
+              _buildBottomBar(context),
+            ],
           ),
         ),
       ),
@@ -252,7 +270,7 @@ class _MaterialControlsState extends State<MaterialControls> {
       duration: Duration(milliseconds: 300),
       child: Container(
         height: barHeight,
-        color: chewieController.controllerBackGroundColor,
+        color: chewieController.controllerBackGroundColor.withOpacity(0.2),
         child: Row(
           children: <Widget>[
             _buildPlayPause(controller),
@@ -303,8 +321,8 @@ class _MaterialControlsState extends State<MaterialControls> {
       opacity: isErr ? 1.0 : _hideStuff ? 0.0 : 1.0,
       duration: Duration(milliseconds: 300),
       child: Container(
-        height: barHeight,
-        padding: EdgeInsets.symmetric(horizontal: 8.0),
+        padding: EdgeInsets.symmetric(horizontal: 4.0),
+        color: Colors.black.withOpacity(0.2),
         child: Row(
           children: <Widget>[
             IconButton(
@@ -317,7 +335,22 @@ class _MaterialControlsState extends State<MaterialControls> {
               },
             ),
             Expanded(
-              child: chewieController.videoTitle,
+              child: Text(
+                chewieController.videoTitle,
+                style: TextStyle(color: chewieController.fontColor),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.screen_share,
+                color: chewieController.fontColor,
+              ),
+              onPressed: () {
+                showShortToast('coming soon...');
+                // showPop = !showPop;
+              },
             )
           ],
         ),
@@ -509,9 +542,71 @@ class _MaterialControlsState extends State<MaterialControls> {
         });
       });
     }
+
+    // await _initDlna();
+
     // maxVol = await Volume.getMaxVol;
-// TODO
   }
+
+//   Future<void> _initDlna() async {
+//     if (!chewieController.enableDLNA) return;
+
+// //    FlutterPlugin.search();
+//     FlutterPlugin.init((List<dynamic> data) {
+//       if (!mounted) return;
+
+//       chewieController.devices = data;
+//     });
+//     await FlutterPlugin.devices;
+//     print('dlna devices ${chewieController.devices}');
+//   }
+
+//   Widget _buildDlna() {
+//     if (chewieController.devices.length == 0) {
+//       return Container(
+//         color: Colors.purple.withOpacity(0.4),
+//         padding: EdgeInsets.all(20.0),
+//         child: Center(
+//           child: Text(
+//             "暂无可用设备,请确保两者在同一wifi下.",
+//             style: TextStyle(
+//               color: Colors.white,
+//             ),
+//           ),
+//         ),
+//       );
+//     }
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.end,
+//       mainAxisAlignment: MainAxisAlignment.end,
+//       children: <Widget>[
+//         Expanded(
+//             child: Container(
+//           color: Colors.purple.withOpacity(0.4),
+//           width: 300,
+//           child: ListView(
+//             padding: EdgeInsets.all(0),
+//             children: chewieController.devices
+//                 .map<Widget>((item) => ListTile(
+//                       title: Text(
+//                         item["name"],
+//                         style: TextStyle(fontSize: 14.0),
+//                       ),
+//                       subtitle: Text(
+//                         item["ip"],
+//                         style: TextStyle(fontSize: 10.0),
+//                       ),
+//                       onTap: () async {
+// //                        FlutterPlugin.playLocalSource(item["uuid"],
+// //                            chewieController.videoPlayerController.dataSource);
+//                       },
+//                     ))
+//                 .toList(),
+//           ),
+//         ))
+//       ],
+//     );
+//   }
 
   void _onExpandCollapse() {
     setState(() {

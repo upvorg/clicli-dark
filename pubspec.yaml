@@ -22,6 +22,7 @@ dev_dependencies:
   video_player: any
   wakelock: any
   screen: any
+  open_iconic_flutter: any
 
 flutter:
   uses-material-design: true

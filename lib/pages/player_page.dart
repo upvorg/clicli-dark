@@ -27,6 +27,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
   ChewieController _chewieController;
   TabController _tabController;
 
+  String thumbnail;
   bool isLoading = true;
   Map detail;
   List videoList = [];
@@ -42,8 +43,10 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
   }
 
   getDetail() async {
-    final res = jsonDecode((await getPostDetail(widget.id)).data)['result'];
-    detail = res;
+    final res = jsonDecode((await getPostDetail(widget.id)).data);
+
+    thumbnail = getSuo(res['content']);
+    detail = res['result'];
     isLoading = false;
     setState(() {});
 
@@ -73,15 +76,11 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
       looping: false,
       allowedScreenSleep: false,
       allowFullScreen: true,
-      videoTitle: Text(
-        videoList[currPlayIndex]['title'],
-        style:
-            Theme.of(context).textTheme.subhead.copyWith(color: Colors.white),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
+      videoTitle: videoList[currPlayIndex]['title'],
       fontColor: Colors.white,
       allowMuting: false,
+      enableDLNA: true,
+      thumbnail: thumbnail,
     );
     setState(() {});
   }
