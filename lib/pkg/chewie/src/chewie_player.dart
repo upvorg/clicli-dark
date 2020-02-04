@@ -26,7 +26,6 @@ class Chewie extends StatefulWidget {
   })  : assert(controller != null, 'You must provide a chewie controller'),
         super(key: key);
 
-  /// The [ChewieController]
   final ChewieController controller;
 
   @override
@@ -125,6 +124,7 @@ class ChewieState extends State<Chewie> {
     final isAndroid = Theme.of(context).platform == TargetPlatform.android;
     final TransitionRoute<Null> route = PageRouteBuilder<Null>(
       settings: RouteSettings(isInitialRoute: false),
+      opaque: false,
       pageBuilder: _fullScreenRoutePageBuilder,
     );
 

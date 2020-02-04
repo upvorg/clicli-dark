@@ -64,7 +64,7 @@ class _MaterialControlsState extends State<MaterialControls> {
 
   // bool showPop = false;
 
-  final barHeight = 48.0;
+  final barHeight = 38.0;
   final marginSize = 5.0;
 
   VideoPlayerController controller;
@@ -270,7 +270,16 @@ class _MaterialControlsState extends State<MaterialControls> {
       duration: Duration(milliseconds: 300),
       child: Container(
         height: barHeight,
-        color: chewieController.controllerBackGroundColor.withOpacity(0.2),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              chewieController.controllerBackGroundColor.withOpacity(0.5),
+              Colors.transparent
+            ],
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+          ),
+        ),
         child: Row(
           children: <Widget>[
             _buildPlayPause(controller),
@@ -321,8 +330,17 @@ class _MaterialControlsState extends State<MaterialControls> {
       opacity: isErr ? 1.0 : _hideStuff ? 0.0 : 1.0,
       duration: Duration(milliseconds: 300),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 4.0),
-        color: Colors.black.withOpacity(0.2),
+        height: barHeight,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.transparent,
+              chewieController.controllerBackGroundColor.withOpacity(0.5),
+            ],
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+          ),
+        ),
         child: Row(
           children: <Widget>[
             IconButton(
@@ -367,7 +385,7 @@ class _MaterialControlsState extends State<MaterialControls> {
       } else
         _cancelAndRestartTimer();
     } else {
-      _playPause();
+      // _playPause();
 
       setState(() {
         _hideStuff = true;
@@ -384,7 +402,7 @@ class _MaterialControlsState extends State<MaterialControls> {
           child: Center(
             child: Column(
               children: <Widget>[
-                if (_latestValue != null &&
+                /*  if (_latestValue != null &&
                     !_latestValue.isPlaying &&
                     !_dragging)
                   Expanded(
@@ -412,8 +430,9 @@ class _MaterialControlsState extends State<MaterialControls> {
                         ),
                       ),
                     ),
-                  ),
-                if (showbri) LinearProgress(bri, Icons.brightness_6),
+                  ), */
+                if (showbri)
+                  LinearProgress(bri, Icons.brightness_6),
                 if (showTimeLine)
                   Container(
                     color: Colors.black.withOpacity(0.5),

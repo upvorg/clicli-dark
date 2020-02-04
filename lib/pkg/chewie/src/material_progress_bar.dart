@@ -101,6 +101,12 @@ class _VideoProgressBarState extends State<MaterialVideoProgressBar> {
           controller.play();
         }
 
+        /// Seek playes video without resuming the controls to play state
+        /// Check if seeked from video end then play video controller
+        if (controller.value.position == controller.value.duration) {
+          controller.pause();
+        }
+
         if (widget.onDragEnd != null) {
           widget.onDragEnd();
         }
@@ -108,6 +114,12 @@ class _VideoProgressBarState extends State<MaterialVideoProgressBar> {
       onTapDown: (TapDownDetails details) {
         if (!controller.value.initialized) {
           return;
+        }
+
+        /// Seek playes video without resuming the controls to play state
+        /// Check and play video if the controller is in pause state
+        if (!controller.value.isPlaying) {
+          controller.play();
         }
         seekToRelativePosition(details.globalPosition);
       },

@@ -43,10 +43,10 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
   }
 
   getDetail() async {
-    final res = jsonDecode((await getPostDetail(widget.id)).data);
+    final res = jsonDecode((await getPostDetail(widget.id)).data)['result'];
 
     thumbnail = getSuo(res['content']);
-    detail = res['result'];
+    detail = res;
     isLoading = false;
     setState(() {});
 
@@ -86,6 +86,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
   }
 
   autoNextLis() {
+    // print(_videoPlayerController.value.buffered);
     if (!mounted) {
       _chewieController?.dispose();
       _videoPlayerController?.removeListener(autoNextLis);

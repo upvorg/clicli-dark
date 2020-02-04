@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:dio/dio.dart';
 //import 'package:flutter/foundation.dart';
 
@@ -20,8 +21,12 @@ class NetUtils {
   static void initConfig() async {
     dio.interceptors.add(InterceptorsWrapper(
       onError: (DioError e) async {
-        // debugPrint("DioError: ${e.message}");
         if (e?.response?.statusCode == 401) {}
+        if (e?.type == DioErrorType.CONNECT_TIMEOUT ||
+            e?.type == DioErrorType.RECEIVE_TIMEOUT ||
+            e?.type == DioErrorType.SEND_TIMEOUT) {
+          showCenterErrorShortToast('NETWORK TIMEOUT, PLZ TRY AGAIN LATER.');
+        }
         return e;
       },
     ));
