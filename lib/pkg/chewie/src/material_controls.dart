@@ -307,11 +307,8 @@ class _MaterialControlsState extends State<MaterialControls> {
         duration: Duration(milliseconds: 300),
         child: Container(
           height: barHeight,
-          margin: EdgeInsets.only(right: 10.0),
-          padding: EdgeInsets.only(
-            left: 5.0,
-            right: 5.0,
-          ),
+          margin: EdgeInsets.only(right: 4.0),
+          padding: EdgeInsets.symmetric(horizontal: 5.0),
           child: Center(
             child: Icon(
               chewieController.isFullScreen
@@ -501,11 +498,8 @@ class _MaterialControlsState extends State<MaterialControls> {
       child: Container(
         height: barHeight,
         color: Colors.transparent,
-        // margin: EdgeInsets.only(left: 4.0, right: 4.0),
-        padding: EdgeInsets.only(
-          left: 5.0,
-          right: 5.0,
-        ),
+        margin: EdgeInsets.symmetric(horizontal: 2.0),
+        padding: EdgeInsets.symmetric(horizontal: 2.0),
         child: Icon(
           controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
           color: chewieController.fontColor,
@@ -527,7 +521,7 @@ class _MaterialControlsState extends State<MaterialControls> {
       child: Text(
         '${formatDuration(position)} / ${formatDuration(duration)}',
         style: TextStyle(
-          fontSize: 12.0,
+          fontSize: 13.0,
           color: chewieController.fontColor,
         ),
       ),
