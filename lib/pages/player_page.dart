@@ -86,7 +86,6 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
   }
 
   autoNextLis() {
-    // print(_videoPlayerController.value.buffered);
     if (!mounted) {
       _chewieController?.dispose();
       _videoPlayerController?.removeListener(autoNextLis);

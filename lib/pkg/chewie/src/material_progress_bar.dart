@@ -116,11 +116,9 @@ class _VideoProgressBarState extends State<MaterialVideoProgressBar> {
           return;
         }
 
-        /// Seek playes video without resuming the controls to play state
-        /// Check and play video if the controller is in pause state
-        if (!controller.value.isPlaying) {
-          controller.play();
-        }
+        // if (!controller.value.isPlaying) {
+        //   controller.play();
+        // }
         seekToRelativePosition(details.globalPosition);
       },
     );

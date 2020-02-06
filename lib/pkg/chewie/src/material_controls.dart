@@ -59,8 +59,6 @@ class _MaterialControlsState extends State<MaterialControls> {
   Timer _hideTimer;
   Timer _initTimer;
   Timer _showAfterExpandCollapseTimer;
-  bool _dragging = false;
-  bool _displayTapped = false;
 
   // bool showPop = false;
 
@@ -75,9 +73,7 @@ class _MaterialControlsState extends State<MaterialControls> {
     if (_latestValue.hasError) {
       return chewieController.errorBuilder != null
           ? chewieController.errorBuilder(
-              context,
-              chewieController.videoPlayerController.value.errorDescription,
-            )
+              context, _latestValue.errorDescription)
           : Stack(
               children: <Widget>[
                 _buildVideoBar(isErr: true),
@@ -132,18 +128,21 @@ class _MaterialControlsState extends State<MaterialControls> {
         onVerticalDragEnd: _onVerticalDragEnd,
         onTap: () => _cancelAndRestartTimer(),
         onDoubleTap: _playPause,
-        child: AbsorbPointer(
-          absorbing: _hideStuff,
-          child: Column(
-            children: <Widget>[
-              _buildVideoBar(),
-              // showPop && chewieController.enableDLNA
-              //     ? Expanded(child: _buildDlna())
-              //     : _buildHitArea(),
-              _buildHitArea(),
-              _buildBottomBar(context),
-            ],
-          ),
+        child: Column(
+          children: <Widget>[
+            AbsorbPointer(
+              child: _buildVideoBar(),
+              absorbing: _hideStuff,
+            ),
+            _buildHitArea(),
+            AbsorbPointer(
+              child: _buildBottomBar(context),
+              absorbing: _hideStuff,
+            ),
+            // showPop && chewieController.enableDLNA
+            //     ? Expanded(child: _buildDlna())
+            //     : _buildHitArea(),
+          ],
         ),
       ),
     );
@@ -176,15 +175,18 @@ class _MaterialControlsState extends State<MaterialControls> {
     super.didChangeDependencies();
   }
 
-  int maxVol = 0;
   int brightness = 1;
   double _startVerticalDragY = 0;
   double _startVerticalDragX = 0;
   double _endVerticalDragY = 0;
-  bool showVolTip = false;
-  bool showbri = false;
+
+  bool showBrightness = false;
   double initBri = 0;
-  double bri = 0;
+  double brighting = 0;
+
+  bool showVolTip = false;
+  double initVol = 0.0; // 初始声音
+  double voling = 0.0; // 滑动百分比
 
   void _onVerticalDragDown(DragDownDetails d) {
     _startVerticalDragX = d.localPosition.dx;
@@ -193,13 +195,13 @@ class _MaterialControlsState extends State<MaterialControls> {
 
   void _onVerticalDragStart(DragStartDetails d) async {
     if (_startVerticalDragX < MediaQuery.of(context).size.width / 2) {
-      showbri = true;
       initBri = await Screen.brightness;
+      showBrightness = true;
     } else {
-      // showVolTip = true;
-      // setState(() {});
-      //  = (await FlutterVolume.get()).toDouble();
+      initVol = controller.value.volume;
+      showVolTip = true;
     }
+    setState(() {});
   }
 
   void _onVerticalDragUpdate(DragUpdateDetails d) {
@@ -208,63 +210,61 @@ class _MaterialControlsState extends State<MaterialControls> {
     final totalHor =
         MediaQuery.of(context).size.width / chewieController.aspectRatio;
     if (_startHorizontalDragX < MediaQuery.of(context).size.width / 2) {
-      final resolut = initBri + (drag / totalHor);
-      bri = resolut <= 0 ? 0.0 : resolut >= 1 ? 1.0 : resolut;
+      final _ = initBri + (drag / totalHor);
+      brighting = _ <= 0 ? 0.0 : _ >= 1 ? 1.0 : _;
     } else {
-      // final resolut = maxVol * _horizontalDrag / totalHor;
-      // vol = (vol + resolut) / maxVol;
+      final _ = initVol + drag / totalHor;
+      voling = _ > 1.0 ? 1.0 : _ < 0.0 ? 0.0 : _;
     }
   }
 
   void _onVerticalDragEnd(DragEndDetails d) async {
-    // final _horizontalDrag = -(_endHorizontalDragY - _startHorizontalDragY);
+    //debug
+    // final _horizontalDrag = -(_endVerticalDragY - _startVerticalDragY);
     // final totalHor =
     //     MediaQuery.of(context).size.width / chewieController.aspectRatio;
+
     if (_startVerticalDragX < MediaQuery.of(context).size.width / 2) {
-      await Screen.setBrightness(bri);
-      showbri = false;
+      showBrightness = false;
+      await Screen.setBrightness(brighting);
     } else {
-      // final resolut =
-      //     (await FlutterVolume.get()) + maxVol * _horizontalDrag / totalHor;
-      // FlutterVolume.set(resolut);
-      // vol = resolut.toDouble();
-      // showVolTip = false;
-      // setState(() {});
+      showVolTip = false;
+      await controller.setVolume(voling);
+
+      // print(
+      //     '滑动了 ${_horizontalDrag / totalHor}  $voling 最终设置为 ${controller.value.volume}');
     }
+    setState(() {});
   }
 
   bool showTimeLine = false;
   double _startHorizontalDragX = 0; //初次
-  double _horizontalDragTime = 0; //累计
+  int _horizontalDragTime = 0; //累计
 
   void _onHorizontalDragDown(DragDownDetails d) async {
     _startHorizontalDragX = d.localPosition.dx;
   }
 
   void _onHorizontalDragStart(DragStartDetails d) async {
-    showTimeLine = true;
-    setState(() {});
+    setState(() {
+      showTimeLine = true;
+    });
   }
 
   void _onHorizontalDragUpdate(DragUpdateDetails d) async {
     final w = MediaQuery.of(context).size.width;
-    final m = (d.localPosition.dx - _startHorizontalDragX) / w * 90;
-    _horizontalDragTime = m;
+    final m = (d.localPosition.dx - _startHorizontalDragX) / w * 90; // 90s
+    _horizontalDragTime = m.toInt();
   }
 
   void _onHorizontalDragEnd(DragEndDetails d) async {
     showTimeLine = false;
     setState(() {});
     chewieController.seekTo(
-        chewieController.videoPlayerController.value.position +
-            Duration(seconds: _horizontalDragTime.toInt()));
+        _latestValue.position + Duration(seconds: _horizontalDragTime.toInt()));
   }
 
-  AnimatedOpacity _buildBottomBar(
-    BuildContext context,
-  ) {
-    final iconColor = Theme.of(context).textTheme.button.color;
-
+  AnimatedOpacity _buildBottomBar(BuildContext context) {
     return AnimatedOpacity(
       opacity: _hideStuff ? 0.0 : 1.0,
       duration: Duration(milliseconds: 300),
@@ -285,14 +285,10 @@ class _MaterialControlsState extends State<MaterialControls> {
             _buildPlayPause(controller),
             chewieController.isLive
                 ? Expanded(child: const Text('LIVE'))
-                : _buildPosition(iconColor),
-            chewieController.isLive ? const SizedBox() : _buildProgressBar(),
-            chewieController.allowMuting
-                ? _buildMuteButton(controller)
-                : Container(),
-            chewieController.allowFullScreen
-                ? _buildExpandButton()
-                : Container(),
+                : _buildPosition(),
+            if (!chewieController.isLive) _buildProgressBar(),
+            if (chewieController.allowMuting) _buildMuteButton(controller),
+            if (chewieController.allowFullScreen) _buildExpandButton(),
           ],
         ),
       ),
@@ -373,17 +369,15 @@ class _MaterialControlsState extends State<MaterialControls> {
     );
   }
 
-  toggleCtrlBar() {
-    if (_latestValue != null && _latestValue.isPlaying) {
-      if (_displayTapped) {
-        setState(() {
-          _hideStuff = true;
-        });
-      } else
-        _cancelAndRestartTimer();
-    } else {
-      // _playPause();
+  void _toggleAndRestartTimer() {
+    if (_hideStuff) {
+      _hideTimer?.cancel();
+      _startHideTimer();
 
+      setState(() {
+        _hideStuff = false;
+      });
+    } else {
       setState(() {
         _hideStuff = true;
       });
@@ -393,43 +387,15 @@ class _MaterialControlsState extends State<MaterialControls> {
   Expanded _buildHitArea() {
     return Expanded(
       child: GestureDetector(
-        onTap: toggleCtrlBar,
+        onTap: _toggleAndRestartTimer,
         child: Container(
           color: Colors.transparent,
           child: Center(
             child: Column(
               children: <Widget>[
-                /*  if (_latestValue != null &&
-                    !_latestValue.isPlaying &&
-                    !_dragging)
-                  Expanded(
-                    child: AnimatedOpacity(
-                      opacity: _latestValue != null &&
-                              !_latestValue.isPlaying &&
-                              !_dragging
-                          ? 1.0
-                          : 0.0,
-                      duration: Duration(milliseconds: 300),
-                      child: GestureDetector(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(48.0),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(12.0),
-                            child: Icon(
-                              Icons.play_arrow,
-                              size: 32.0,
-                              color: chewieController.fontColor,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ), */
-                if (showbri)
-                  LinearProgress(bri, Icons.brightness_6),
+                if (showBrightness)
+                  LinearProgress(brighting, Icons.brightness_6),
+                if (showVolTip) LinearProgress(voling, Icons.volume_up),
                 if (showTimeLine)
                   Container(
                     color: Colors.black.withOpacity(0.5),
@@ -454,9 +420,7 @@ class _MaterialControlsState extends State<MaterialControls> {
     );
   }
 
-  GestureDetector _buildMuteButton(
-    VideoPlayerController controller,
-  ) {
+  GestureDetector _buildMuteButton(VideoPlayerController controller) {
     return GestureDetector(
       onTap: () {
         _cancelAndRestartTimer();
@@ -508,7 +472,7 @@ class _MaterialControlsState extends State<MaterialControls> {
     );
   }
 
-  Widget _buildPosition(Color iconColor) {
+  Widget _buildPosition() {
     final position = _latestValue != null && _latestValue.position != null
         ? _latestValue.position
         : Duration.zero;
@@ -534,7 +498,6 @@ class _MaterialControlsState extends State<MaterialControls> {
 
     setState(() {
       _hideStuff = false;
-      _displayTapped = true;
     });
   }
 
@@ -676,29 +639,20 @@ class _MaterialControlsState extends State<MaterialControls> {
   Widget _buildProgressBar() {
     return Expanded(
       child: Padding(
-        padding: EdgeInsets.only(right: 0.0),
+        padding: EdgeInsets.only(right: 2.0, left: 2.0),
         child: MaterialVideoProgressBar(
           controller,
           onDragStart: () {
-            setState(() {
-              _dragging = true;
-            });
-
             _hideTimer?.cancel();
           },
-          onDragEnd: () {
-            setState(() {
-              _dragging = false;
-            });
-
-            _startHideTimer();
-          },
+          onDragEnd: _startHideTimer,
           colors: chewieController.materialProgressColors ??
               ChewieProgressColors(
-                  playedColor: Theme.of(context).accentColor,
-                  handleColor: Theme.of(context).accentColor,
-                  bufferedColor: Theme.of(context).backgroundColor,
-                  backgroundColor: Theme.of(context).disabledColor),
+                playedColor: Theme.of(context).accentColor,
+                handleColor: Theme.of(context).accentColor,
+                bufferedColor: Theme.of(context).backgroundColor,
+                backgroundColor: Theme.of(context).disabledColor,
+              ),
         ),
       ),
     );

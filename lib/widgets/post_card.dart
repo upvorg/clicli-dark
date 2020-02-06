@@ -60,12 +60,12 @@ class _PostCardState extends State<PostCard> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5),
+                    padding: EdgeInsets.only(top: 4),
                     child: Text(
                       widget.data['title'],
                       maxLines: 1,
@@ -73,12 +73,14 @@ class _PostCardState extends State<PostCard> {
                     ),
                   ),
                   Text(
-                    widget.data['time'],
+                    widget.data['tag'].substring(1).replaceAll(' ', ' · '),
                     style: Theme.of(context).textTheme.caption,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
