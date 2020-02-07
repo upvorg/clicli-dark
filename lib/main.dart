@@ -92,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
             physics: NeverScrollableScrollPhysics(),
           ),
           bottomNavigationBar: BottomAppBar(
-            color: Colors.white,
+            elevation: 2.0,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(
@@ -103,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: _currentPageIndex == i
                         ? Theme.of(context).primaryColor
                         : Colors.grey,
-                    height: 28,
+                    height: 25,
                   ),
                   onPressed: () {
                     _onPageChange(i);

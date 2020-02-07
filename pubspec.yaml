@@ -23,6 +23,9 @@ dev_dependencies:
   wakelock: any
   screen: any
   open_iconic_flutter: any
+  # super_rich_text: any
+  flutter_markdown: ^0.3.3
+  url_launcher: any
 
 flutter:
   uses-material-design: true
