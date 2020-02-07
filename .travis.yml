@@ -1,7 +1,6 @@
 cache:
   directories:
     - '$HOME/.pub-cache'
-
 language: android
 os: linux
 sudo: false
@@ -11,20 +10,20 @@ jobs:
     - stage: deployAPK
       os: linux
       language: android
-      licenses:
-        - android-sdk-preview-license-.+
-        - android-sdk-license-.+
-        - google-gdk-license-.+
-      android:
-        components:
-          - tools
-          - platform-tools
-          - build-tools-27.0.3
-          - android-27
-          - sys-img-armeabi-v7a-google_apis-25
-          - extra-android-m2repository
-          - extra-google-m2repository
-          - extra-google-android-support
+      # licenses:
+      #   - android-sdk-preview-license-.+
+      #   - android-sdk-license-.+
+      #   - google-gdk-license-.+
+      # android:
+      #   components:
+      #     - tools
+      #     - platform-tools
+      #     - build-tools-27.0.3
+      #     - android-27
+      #     - sys-img-armeabi-v7a-google_apis-25
+      #     - extra-android-m2repository
+      #     - extra-google-m2repository
+      #     - extra-google-android-support
       jdk: oraclejdk8
       sudo: false
       env: APK_OUTPUT=build/app/outputs/apk/release/app-release.apk
@@ -41,8 +40,6 @@ jobs:
         - git clone https://github.com/flutter/flutter.git -b stable --depth 1
       script:
         - './flutter/bin/flutter --version'
-        - './flutter/bin/flutter clean'
-        - './flutter/bin/flutter upgrade'
         - './flutter/bin/flutter -v build apk --target-platform android-arm --release'
       deploy:
         provider: releases
