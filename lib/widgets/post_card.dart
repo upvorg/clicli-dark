@@ -4,18 +4,10 @@ import 'package:clicli_dark/utils/reg_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class PostCard extends StatefulWidget {
+class PostCard extends StatelessWidget {
   final Map data;
-
   PostCard(this.data);
 
-  @override
-  State<StatefulWidget> createState() {
-    return _PostCardState();
-  }
-}
-
-class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -23,7 +15,7 @@ class _PostCardState extends State<PostCard> {
         Navigator.pushAndRemoveUntil(context,
             MaterialPageRoute(builder: (BuildContext context) {
           return PlayerPage(
-            id: widget.data['id'],
+            id: data['id'],
           );
         }), (Route<dynamic> route) => true);
       },
@@ -36,7 +28,6 @@ class _PostCardState extends State<PostCard> {
               blurRadius: 0.5,
             )
           ],
-          borderRadius: BorderRadius.all(Radius.circular(5.0)),
           color: Colors.white,
         ),
         child: Column(
@@ -44,7 +35,7 @@ class _PostCardState extends State<PostCard> {
           children: <Widget>[
             CachedNetworkImage(
               //TODO 回收图片内存
-              imageUrl: getSuo(widget.data['content']),
+              imageUrl: getSuo(data['content']),
               placeholder: (ctx, url) => SizedBox(
                 height: 115,
                 width: double.infinity,
@@ -60,20 +51,20 @@ class _PostCardState extends State<PostCard> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.only(top: 4),
                     child: Text(
-                      widget.data['title'],
+                      data['title'],
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   Text(
-                    widget.data['tag'].substring(1).replaceAll(' ', ' · '),
+                    data['tag'].substring(1).replaceAll(' ', ' · '),
                     style: Theme.of(context).textTheme.caption,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -84,6 +75,44 @@ class _PostCardState extends State<PostCard> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class Grid2RowView extends StatelessWidget {
+  final List<Widget> widgets;
+  final ScrollController controller;
+
+  Grid2RowView(this.widgets, this.controller);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemBuilder: (ctx, i) {
+        return Row(
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.fromLTRB(10, 5, 5, 5),
+                child: widgets[i * 2],
+              ),
+            ),
+            widgets.length > i * 2 + 1
+                ? Expanded(
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(5, 5, 10, 5),
+                      child: widgets[i * 2 + 1],
+                    ),
+                  )
+                : Expanded(child: Container())
+          ],
+        );
+      },
+      physics: BouncingScrollPhysics(),
+      padding: EdgeInsets.all(0),
+      itemCount: widgets.length ~/ 2,
+      controller: controller,
     );
   }
 }

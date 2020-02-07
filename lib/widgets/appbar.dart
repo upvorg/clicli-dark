@@ -69,6 +69,7 @@ class HomeStackTitleAppbar extends StatelessWidget {
     final textStyle =
         TextStyle(color: Theme.of(context).primaryColor, fontSize: 24);
     return FixedAppBar(
+      elevation: 0.5,
       automaticallyImplyLeading: false,
       title: Container(
         padding: EdgeInsets.symmetric(horizontal: 16),

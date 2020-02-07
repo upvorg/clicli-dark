@@ -80,31 +80,26 @@ class _HomePageState extends State<HomePage>
 
   Widget getTabPage(List data, ScrollController c) {
     if (data.length < 1) Center(child: CircularProgressIndicator());
+
     return RefreshWrapper(
       onLoadMore: _loadData,
       onRefresh: () async {
         await _loadData(reset: true);
       },
       scrollController: c,
-      child: GridView.builder(
-        physics: BouncingScrollPhysics(),
-        itemBuilder: (BuildContext ctx, int i) {
-          return PostCard(data[i]);
-        },
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisSpacing: 15.0,
-          mainAxisSpacing: 20.0,
-          crossAxisCount: 2,
+      child: Grid2RowView(
+        List<PostCard>.generate(
+          data.length,
+          (i) => PostCard(data[i]),
         ),
-        itemCount: data.length,
-        controller: c,
-        padding: EdgeInsets.all(10.0),
+        c,
       ),
     );
   }
 
   get appbar => FixedAppBar(
         automaticallyImplyLeading: false,
+        elevation: 0.5,
         title: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: Row(

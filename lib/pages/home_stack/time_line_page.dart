@@ -48,6 +48,7 @@ class _TimeLineState extends State<TimeLinePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final theme = Theme.of(context);
     return Scaffold(
         body: Column(children: <Widget>[
       HomeStackTitleAppbar('时间表'),
@@ -64,7 +65,11 @@ class _TimeLineState extends State<TimeLinePage>
                           children: <Widget>[
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: 15),
-                              child: Text(week[i]),
+                              child: Text(
+                                week[i],
+                                style: theme.textTheme.title
+                                    .copyWith(color: theme.primaryColor),
+                              ),
                             ),
                             for (int j = 0; j < data[i].length / 2; j++)
                               Row(
@@ -72,14 +77,15 @@ class _TimeLineState extends State<TimeLinePage>
                                 children: <Widget>[
                                   Expanded(
                                     child: Container(
-                                      margin: EdgeInsets.all(10),
+                                      margin: EdgeInsets.fromLTRB(10, 5, 5, 5),
                                       child: PostCard(data[i][(j + 1) * 2 - 2]),
                                     ),
                                   ),
                                   data[i].length > (j + 1) * 2 - 1
                                       ? Expanded(
                                           child: Container(
-                                            margin: EdgeInsets.all(10),
+                                            margin: EdgeInsets.fromLTRB(
+                                                5, 5, 10, 5),
                                             child: PostCard(
                                                 data[i][(j + 1) * 2 - 1]),
                                           ),

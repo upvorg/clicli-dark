@@ -120,12 +120,8 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
     Wakelock.enable();
     getDetail();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.white,
-      systemNavigationBarDividerColor: null,
-      statusBarColor: null,
-      systemNavigationBarIconBrightness: Brightness.dark,
+      statusBarColor: Colors.black,
       statusBarIconBrightness: Brightness.light,
-      statusBarBrightness: Brightness.dark,
     ));
   }
 
@@ -135,6 +131,11 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
     _chewieController?.dispose();
     _videoPlayerController?.dispose();
     super.dispose();
+
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.white,
+      statusBarIconBrightness: Brightness.dark,
+    ));
   }
 
   @override

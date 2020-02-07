@@ -10,11 +10,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isAndroid) {
-    SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-    );
-    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.white,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: Colors.white,
+    ));
   }
 
   runApp(MyApp());
@@ -83,30 +86,32 @@ class _MyHomePageState extends State<MyHomePage> {
     return WillPopScope(
       onWillPop: doubleBackExit,
       child: Scaffold(
-        body: PageView(
-          controller: _pageController,
-          children: [HomePage(), TimeLinePage(), UGCPage()],
-          physics: NeverScrollableScrollPhysics(),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentPageIndex,
-          onTap: _onPageChange,
-          type: BottomNavigationBarType.fixed,
-          items: [
-            for (int i = 0; i < pagesIcon.length; i++)
-              BottomNavigationBarItem(
-                title: SizedBox.shrink(),
-                icon: SvgPicture.asset(
-                  pagesIcon[i],
-                  color: _currentPageIndex == i
-                      ? Theme.of(context).primaryColor
-                      : Colors.grey,
-                  height: 28,
+          body: PageView(
+            controller: _pageController,
+            children: [HomePage(), TimeLinePage(), UGCPage()],
+            physics: NeverScrollableScrollPhysics(),
+          ),
+          bottomNavigationBar: BottomAppBar(
+            color: Colors.white,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: List.generate(
+                pagesIcon.length,
+                (i) => IconButton(
+                  icon: SvgPicture.asset(
+                    pagesIcon[i],
+                    color: _currentPageIndex == i
+                        ? Theme.of(context).primaryColor
+                        : Colors.grey,
+                    height: 28,
+                  ),
+                  onPressed: () {
+                    _onPageChange(i);
+                  },
                 ),
-              )
-          ],
-        ),
-      ),
+              ),
+            ),
+          )),
     );
   }
 }

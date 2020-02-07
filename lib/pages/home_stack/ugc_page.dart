@@ -37,23 +37,19 @@ class _UGCPageState extends State<UGCPage> with AutomaticKeepAliveClientMixin {
       children: <Widget>[
         HomeStackTitleAppbar('UGC'),
         Expanded(
-            child: RefreshWrapper(
-          onLoadMore: getUGC,
-          onRefresh: getUGC,
-          scrollController: _scrollController,
-          child: GridView(
-            physics: BouncingScrollPhysics(),
-            controller: _scrollController,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisSpacing: 15.0,
-              mainAxisSpacing: 20.0,
-              crossAxisCount: 2,
-              childAspectRatio: 2 / 2,
+          child: RefreshWrapper(
+            onLoadMore: getUGC,
+            onRefresh: getUGC,
+            scrollController: _scrollController,
+            child: Grid2RowView(
+              List<PostCard>.generate(
+                data.length,
+                (i) => PostCard(data[i]),
+              ),
+              _scrollController,
             ),
-            padding: EdgeInsets.all(10.0),
-            children: data.map((f) => PostCard(f)).toList(),
           ),
-        ))
+        )
       ],
     ));
   }
