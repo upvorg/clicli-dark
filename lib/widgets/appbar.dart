@@ -27,35 +27,33 @@ class FixedAppBar extends StatelessWidget {
       _title = Center(child: _title);
     }
     return Container(
-        color: backgroundColor ?? Colors.purple.withOpacity(0.7),
-        child: Container(
-          margin: EdgeInsets.only(
-            top: MediaQuery.of(context).padding.top,
-          ),
-          decoration: BoxDecoration(
-            boxShadow: elevation != null
-                ? <BoxShadow>[
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: elevation * 2.0,
-                    ),
-                  ]
-                : null,
-            color: backgroundColor ?? Colors.white,
-          ),
-          child: Row(
-            children: <Widget>[
-              if (automaticallyImplyLeading && Navigator.of(context).canPop())
-                BackButton(),
-              Expanded(child: _title),
-              if (automaticallyImplyLeading &&
-                  Navigator.of(context).canPop() &&
-                  actions == null)
-                SizedBox.fromSize(size: Size.square(56.0)),
-              if (actions != null) ...actions,
-            ],
-          ),
-        ));
+      margin: EdgeInsets.only(
+        top: MediaQuery.of(context).padding.top,
+      ),
+      decoration: BoxDecoration(
+        boxShadow: elevation != null
+            ? <BoxShadow>[
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: elevation * 2.0,
+                ),
+              ]
+            : null,
+        color: backgroundColor ?? Colors.white,
+      ),
+      child: Row(
+        children: <Widget>[
+          if (automaticallyImplyLeading && Navigator.of(context).canPop())
+            BackButton(),
+          Expanded(child: _title),
+          if (automaticallyImplyLeading &&
+              Navigator.of(context).canPop() &&
+              actions == null)
+            SizedBox.fromSize(size: Size.square(56.0)),
+          if (actions != null) ...actions,
+        ],
+      ),
+    );
   }
 }
 

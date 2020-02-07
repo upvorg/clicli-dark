@@ -57,7 +57,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
 
     if (mounted) {
       setState(() {});
-      await initPlayer();
+      if (videoList.length > 0) await initPlayer();
     }
   }
 
@@ -296,7 +296,9 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
       padding: EdgeInsets.all(20),
       child: MarkdownBody(
           // selectable: true,
-          data: detail['content'],
+          data:
+              '# ${detail['title']}\r\n> ${detail['uname']}    ${detail['time']}   id ${detail['id']}\r\n #  ' +
+                  detail['content'],
           onTapLink: (url) async {
             showDialog<Null>(
                 context: context,
@@ -304,7 +306,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     title: Text('提示'),
-                    content: Text('是否使用外部打开该链接？'),
+                    content: Text('是否使用外部打开该链接？\r\n\r\n $url'),
                     actions: <Widget>[
                       FlatButton(
                         child: Text('取消'),
