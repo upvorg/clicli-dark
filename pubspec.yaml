@@ -24,7 +24,7 @@ dev_dependencies:
   screen: any
   open_iconic_flutter: any
   # super_rich_text: any
-  flutter_markdown: ^0.3.3
+  flutter_markdown: any
   url_launcher: any
 
 flutter:
