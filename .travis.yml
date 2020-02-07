@@ -57,6 +57,8 @@ jobs:
       osx_image: xcode10.2
       before_script:
         - brew update
+        - brew uninstall --ignore-dependencies libimobiledevice
+        - brew uninstall --ignore-dependencies usbmuxd
         - brew install --HEAD usbmuxd
         - brew unlink usbmuxd
         - brew link usbmuxd
