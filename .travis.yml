@@ -46,7 +46,8 @@ jobs:
         #   secure: uDRE0d3gZ5JYhl/jBiDp5zv32fHW0WMhJuhg/H4oDOxvYvyCD/1dmBMb00fFFL4gDFxl96wCGMnFcn3f55Xy8IeVMocvrQrIwRkEWsD+4vpzxFr+EBNObjyFW/jQJR3FNXpOJfWNt5unpRsmwWhUpuo7s/PJ1ONqZTctt0VYHXHY5ACmdPx9Tf6U0iAUloQyBeIfYtLN82fB4gewx7sKCnQulerGquXduthVj8URXZzS/3jMJqPL2cqGsjKZ79DPDLzVAulMmhFHs6VVeM2F2HO/GKx58ApLkltFNdoXjdmGSlvuqT1ZAJ0fOlVW78hEVmpxbbQlDPztHThFDlag4uPnlgAFm+OUZ5XXJBeJGkrGU6zRGIcghTQng9JQ3wvL1LVr+2c/MVU8n7+E2SQs7f7TF8kvSm4ok2FpH5zgEuiTIZSNicJO4ceLtigRLySnmbjgKXL1f9O1P8OENuU4hFJ+6WNJtSkzG/MeDGUKPE29rZxA62/+gmQAywDCq7R70kUae4P0XHeneorWnSUyuHhIyRVl0fY22q7U8cY6eTmARTDRKVlykFLvUN2KV8HG2f+VReG64IX93Ge48YI8H8QqeY38HzJQ0nuuF1W84omOFJKtLdtJhg2/5uiaPe7kQ1SmIcrIuqLLZqA0GelP+wLEOtGCm6bMpZdeJECPRbw=
         file: $APK_OUTPUT
         on:
-          tags: true
+          branch: master
+          # tags: true
     # - stage: deployIPA
     #   os: osx
     #   language: generic
