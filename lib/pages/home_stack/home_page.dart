@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage>
           data.length,
           (i) => PostCard(data[i]),
         ),
-        c,
+        controller: c,
       ),
     );
   }

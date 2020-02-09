@@ -46,7 +46,7 @@ class _UGCPageState extends State<UGCPage> with AutomaticKeepAliveClientMixin {
                 data.length,
                 (i) => PostCard(data[i]),
               ),
-              _scrollController,
+              controller: _scrollController,
             ),
           ),
         )

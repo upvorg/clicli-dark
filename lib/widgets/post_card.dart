@@ -83,7 +83,7 @@ class Grid2RowView extends StatelessWidget {
   final List<Widget> widgets;
   final ScrollController controller;
 
-  Grid2RowView(this.widgets, this.controller);
+  Grid2RowView(this.widgets, {this.controller});
 
   @override
   Widget build(BuildContext context) {

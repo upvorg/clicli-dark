@@ -14,27 +14,12 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  ScrollController _scrollController = ScrollController();
-
-  int page = 1;
   List data;
   String key;
   bool isLoading = false;
 
   Duration durationTime = Duration(milliseconds: 500);
   Timer timer;
-
-  @override
-  void initState() {
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        _loadData();
-      }
-    });
-
-    super.initState();
-  }
 
   Future<void> _loadData({reset = false}) async {
     if (key.length < 1) {
@@ -46,18 +31,16 @@ class _SearchPageState extends State<SearchPage> {
       isLoading = true;
     });
 
-    final _page = reset ? 1 : page + 1;
     final res = (await getSearch(key)).data;
-
     if (reset) {
       data = jsonDecode(res)['posts'] ?? [];
-      page = 1;
     } else {
       data.addAll(jsonDecode(res)['posts']);
-      page = _page;
     }
-    isLoading = false;
-    setState(() {});
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -89,7 +72,6 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                     child: TextField(
                       maxLines: 1,
-                      autofocus: true,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         contentPadding:
@@ -112,13 +94,8 @@ class _SearchPageState extends State<SearchPage> {
                 child: isLoading
                     ? Center(child: CircularProgressIndicator())
                     : data.length > 1
-                        ? Grid2RowView(
-                            List<PostCard>.generate(
-                              data.length,
-                              (i) => PostCard(data[i]),
-                            ),
-                            _scrollController,
-                          )
+                        ? Grid2RowView(List<PostCard>.generate(
+                            data.length, (i) => PostCard(data[i])))
                         : Center(
                             child: Text(
                             '这里什么都没有 (⊙x⊙;)',

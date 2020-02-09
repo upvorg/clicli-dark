@@ -150,71 +150,74 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
       );
     }
     return Scaffold(
+        appBar: videoList.length <= 0
+            ? AppBar(
+                title: Text('文章详情'),
+                titleSpacing: -5.0,
+              )
+            : null,
         body: SafeArea(
-      child: videoList.length > 0
-          ? Column(
-              children: <Widget>[
-                _chewieController != null
-                    ? Chewie(controller: _chewieController)
-                    : AspectRatio(
-                        aspectRatio: 16 / 9,
-                        child: Container(
-                          color: Colors.black,
-                          child: Center(
-                              child: Text(
-                            'loading ···',
-                            style: TextStyle(color: Colors.white),
-                          )),
+          child: videoList.length > 0
+              ? Column(
+                  children: <Widget>[
+                    _chewieController != null
+                        ? Chewie(controller: _chewieController)
+                        : AspectRatio(
+                            aspectRatio: 16 / 9,
+                            child: Container(
+                              color: Colors.black,
+                              child: Center(
+                                  child: Text(
+                                'loading ···',
+                                style: TextStyle(color: Colors.white),
+                              )),
+                            ),
+                          ),
+                    Container(
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color:
+                                Theme.of(context).primaryColor.withOpacity(0.2),
+                            offset: Offset(0, 5),
+                            blurRadius: 12,
+                            spreadRadius: -10,
+                          ),
+                        ],
+                        color: Colors.white,
+                      ),
+                      child: TabBar(
+                        tabs: <Widget>[Tab(text: '剧集'), Tab(text: '简介')],
+                        controller: _tabController,
+                        isScrollable: true,
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        indicatorPadding:
+                            EdgeInsets.symmetric(horizontal: 25, vertical: 0),
+                        labelColor: Theme.of(context).primaryColor,
+                        labelStyle: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        unselectedLabelStyle: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.normal,
                         ),
                       ),
-                Container(
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Theme.of(context).primaryColor.withOpacity(0.2),
-                        offset: Offset(0, 5),
-                        blurRadius: 12,
-                        spreadRadius: -10,
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: <Widget>[buildProfile(), buildComments()],
                       ),
-                    ],
-                    color: Colors.white,
-                  ),
-                  child: TabBar(
-                    tabs: <Widget>[Tab(text: '剧集'), Tab(text: '简介')],
-                    controller: _tabController,
-                    isScrollable: true,
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    indicatorPadding:
-                        EdgeInsets.symmetric(horizontal: 25, vertical: 0),
-                    labelColor: Theme.of(context).primaryColor,
-                    labelStyle: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    unselectedLabelStyle: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
+                    )
+                  ],
+                )
+              : Column(
+                  children: <Widget>[Expanded(child: buildComments())],
                 ),
-                Expanded(
-                  child: TabBarView(
-                    controller: _tabController,
-                    children: <Widget>[buildProfile(), buildComments()],
-                  ),
-                )
-              ],
-            )
-          : Column(
-              children: <Widget>[
-                Expanded(
-                  child: buildComments(),
-                )
-              ],
-            ),
-    ));
+        ));
   }
 
   Widget buildProfile() {
