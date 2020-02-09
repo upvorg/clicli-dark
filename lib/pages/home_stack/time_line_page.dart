@@ -21,7 +21,7 @@ class _TimeLineState extends State<TimeLinePage>
   final List week = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 
   bool hasLoad = false;
-  List<List> data = [[], [], [], [], [], [], []];
+  List<List> data = List(7);
 
   @override
   void initState() {
@@ -30,6 +30,7 @@ class _TimeLineState extends State<TimeLinePage>
   }
 
   Future<void> getUGC() async {
+    data = List(7);
     final res = (await getPost('新番', '', 1, 100)).data;
     final List _res = jsonDecode(res)['posts'];
 
