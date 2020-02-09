@@ -154,10 +154,6 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
       child: videoList.length > 0
           ? Column(
               children: <Widget>[
-                Container(
-                  color: Colors.black,
-                  height: MediaQuery.of(context).padding.top,
-                ),
                 _chewieController != null
                     ? Chewie(controller: _chewieController)
                     : AspectRatio(
@@ -178,9 +174,10 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
                     boxShadow: [
                       BoxShadow(
                         color: Theme.of(context).primaryColor.withOpacity(0.2),
-                        offset: Offset(0, 0.2),
-                        blurRadius: 10,
-                      )
+                        offset: Offset(0, 5),
+                        blurRadius: 12,
+                        spreadRadius: -10,
+                      ),
                     ],
                     color: Colors.white,
                   ),
@@ -302,7 +299,6 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
           onTapLink: (url) async {
             showDialog<Null>(
                 context: context,
-                barrierDismissible: false,
                 builder: (BuildContext context) {
                   return AlertDialog(
                     title: Text('提示'),
