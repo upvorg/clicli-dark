@@ -101,7 +101,6 @@ class _SearchPageState extends State<SearchPage> {
                         timer = new Timer(durationTime, () {
                           _loadData(reset: true);
                         });
-                        setState(() {});
                       },
                     ),
                   ))
@@ -113,13 +112,12 @@ class _SearchPageState extends State<SearchPage> {
                 child: isLoading
                     ? Center(child: CircularProgressIndicator())
                     : data.length > 1
-                        ? GridView.count(
-                            controller: _scrollController,
-                            crossAxisSpacing: 15.0,
-                            mainAxisSpacing: 20.0,
-                            padding: EdgeInsets.all(10.0),
-                            crossAxisCount: 2,
-                            children: data.map((f) => PostCard(f)).toList(),
+                        ? Grid2RowView(
+                            List<PostCard>.generate(
+                              data.length,
+                              (i) => PostCard(data[i]),
+                            ),
+                            _scrollController,
                           )
                         : Center(
                             child: Text(
