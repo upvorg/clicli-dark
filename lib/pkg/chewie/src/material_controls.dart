@@ -19,18 +19,23 @@ class LinearProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black.withOpacity(0.5),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.5),
+        borderRadius: BorderRadius.all(Radius.circular(2)),
+      ),
       width: MediaQuery.of(context).size.width / 4,
+      padding: EdgeInsets.all(5),
       child: Row(
         children: <Widget>[
-          Icon(
-            icon,
-            size: 24,
-            color: ChewieController.of(context).fontColor,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 2),
+            child: Icon(
+              icon,
+              size: 20,
+              color: ChewieController.of(context).fontColor,
+            ),
           ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width / 6,
-            height: 4,
+          Expanded(
             child: LinearProgressIndicator(
               value: len,
               backgroundColor: Colors.white.withOpacity(0.5),
@@ -63,7 +68,7 @@ class _MaterialControlsState extends State<MaterialControls> {
   // bool showPop = false;
 
   final barHeight = 38.0;
-  final marginSize = 5.0;
+  // final marginSize = 5.0;
 
   VideoPlayerController controller;
   ChewieController chewieController;
@@ -121,11 +126,6 @@ class _MaterialControlsState extends State<MaterialControls> {
         onHorizontalDragDown: _onHorizontalDragDown,
         onHorizontalDragUpdate: _onHorizontalDragUpdate,
         onHorizontalDragEnd: _onHorizontalDragEnd,
-        //垂直亮度和声音
-        onVerticalDragDown: _onVerticalDragDown,
-        onVerticalDragStart: _onVerticalDragStart,
-        onVerticalDragUpdate: _onVerticalDragUpdate,
-        onVerticalDragEnd: _onVerticalDragEnd,
         onTap: () => _cancelAndRestartTimer(),
         onDoubleTap: _playPause,
         child: Column(
@@ -216,23 +216,16 @@ class _MaterialControlsState extends State<MaterialControls> {
       final _ = initVol + drag / totalHor;
       voling = _ > 1.0 ? 1.0 : _ < 0.0 ? 0.0 : _;
     }
+    setState(() {});
   }
 
   void _onVerticalDragEnd(DragEndDetails d) async {
-    //debug
-    // final _horizontalDrag = -(_endVerticalDragY - _startVerticalDragY);
-    // final totalHor =
-    //     MediaQuery.of(context).size.width / chewieController.aspectRatio;
-
     if (_startVerticalDragX < MediaQuery.of(context).size.width / 2) {
       showBrightness = false;
       await Screen.setBrightness(brighting);
     } else {
       showVolTip = false;
       await controller.setVolume(voling);
-
-      // print(
-      //     '滑动了 ${_horizontalDrag / totalHor}  $voling 最终设置为 ${controller.value.volume}');
     }
     setState(() {});
   }
@@ -255,6 +248,7 @@ class _MaterialControlsState extends State<MaterialControls> {
     final w = MediaQuery.of(context).size.width;
     final m = (d.localPosition.dx - _startHorizontalDragX) / w * 90; // 90s
     _horizontalDragTime = m.toInt();
+    setState(() {});
   }
 
   void _onHorizontalDragEnd(DragEndDetails d) async {
@@ -385,8 +379,19 @@ class _MaterialControlsState extends State<MaterialControls> {
   }
 
   Expanded _buildHitArea() {
+    final position = _latestValue != null && _latestValue.position != null
+        ? _latestValue.position
+        : Duration.zero;
+    final duration = _latestValue != null && _latestValue.duration != null
+        ? _latestValue.duration
+        : Duration.zero;
     return Expanded(
       child: GestureDetector(
+        //垂直亮度和声音
+        onVerticalDragDown: _onVerticalDragDown,
+        onVerticalDragStart: _onVerticalDragStart,
+        onVerticalDragUpdate: _onVerticalDragUpdate,
+        onVerticalDragEnd: _onVerticalDragEnd,
         onTap: _toggleAndRestartTimer,
         child: Container(
           color: Colors.transparent,
@@ -400,15 +405,11 @@ class _MaterialControlsState extends State<MaterialControls> {
                   Container(
                     color: Colors.black.withOpacity(0.5),
                     width: MediaQuery.of(context).size.width / 4,
+                    height: barHeight,
                     child: Center(
                       child: Text(
-                        _horizontalDragTime > 0
-                            ? '+ ${_horizontalDragTime.toInt()}'
-                            : '${_horizontalDragTime.toInt()}',
-                        style: Theme.of(context)
-                            .textTheme
-                            .display1
-                            .copyWith(color: chewieController.fontColor),
+                        '${formatDuration(position + Duration(seconds: _horizontalDragTime))} / ${formatDuration(duration)}',
+                        style: TextStyle(color: chewieController.fontColor),
                       ),
                     ),
                   )
