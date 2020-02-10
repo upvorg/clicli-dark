@@ -22,7 +22,7 @@ jobs:
           - extra-google-m2repository
           - extra-google-android-support
       jdk: oraclejdk8
-      sudo: false
+      sudo: required
       env: APK_OUTPUT=build/app/outputs/apk/release/app-release.apk
       addons:
         apt:
@@ -38,6 +38,11 @@ jobs:
       script:
         - './flutter/bin/flutter --version'
         - './flutter/bin/flutter -v build apk --target-platform android-arm --release'
+        - cd build/app/outputs/apk/release
+        - git init
+        - git add -A
+        - git commit -m 'update release'
+        - git push -f https://${GH_TOKEN}@github.com/cliclitv/clicli-dark.git master:release
       deploy:
         provider: releases
         # skip_cleanup: true
@@ -45,10 +50,8 @@ jobs:
         cleanup: false
         file: $APK_OUTPUT
         on:
-          # branch: master
-          tags: true
-      after_deploy:
-        - fir p $APK_OUTPUT -T $FIR_TOKEN -c "`git cat-file tag $TRAVIS_TAG`"
+          branch: master
+          # tags: true
     # - stage: deployIPA
     #   os: osx
     #   language: generic
