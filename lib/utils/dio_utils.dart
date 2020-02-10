@@ -10,6 +10,7 @@ BaseOptions baseOptions = BaseOptions(
   headers: {HttpHeaders.acceptHeader: "*"},
   connectTimeout: 10000,
   receiveTimeout: 10000,
+  sendTimeout: 10000,
   contentType: "accept: application/json",
   responseType: ResponseType.json,
 );

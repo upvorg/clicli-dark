@@ -79,17 +79,20 @@ class _MaterialControlsState extends State<MaterialControls> {
       return chewieController.errorBuilder != null
           ? chewieController.errorBuilder(
               context, _latestValue.errorDescription)
-          : Stack(
-              children: <Widget>[
-                _buildVideoBar(isErr: true),
-                Center(
-                  child: Icon(
-                    Icons.error_outline,
-                    color: chewieController.fontColor,
-                    size: 42,
-                  ),
-                )
-              ],
+          : Container(
+              color: chewieController.backgroundColor,
+              child: Stack(
+                children: <Widget>[
+                  _buildVideoBar(isErr: true),
+                  Center(
+                    child: Icon(
+                      Icons.error_outline,
+                      color: chewieController.fontColor,
+                      size: 42,
+                    ),
+                  )
+                ],
+              ),
             );
     }
 
@@ -205,11 +208,11 @@ class _MaterialControlsState extends State<MaterialControls> {
   }
 
   void _onVerticalDragUpdate(DragUpdateDetails d) {
+    final w = MediaQuery.of(context).size.width;
     _endVerticalDragY = d.localPosition.dy;
     final drag = -(_endVerticalDragY - _startVerticalDragY);
-    final totalHor =
-        MediaQuery.of(context).size.width / chewieController.aspectRatio;
-    if (_startHorizontalDragX < MediaQuery.of(context).size.width / 2) {
+    final totalHor = w / chewieController.aspectRatio - 2 * barHeight;
+    if (_startHorizontalDragX < w / 2) {
       final _ = initBri + (drag / totalHor);
       brighting = _ <= 0 ? 0.0 : _ >= 1 ? 1.0 : _;
     } else {
@@ -239,12 +242,14 @@ class _MaterialControlsState extends State<MaterialControls> {
   }
 
   void _onHorizontalDragStart(DragStartDetails d) async {
+    _cancelAndRestartTimer();
     setState(() {
       showTimeLine = true;
     });
   }
 
   void _onHorizontalDragUpdate(DragUpdateDetails d) async {
+    _cancelAndRestartTimer();
     final w = MediaQuery.of(context).size.width;
     final m = (d.localPosition.dx - _startHorizontalDragX) / w * 90; // 90s
     _horizontalDragTime = m.toInt();
@@ -252,6 +257,7 @@ class _MaterialControlsState extends State<MaterialControls> {
   }
 
   void _onHorizontalDragEnd(DragEndDetails d) async {
+    _cancelAndRestartTimer();
     showTimeLine = false;
     setState(() {});
     chewieController.seekTo(

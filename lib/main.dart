@@ -97,17 +97,19 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(
                 pagesIcon.length,
-                (i) => IconButton(
-                  icon: SvgPicture.asset(
-                    pagesIcon[i],
-                    color: _currentPageIndex == i
-                        ? Theme.of(context).primaryColor
-                        : Colors.grey,
-                    height: 25,
+                (i) => Expanded(
+                  child: IconButton(
+                    icon: SvgPicture.asset(
+                      pagesIcon[i],
+                      color: _currentPageIndex == i
+                          ? Theme.of(context).primaryColor
+                          : Colors.grey,
+                      height: 25,
+                    ),
+                    onPressed: () {
+                      _onPageChange(i);
+                    },
                   ),
-                  onPressed: () {
-                    _onPageChange(i);
-                  },
                 ),
               ),
             ),

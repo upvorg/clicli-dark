@@ -240,15 +240,15 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
               ClipOval(
                 child: Image.network(
                   getAvatar(avatar: detail['uqq']),
-                  width: 50,
-                  height: 50,
+                  width: 40,
+                  height: 40,
                 ),
               ),
               SizedBox(width: 15),
               Text(detail['uname'], style: caption),
             ],
           ),
-          SizedBox(height: 25),
+          SizedBox(height: 10),
           buildVideoList()
         ]));
   }
@@ -259,7 +259,6 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
       return Container(
         margin: EdgeInsets.symmetric(vertical: 5),
         child: InkWell(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
             splashColor: Color.fromRGBO(148, 108, 230, 0.6),
             highlightColor: Color.fromRGBO(148, 108, 230, 0.4),
             onTap: () {
@@ -270,7 +269,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
                   ? Color.fromRGBO(148, 108, 230, 0.5)
                   : Color.fromRGBO(148, 108, 230, 0.2),
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: Row(
                   children: <Widget>[
                     Text(
