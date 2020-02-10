@@ -93,7 +93,7 @@ class _SearchPageState extends State<SearchPage> {
               Expanded(
                 child: isLoading
                     ? Center(child: CircularProgressIndicator())
-                    : data.length > 1
+                    : data.length > 0
                         ? Grid2RowView(List<PostCard>.generate(
                             data.length, (i) => PostCard(data[i])))
                         : Center(
