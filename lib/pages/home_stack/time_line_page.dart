@@ -84,16 +84,16 @@ class _TimeLineState extends State<TimeLinePage>
                                   Expanded(
                                     child: Container(
                                       margin: EdgeInsets.fromLTRB(10, 5, 5, 5),
-                                      child: PostCard(data[i][(j + 1) * 2 - 2]),
+                                      child: PostCard(data[i][j * 2]),
                                     ),
                                   ),
-                                  data[i].length > (j + 1) * 2 - 1
+                                  data[i].length > j * 2 + 1
                                       ? Expanded(
                                           child: Container(
                                             margin: EdgeInsets.fromLTRB(
                                                 5, 5, 10, 5),
                                             child: PostCard(
-                                                data[i][(j + 1) * 2 - 1]),
+                                                data[i][j * 2 + 1]),
                                           ),
                                         )
                                       : Expanded(child: Container())
