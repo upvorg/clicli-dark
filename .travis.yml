@@ -2,6 +2,13 @@ cache:
   directories:
     - '$HOME/.pub-cache'
 
+notifications:
+  email:
+    recipients:
+      - 468549471@qq.com
+      - 1175896881@qq.com
+    on_success: always # default: change
+    on_failure: always # default: always
 jobs:
   include:
     - stage: deployAPK
@@ -39,18 +46,20 @@ jobs:
         - './flutter/bin/flutter --version'
         - './flutter/bin/flutter -v build apk --target-platform android-arm --release'
         - cd build/app/outputs/apk/release
+        - git config user.name "cy"
+        - git config user.email "i@runtua.cn"
         - git init
         - git add -A
-        - git commit -m 'update release'
+        - git commit -m 'update release By TravisCI With Build $TRAVIS_BUILD_NUMBER'
         - git push -f https://${GH_TOKEN}@github.com/cliclitv/clicli-dark.git master:release
-      deploy:
-        provider: releases
+      #deploy:
+        #provider: releases
         # skip_cleanup: true
-        api_key: $GH_TOKEN
-        cleanup: false
-        file: $APK_OUTPUT
-        on:
-          branch: master
+        #api_key: $GH_TOKEN
+        #cleanup: false
+        #file: $APK_OUTPUT
+        #on:
+          #branch: master
           # tags: true
     # - stage: deployIPA
     #   os: osx
