@@ -72,7 +72,12 @@ class _TimeLineState extends State<TimeLinePage>
                                     .copyWith(color: theme.primaryColor),
                               ),
                             ),
-                            for (int j = 0; j < data[i].length / 2; j++)
+                            for (int j = 0;
+                                j <
+                                    ((data[i].length % 2 > 0)
+                                        ? data[i].length / 2 + 1
+                                        : data[i].length / 2);
+                                j++)
                               Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[

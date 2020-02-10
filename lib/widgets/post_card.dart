@@ -87,6 +87,7 @@ class Grid2RowView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isOdd = widgets.length % 2 > 0;
     return ListView.builder(
       itemBuilder: (ctx, i) {
         return Row(
@@ -111,7 +112,7 @@ class Grid2RowView extends StatelessWidget {
       },
       physics: BouncingScrollPhysics(),
       padding: EdgeInsets.all(0),
-      itemCount: widgets.length ~/ 2,
+      itemCount: isOdd ? widgets.length ~/ 2 + 1 : widgets.length ~/ 2,
       controller: controller,
     );
   }
