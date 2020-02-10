@@ -162,6 +162,7 @@ class _MaterialControlsState extends State<MaterialControls> {
     _hideTimer?.cancel();
     _initTimer?.cancel();
     _showAfterExpandCollapseTimer?.cancel();
+    Screen.setBrightness(initBri);
   }
 
   @override
@@ -178,18 +179,17 @@ class _MaterialControlsState extends State<MaterialControls> {
     super.didChangeDependencies();
   }
 
-  int brightness = 1;
   double _startVerticalDragY = 0;
   double _startVerticalDragX = 0;
   double _endVerticalDragY = 0;
 
   bool showBrightness = false;
-  double initBri = 0;
-  double brighting = 0;
+  double initBri;
+  double brighting = 0.0;
 
   bool showVolTip = false;
-  double initVol = 0.0; // 初始声音
-  double voling = 0.0; // 滑动百分比
+  double initVol;
+  double voling = 0.0;
 
   void _onVerticalDragDown(DragDownDetails d) {
     _startVerticalDragX = d.localPosition.dx;
@@ -234,8 +234,8 @@ class _MaterialControlsState extends State<MaterialControls> {
   }
 
   bool showTimeLine = false;
-  double _startHorizontalDragX = 0; //初次
-  int _horizontalDragTime = 0; //累计
+  double _startHorizontalDragX = 0;
+  int _horizontalDragTime = 0;
 
   void _onHorizontalDragDown(DragDownDetails d) async {
     _startHorizontalDragX = d.localPosition.dx;
