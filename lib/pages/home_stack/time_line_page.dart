@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:clicli_dark/api/post.dart';
 import 'package:clicli_dark/widgets//post_card.dart';
 import 'package:clicli_dark/widgets/appbar.dart';
+import 'package:clicli_dark/widgets/loading2load.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -20,17 +21,10 @@ class _TimeLineState extends State<TimeLinePage>
 
   final List week = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 
-  bool hasLoad = false;
-  List<List> data = List(7);
-
-  @override
-  void initState() {
-    getUGC();
-    super.initState();
-  }
+  List<List> data = [[], [], [], [], [], [], []];
 
   Future<void> getUGC() async {
-    data = List(7);
+    data = [[], [], [], [], [], [], []];
     final res = (await getPost('新番', '', 1, 100, status: 'nowait')).data;
     final List _res = jsonDecode(res)['posts'];
 
@@ -41,7 +35,6 @@ class _TimeLineState extends State<TimeLinePage>
       if (data[day] == null) data[day] = [];
       data[day].add(f);
     });
-    hasLoad = true;
 
     setState(() {});
   }
@@ -54,56 +47,56 @@ class _TimeLineState extends State<TimeLinePage>
         body: Column(children: <Widget>[
       HomeStackTitleAppbar('时间表'),
       Expanded(
-          child: hasLoad
-              ? RefreshIndicator(
-                  onRefresh: getUGC,
-                  child: ListView(
-                    physics: BouncingScrollPhysics(),
-                    padding: EdgeInsets.all(0),
-                    children: [
-                      for (int i = 0; i < data.length; i++)
-                        Column(
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 15),
-                              child: Text(
-                                week[i],
-                                style: theme.textTheme.title
-                                    .copyWith(color: theme.primaryColor),
-                              ),
+          child: Loading2Load(
+        load: getUGC,
+        child: RefreshIndicator(
+          onRefresh: getUGC,
+          child: ListView(
+            physics: BouncingScrollPhysics(),
+            padding: EdgeInsets.all(0),
+            children: [
+              for (int i = 0; i < data.length; i++)
+                Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      child: Text(
+                        week[i],
+                        style: theme.textTheme.title
+                            .copyWith(color: theme.primaryColor),
+                      ),
+                    ),
+                    for (int j = 0;
+                        j <
+                            ((data[i].length % 2 > 0)
+                                ? data[i].length ~/ 2 + 1
+                                : data[i].length ~/ 2);
+                        j++)
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.fromLTRB(10, 5, 5, 5),
+                              child: PostCard(data[i][j * 2]),
                             ),
-                            for (int j = 0;
-                                j <
-                                    ((data[i].length % 2 > 0)
-                                        ? data[i].length ~/ 2 + 1
-                                        : data[i].length ~/ 2);
-                                j++)
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Container(
-                                      margin: EdgeInsets.fromLTRB(10, 5, 5, 5),
-                                      child: PostCard(data[i][j * 2]),
-                                    ),
+                          ),
+                          data[i].length > j * 2 + 1
+                              ? Expanded(
+                                  child: Container(
+                                    margin: EdgeInsets.fromLTRB(5, 5, 10, 5),
+                                    child: PostCard(data[i][j * 2 + 1]),
                                   ),
-                                  data[i].length > j * 2 + 1
-                                      ? Expanded(
-                                          child: Container(
-                                            margin: EdgeInsets.fromLTRB(
-                                                5, 5, 10, 5),
-                                            child: PostCard(data[i][j * 2 + 1]),
-                                          ),
-                                        )
-                                      : Expanded(child: Container())
-                                ],
-                              )
-                          ],
-                        )
-                    ],
-                  ),
+                                )
+                              : Expanded(child: Container())
+                        ],
+                      )
+                  ],
                 )
-              : Center(child: CircularProgressIndicator()))
+            ],
+          ),
+        ),
+      ))
     ]));
   }
 }

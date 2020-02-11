@@ -29,6 +29,7 @@ class _RefreshWrapperState extends State<RefreshWrapper>
   bool _isLoading = false;
   bool firstLoaded = false;
   bool isLoadMore = false;
+  bool hasError = false;
 
   @override
   bool get wantKeepAlive => true;
@@ -49,25 +50,38 @@ class _RefreshWrapperState extends State<RefreshWrapper>
   Future<void> _onLoadMore() async {
     isLoadMore = true;
     setState(() {});
-
-    _isLoading = true;
-    await widget.onLoadMore();
-    _isLoading = false;
-    isLoadMore = false;
+    try {
+      _isLoading = true;
+      await widget.onLoadMore();
+      _isLoading = false;
+      isLoadMore = false;
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        isLoadMore = false;
+      });
+    }
   }
 
   Future<void> _onRefresh() async {
     if (isLoading) return;
     _isLoading = true;
+
     try {
+      if (hasError) {
+        setState(() {
+          hasError = false;
+        });
+      }
       await widget.onRefresh();
-    } catch (e) {}
-
-    _isLoading = false;
-
-    if (!firstLoaded) {
+      _isLoading = false;
+      if (!firstLoaded) firstLoaded = true;
+      setState(() {});
+    } catch (e) {
       setState(() {
-        firstLoaded = true;
+        hasError = true;
+        _isLoading = false;
+        firstLoaded = false;
       });
     }
   }
@@ -80,41 +94,48 @@ class _RefreshWrapperState extends State<RefreshWrapper>
     return RefreshIndicator(
       key: refreshIndicatorKey,
       onRefresh: _onRefresh,
-      child: firstLoaded
-          ? Stack(
-              children: <Widget>[
-                widget.child,
-                if (isLoadMore)
-                  Positioned(
-                      top: 15,
-                      left: MediaQuery.of(context).size.width / 2 - 20,
-                      child: AnimatedOpacity(
-                        opacity: isLoadMore ? 1 : 0,
-                        duration: Duration(milliseconds: 300),
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(100)),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey,
-                                    offset: Offset(1, 1),
-                                    blurRadius: 2)
-                              ]),
-                          child: SizedBox(
-                            child: CircularProgressIndicator(
-                              strokeWidth: 3,
-                            ),
-                          ),
-                        ),
-                      ))
-              ],
+      child: hasError
+          ? Container(
+              child: IconButton(
+                icon: Icon(Icons.refresh),
+                onPressed: _onRefresh,
+              ),
             )
-          : Center(child: CircularProgressIndicator()),
+          : firstLoaded
+              ? Stack(
+                  children: <Widget>[
+                    widget.child,
+                    if (isLoadMore)
+                      Positioned(
+                          top: 15,
+                          left: MediaQuery.of(context).size.width / 2 - 20,
+                          child: AnimatedOpacity(
+                            opacity: isLoadMore ? 1 : 0,
+                            duration: Duration(milliseconds: 300),
+                            child: Container(
+                              width: 40,
+                              height: 40,
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(100)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.grey,
+                                        offset: Offset(1, 1),
+                                        blurRadius: 2)
+                                  ]),
+                              child: SizedBox(
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 3,
+                                ),
+                              ),
+                            ),
+                          ))
+                  ],
+                )
+              : Center(child: CircularProgressIndicator()),
     );
   }
 }

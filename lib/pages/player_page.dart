@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:clicli_dark/api/post.dart';
+import 'package:clicli_dark/pages/search_page.dart';
 import 'package:clicli_dark/pkg/chewie/chewie.dart';
 import 'package:clicli_dark/utils/reg_utils.dart';
 import 'package:clicli_dark/utils/toast_utils.dart';
@@ -222,6 +223,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
 
   Widget buildProfile() {
     final caption = Theme.of(context).textTheme.caption;
+    final List tags = detail['tag'].substring(1).split(' ');
     return Container(
         child: ListView(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
@@ -234,6 +236,35 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
               Text(detail['time'], style: caption),
             ],
           ),
+          SizedBox(height: 10),
+          Row(children: [
+            for (int i = 0; i < tags.length; i++)
+              if (tags[i].length > 0)
+                GestureDetector(
+                  onTap: () {
+                    if (_videoPlayerController.value.isPlaying)
+                      _videoPlayerController.pause();
+                    Navigator.pushAndRemoveUntil(context,
+                        MaterialPageRoute(builder: (BuildContext context) {
+                      return TagPage(tags[i]);
+                    }), (Route<dynamic> route) => true);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(4)),
+                      color: Theme.of(context).primaryColor.withOpacity(0.2),
+                    ),
+                    margin: EdgeInsets.symmetric(horizontal: 2),
+                    padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    child: Text(
+                      tags[i],
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor.withOpacity(0.6),
+                      ),
+                    ),
+                  ),
+                )
+          ]),
           SizedBox(height: 10),
           Row(
             children: <Widget>[
