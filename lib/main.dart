@@ -7,7 +7,6 @@ import 'package:clicli_dark/utils/dio_utils.dart';
 import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,11 +41,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  static final List<String> pagesIcon = [
-    'assets/home.svg',
-    'assets/time.svg',
-    'assets/other.svg',
-    // 'assets/user.svg'
+  static final List<IconData> pagesIcon = [
+    Icons.home,
+    Icons.timeline,
+    Icons.explore
   ];
 
   int _currentPageIndex = 0;
@@ -99,12 +97,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 pagesIcon.length,
                 (i) => Expanded(
                   child: IconButton(
-                    icon: SvgPicture.asset(
+                    icon: Icon(
                       pagesIcon[i],
                       color: _currentPageIndex == i
                           ? Theme.of(context).primaryColor
                           : Colors.grey,
-                      height: 25,
+                      size: 28,
                     ),
                     onPressed: () {
                       _onPageChange(i);
@@ -117,6 +115,15 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+/*
+
+static const MethodChannel _methodChannel =
+  const MethodChannel('flutter_volume');
+  static Future<double> get volume async => (await _methodChannel.invokeMethod('volume')) as double;
+  static Future setVolume(double volume) => _methodChannel.invokeMethod('setVolume', {"volume" : volume});
+
+
+  */
 
 /*
 

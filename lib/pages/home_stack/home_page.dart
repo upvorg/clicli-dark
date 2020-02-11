@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage>
                 children: <Widget>[
                   IconButton(
                     icon: Icon(
-                      Icons.show_chart,
+                      Icons.whatshot,
                       color: Theme.of(context).primaryColor,
                     ),
                     onPressed: () {

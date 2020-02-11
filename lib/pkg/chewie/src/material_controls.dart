@@ -162,7 +162,7 @@ class _MaterialControlsState extends State<MaterialControls> {
     _hideTimer?.cancel();
     _initTimer?.cancel();
     _showAfterExpandCollapseTimer?.cancel();
-    Screen.setBrightness(initBri);
+    if (initBri != null) Screen.setBrightness(initBri);
   }
 
   @override

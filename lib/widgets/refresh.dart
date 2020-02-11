@@ -77,11 +77,11 @@ class _RefreshWrapperState extends State<RefreshWrapper>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return firstLoaded
-        ? RefreshIndicator(
-            key: refreshIndicatorKey,
-            onRefresh: _onRefresh,
-            child: Stack(
+    return RefreshIndicator(
+      key: refreshIndicatorKey,
+      onRefresh: _onRefresh,
+      child: firstLoaded
+          ? Stack(
               children: <Widget>[
                 widget.child,
                 if (isLoadMore)
@@ -113,8 +113,8 @@ class _RefreshWrapperState extends State<RefreshWrapper>
                         ),
                       ))
               ],
-            ),
-          )
-        : Center(child: CircularProgressIndicator());
+            )
+          : Center(child: CircularProgressIndicator()),
+    );
   }
 }

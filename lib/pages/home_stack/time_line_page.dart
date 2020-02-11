@@ -31,7 +31,7 @@ class _TimeLineState extends State<TimeLinePage>
 
   Future<void> getUGC() async {
     data = List(7);
-    final res = (await getPost('新番', '', 1, 100)).data;
+    final res = (await getPost('新番', '', 1, 100, status: 'nowait')).data;
     final List _res = jsonDecode(res)['posts'];
 
     _res.forEach((f) {
