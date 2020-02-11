@@ -207,7 +207,7 @@ class _MaterialControlsState extends State<MaterialControls> {
     setState(() {});
   }
 
-  void _onVerticalDragUpdate(DragUpdateDetails d) {
+  void _onVerticalDragUpdate(DragUpdateDetails d) async {
     final w = MediaQuery.of(context).size.width;
     _endVerticalDragY = d.localPosition.dy;
     final drag = -(_endVerticalDragY - _startVerticalDragY);
@@ -215,9 +215,11 @@ class _MaterialControlsState extends State<MaterialControls> {
     if (_startHorizontalDragX < w / 2) {
       final _ = initBri + (drag / totalHor);
       brighting = _ <= 0 ? 0.0 : _ >= 1 ? 1.0 : _;
+      await Screen.setBrightness(brighting);
     } else {
       final _ = initVol + drag / totalHor;
       voling = _ > 1.0 ? 1.0 : _ < 0.0 ? 0.0 : _;
+      await controller.setVolume(voling);
     }
     setState(() {});
   }
@@ -225,10 +227,10 @@ class _MaterialControlsState extends State<MaterialControls> {
   void _onVerticalDragEnd(DragEndDetails d) async {
     if (_startVerticalDragX < MediaQuery.of(context).size.width / 2) {
       showBrightness = false;
-      await Screen.setBrightness(brighting);
+      // await Screen.setBrightness(brighting);
     } else {
       showVolTip = false;
-      await controller.setVolume(voling);
+      // await controller.setVolume(voling);
     }
     setState(() {});
   }
@@ -236,9 +238,11 @@ class _MaterialControlsState extends State<MaterialControls> {
   bool showTimeLine = false;
   double _startHorizontalDragX = 0;
   int _horizontalDragTime = 0;
+  Duration initPos;
 
   void _onHorizontalDragDown(DragDownDetails d) async {
     _startHorizontalDragX = d.localPosition.dx;
+    initPos = _latestValue.position;
   }
 
   void _onHorizontalDragStart(DragStartDetails d) async {
@@ -252,7 +256,10 @@ class _MaterialControlsState extends State<MaterialControls> {
     _cancelAndRestartTimer();
     final w = MediaQuery.of(context).size.width;
     final m = (d.localPosition.dx - _startHorizontalDragX) / w * 90; // 90s
+    chewieController
+        .seekTo(initPos + Duration(seconds: _horizontalDragTime.toInt()));
     _horizontalDragTime = m.toInt();
+
     setState(() {});
   }
 
@@ -260,8 +267,8 @@ class _MaterialControlsState extends State<MaterialControls> {
     _cancelAndRestartTimer();
     showTimeLine = false;
     setState(() {});
-    chewieController.seekTo(
-        _latestValue.position + Duration(seconds: _horizontalDragTime.toInt()));
+    // chewieController.seekTo(
+    //     _latestValue.position + Duration(seconds: _horizontalDragTime.toInt()));
   }
 
   AnimatedOpacity _buildBottomBar(BuildContext context) {
@@ -385,9 +392,6 @@ class _MaterialControlsState extends State<MaterialControls> {
   }
 
   Expanded _buildHitArea() {
-    final position = _latestValue != null && _latestValue.position != null
-        ? _latestValue.position
-        : Duration.zero;
     final duration = _latestValue != null && _latestValue.duration != null
         ? _latestValue.duration
         : Duration.zero;
@@ -414,7 +418,7 @@ class _MaterialControlsState extends State<MaterialControls> {
                     height: barHeight,
                     child: Center(
                       child: Text(
-                        '${formatDuration(position + Duration(seconds: _horizontalDragTime))} / ${formatDuration(duration)}',
+                        '${formatDuration(initPos + Duration(seconds: _horizontalDragTime))} / ${formatDuration(duration)}',
                         style: TextStyle(color: chewieController.fontColor),
                       ),
                     ),

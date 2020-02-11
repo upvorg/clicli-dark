@@ -75,8 +75,8 @@ class _TimeLineState extends State<TimeLinePage>
                             for (int j = 0;
                                 j <
                                     ((data[i].length % 2 > 0)
-                                        ? data[i].length / 2 + 1
-                                        : data[i].length / 2);
+                                        ? data[i].length ~/ 2 + 1
+                                        : data[i].length ~/ 2);
                                 j++)
                               Row(
                                 mainAxisSize: MainAxisSize.max,
@@ -92,8 +92,7 @@ class _TimeLineState extends State<TimeLinePage>
                                           child: Container(
                                             margin: EdgeInsets.fromLTRB(
                                                 5, 5, 10, 5),
-                                            child: PostCard(
-                                                data[i][j * 2 + 1]),
+                                            child: PostCard(data[i][j * 2 + 1]),
                                           ),
                                         )
                                       : Expanded(child: Container())

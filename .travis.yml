@@ -7,8 +7,9 @@ notifications:
     recipients:
       - 468549471@qq.com
       - 1175896881@qq.com
-    on_success: always # default: change
-    on_failure: always # default: always
+      - 595211737@qq.com
+    on_success: always
+    on_failure: always
 jobs:
   include:
     - stage: deployAPK
@@ -38,8 +39,6 @@ jobs:
           packages:
             - libstdc++6
             - fonts-droid
-      before_install:
-        - gem install fir-cli
       before_script:
         - git clone https://github.com/flutter/flutter.git -b stable --depth 1
       script:
@@ -53,14 +52,14 @@ jobs:
         - git commit -m 'update release By TravisCI With Build $TRAVIS_BUILD_NUMBER'
         - git push -f https://${GH_TOKEN}@github.com/cliclitv/clicli-dark.git master:release
       #deploy:
-        #provider: releases
-        # skip_cleanup: true
-        #api_key: $GH_TOKEN
-        #cleanup: false
-        #file: $APK_OUTPUT
-        #on:
-          #branch: master
-          # tags: true
+      #provider: releases
+      # skip_cleanup: true
+      #api_key: $GH_TOKEN
+      #cleanup: false
+      #file: $APK_OUTPUT
+      #on:
+      #branch: master
+      # tags: true
     # - stage: deployIPA
     #   os: osx
     #   language: generic
