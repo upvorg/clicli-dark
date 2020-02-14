@@ -8,13 +8,13 @@ import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:video_player/video_player.dart';
-import 'package:wakelock/wakelock.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:video_player/video_player.dart';
+import 'package:wakelock/wakelock.dart';
 
 //https://stackoverflow.com/questions/52431109/flutter-video-player-fullscreen
-class PlayerPage extends StatefulWidget {
+class PlayerPage extends StatefulWidget with WidgetsBindingObserver {
   final int id;
 
   PlayerPage({Key key, this.id}) : super(key: key);
@@ -26,7 +26,8 @@ class PlayerPage extends StatefulWidget {
 }
 
 //https://vt1.doubanio.com/201902111139/0c06a85c600b915d8c9cbdbbaf06ba9f/view/movie/M/302420330.mp4
-class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
+class _PlayerPageState extends State<PlayerPage>
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   VideoPlayerController _videoPlayerController;
   ChewieController _chewieController;
   TabController _tabController;
@@ -110,7 +111,8 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
     if (i == currPlayIndex ||
         i > videoList.length - 1 ||
         (!_videoPlayerController.value.initialized &&
-            !_videoPlayerController.value.hasError)) return;
+            !_videoPlayerController.value.hasError &&
+            _videoPlayerController != null)) return;
     await _videoPlayerController.pause();
     currPlayIndex = i;
     await initPlayer();
@@ -122,10 +124,24 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
     _tabController = TabController(length: 2, vsync: this);
     Wakelock.enable();
     getDetail();
+    WidgetsBinding.instance.addObserver(this);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.black,
       statusBarIconBrightness: Brightness.light,
     ));
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.paused:
+        showCenterShortToast('paused');
+        if (_videoPlayerController.value.isPlaying)
+          _videoPlayerController.pause();
+        break;
+      default:
+        break;
+    }
   }
 
   @override
@@ -139,6 +155,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
       statusBarColor: Colors.white,
       statusBarIconBrightness: Brightness.dark,
     ));
+    WidgetsBinding.instance.removeObserver(this);
   }
 
   @override
@@ -244,10 +261,18 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
                   onTap: () {
                     if (_videoPlayerController.value.isPlaying)
                       _videoPlayerController.pause();
-                    Navigator.pushAndRemoveUntil(context,
-                        MaterialPageRoute(builder: (BuildContext context) {
-                      return TagPage(tags[i]);
-                    }), (Route<dynamic> route) => true);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            TagPage(tags[i] as String)));
+                  },
+                  onDoubleTap: () {
+                    if (_videoPlayerController.value.isPlaying)
+                      _videoPlayerController.pause();
+
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            TagPage(tags[i] as String)));
                   },
                   child: Container(
                     decoration: BoxDecoration(

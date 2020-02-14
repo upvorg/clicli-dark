@@ -335,7 +335,7 @@ packages:
       name: video_player
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.10.6"
+    version: "0.10.7"
   video_player_platform_interface:
     dependency: transitive
     description:

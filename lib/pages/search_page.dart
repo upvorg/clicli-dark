@@ -3,8 +3,8 @@ import 'dart:convert';
 
 import 'package:clicli_dark/api/post.dart';
 import 'package:clicli_dark/widgets/appbar.dart';
-import 'package:clicli_dark/widgets/loading2load.dart';
 import 'package:clicli_dark/widgets/post_card.dart';
+import 'package:clicli_dark/widgets/refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -20,7 +20,7 @@ class _SearchPageState extends State<SearchPage> {
   String key;
   bool isLoading = false;
 
-  Duration durationTime = Duration(milliseconds: 500);
+  final Duration durationTime = Duration(milliseconds: 500);
   Timer timer;
 
   Future<void> _loadData({reset = false}) async {
@@ -37,14 +37,6 @@ class _SearchPageState extends State<SearchPage> {
     if (int.tryParse(key) != null) {
       res = jsonDecode((await getPostDetail(int.parse(key))).data)['result'];
       data = [res];
-    } else if (key == 'r15') {
-      res = (await getPost('', 'r15', 1, 100, status: 'nowait')).data;
-
-      if (reset) {
-        data = jsonDecode(res)['posts'] ?? [];
-      } else {
-        data.addAll(jsonDecode(res)['posts']);
-      }
     } else {
       res = (await getSearch(key)).data;
       if (reset) {
@@ -94,7 +86,7 @@ class _SearchPageState extends State<SearchPage> {
                       onChanged: (v) {
                         key = v;
                         timer?.cancel();
-                        timer = new Timer(durationTime, () {
+                        timer = Timer(durationTime, () {
                           _loadData(reset: true);
                         });
                       },
@@ -129,6 +121,7 @@ class _SearchPageState extends State<SearchPage> {
 
 class TagPage extends StatefulWidget {
   final String tag;
+
   TagPage(this.tag);
 
   @override
@@ -136,27 +129,41 @@ class TagPage extends StatefulWidget {
 }
 
 class _TagPageState extends State<TagPage> {
+  final ScrollController _scrollController = ScrollController();
+
   List data = [];
-  getTagList() async {
-    data = jsonDecode((await getPost('', widget.tag, 1, 100, status: 'nowait'))
-        .data)['posts'];
+  int page = 1;
+
+  Future<void> getTagList() async {
+    data.addAll(jsonDecode(
+        (await getPost('', widget.tag, page, 10, status: 'nowait'))
+            .data)['posts']);
     setState(() {});
+  }
+
+  Future<void> getNextList() async {
+    page = page + 1;
+    await getTagList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Loading2Load(
-      load: getTagList,
-      child: Column(
-        children: <Widget>[
-          HomeStackTitleAppbar(widget.tag),
-          Expanded(
+        body: Column(
+      children: <Widget>[
+        HomeStackTitleAppbar(widget.tag),
+        Expanded(
+          child: RefreshWrapper(
+            scrollController: _scrollController,
+            onRefresh: getTagList,
+            onLoadMore: getNextList,
             child: Grid2RowView(
-                List.generate(data.length, (i) => PostCard(data[i]))),
-          )
-        ],
-      ),
+              List.generate(data.length, (i) => PostCard(data[i])),
+              controller: _scrollController,
+            ),
+          ),
+        ),
+      ],
     ));
   }
 }
