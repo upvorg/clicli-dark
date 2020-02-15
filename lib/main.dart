@@ -28,9 +28,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      navigatorKey: Instances.navigatorKey,
-      theme: ThemeData(primarySwatch: Colors.purple),
-      home: MyHomePage(),
+      home: Scaffold(
+          key: Instances.scaffoldKey,
+          body: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            navigatorKey: Instances.navigatorKey,
+            theme: ThemeData(primarySwatch: Colors.purple),
+            home: MyHomePage(),
+          )),
     );
   }
 }
@@ -84,7 +89,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return WillPopScope(
       onWillPop: doubleBackExit,
       child: Scaffold(
-          key: Instances.scaffoldKey,
           body: PageView(
             controller: _pageController,
             children: [HomePage(), TimeLinePage(), UGCPage()],
