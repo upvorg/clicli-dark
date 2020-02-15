@@ -237,6 +237,14 @@ class _PlayerPageState extends State<PlayerPage>
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
+                  actions: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.more_horiz),
+                      onPressed: () {
+                        showSnackBar(context, '这里不可以哦 o(*////▽////*)q');
+                      },
+                    )
+                  ],
                 ),
                 Expanded(child: buildComments())
               ],
@@ -358,7 +366,7 @@ class _PlayerPageState extends State<PlayerPage>
       child: MarkdownBody(
           // selectable: true,
           data:
-              '> ${detail['uname']}    ${detail['time']}   id ${detail['id']}\r\n #  ' +
+              '${videoList.length > 0 ? '# ' + detail['title'] + '\r\n' : ''} > ${detail['uname']}    ${detail['time']}   id ${detail['id']}\r\n #  ' +
                   detail['content'],
           onTapLink: (url) async {
             showDialog<Null>(
@@ -380,7 +388,7 @@ class _PlayerPageState extends State<PlayerPage>
                           if (await canLaunch(url)) {
                             await launch(url);
                           } else {
-                            showErrorSnackBar('打开链接失败');
+                            showErrorSnackBar(context, '打开链接失败');
                           }
                           Navigator.of(context).pop();
                         },

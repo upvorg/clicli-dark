@@ -28,14 +28,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-          key: Instances.scaffoldKey,
-          body: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            navigatorKey: Instances.navigatorKey,
-            theme: ThemeData(primarySwatch: Colors.purple),
-            home: MyHomePage(),
-          )),
+      navigatorKey: Instances.navigatorKey,
+      theme: ThemeData(
+        primarySwatch: Colors.purple,
+        highlightColor: Colors.transparent,
+        splashFactory: const NoSplashFactory(),
+      ),
+      home: MyHomePage(),
     );
   }
 }
@@ -68,10 +67,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<bool> doubleBackExit() {
     int now = DateTime.now().millisecondsSinceEpoch;
     if (now - lastBack > 1000) {
-      showSnackBar("再按一次退出应用");
+      showSnackBar(context, "再按一次退出应用");
       lastBack = DateTime.now().millisecondsSinceEpoch;
     } else {
-      cancelSnackBar();
+      cancelSnackBar(context);
       //  SystemNavigator.pop();
       return Future.value(true);
     }
@@ -152,3 +151,46 @@ class _RankPageState extends State<RankPage> {
 }
 
 */
+
+class NoSplashFactory extends InteractiveInkFeatureFactory {
+  const NoSplashFactory();
+
+  InteractiveInkFeature create({
+    @required MaterialInkController controller,
+    @required RenderBox referenceBox,
+    @required Offset position,
+    @required Color color,
+    TextDirection textDirection,
+    bool containedInkWell: false,
+    RectCallback rectCallback,
+    BorderRadius borderRadius,
+    ShapeBorder customBorder,
+    double radius,
+    VoidCallback onRemoved,
+  }) {
+    return new NoSplash(
+      controller: controller,
+      referenceBox: referenceBox,
+      color: color,
+      onRemoved: onRemoved,
+    );
+  }
+}
+
+class NoSplash extends InteractiveInkFeature {
+  NoSplash({
+    @required MaterialInkController controller,
+    @required RenderBox referenceBox,
+    Color color,
+    VoidCallback onRemoved,
+  })  : assert(controller != null),
+        assert(referenceBox != null),
+        super(
+            controller: controller,
+            referenceBox: referenceBox,
+            onRemoved: onRemoved) {
+    controller.addInkFeature(this);
+  }
+  @override
+  void paintFeature(Canvas canvas, Matrix4 transform) {}
+}
