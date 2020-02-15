@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class Instances {
-  // static final scaffoldKey = GlobalKey<ScaffoldState>();
+  static final homeStackscaffoldKey = GlobalKey<ScaffoldState>();
 
-  // static ScaffoldState get scaffoldState => Instances.scaffoldKey.currentState;
+  static ScaffoldState get scaffoldState =>
+      Instances.homeStackscaffoldKey.currentState;
 
   static final navigatorKey = GlobalKey<NavigatorState>();
 

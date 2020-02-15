@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:clicli_dark/instance.dart';
 
-const Duration _snackBarDisplayDuration = Duration(milliseconds: 1000);
+const Duration snackBarDisplayDuration = Duration(milliseconds: 1000);
 
 void showSnackBar(BuildContext ctx, String text,
-    {Color color, Duration duration = _snackBarDisplayDuration}) {
+    {Color color, Duration duration = snackBarDisplayDuration}) {
   Scaffold.of(ctx).hideCurrentSnackBar();
   Scaffold.of(ctx).showSnackBar(
     SnackBar(
@@ -22,7 +22,7 @@ void showErrorSnackBar(BuildContext ctx, String text) {
   Scaffold.of(ctx).hideCurrentSnackBar();
   Scaffold.of(ctx).showSnackBar(
     SnackBar(
-      duration: _snackBarDisplayDuration,
+      duration: snackBarDisplayDuration,
       backgroundColor: Colors.red,
       content: Text(
         text,

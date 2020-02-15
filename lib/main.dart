@@ -67,10 +67,14 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<bool> doubleBackExit() {
     int now = DateTime.now().millisecondsSinceEpoch;
     if (now - lastBack > 1000) {
-      showSnackBar(context, "再按一次退出应用");
+      Instances.scaffoldState.showSnackBar(
+        SnackBar(
+          duration: snackBarDisplayDuration,
+          content: Text('再按一次退出应用'),
+        ),
+      );
       lastBack = DateTime.now().millisecondsSinceEpoch;
     } else {
-      cancelSnackBar(context);
       //  SystemNavigator.pop();
       return Future.value(true);
     }
@@ -88,6 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return WillPopScope(
       onWillPop: doubleBackExit,
       child: Scaffold(
+          key: Instances.homeStackscaffoldKey,
           body: PageView(
             controller: _pageController,
             children: [HomePage(), TimeLinePage(), UGCPage()],
