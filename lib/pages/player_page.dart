@@ -5,6 +5,7 @@ import 'package:clicli_dark/pages/search_page.dart';
 import 'package:clicli_dark/pkg/chewie/chewie.dart';
 import 'package:clicli_dark/utils/reg_utils.dart';
 import 'package:clicli_dark/utils/toast_utils.dart';
+import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -56,6 +57,12 @@ class _PlayerPageState extends State<PlayerPage>
 
     final videoRes = jsonDecode((await getVideoList(widget.id)).data)['videos'];
     videoList = videoRes ?? [];
+    if (videoList.length > 1) {
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Colors.black,
+        statusBarIconBrightness: Brightness.light,
+      ));
+    }
 
     if (mounted) {
       setState(() {});
@@ -125,21 +132,18 @@ class _PlayerPageState extends State<PlayerPage>
     Wakelock.enable();
     getDetail();
     WidgetsBinding.instance.addObserver(this);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.black,
-      statusBarIconBrightness: Brightness.light,
-    ));
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.paused:
-        showCenterShortToast('paused');
         if (_videoPlayerController.value.isPlaying)
           _videoPlayerController.pause();
         break;
       default:
+        if (!_videoPlayerController.value.isPlaying)
+          _videoPlayerController.play();
         break;
     }
   }
@@ -168,74 +172,76 @@ class _PlayerPageState extends State<PlayerPage>
       );
     }
     return Scaffold(
-        appBar: videoList.length <= 0
-            ? AppBar(
-                title: Text('文章详情'),
-                titleSpacing: -5.0,
-              )
-            : null,
         body: SafeArea(
-          child: videoList.length > 0
-              ? Column(
-                  children: <Widget>[
-                    _chewieController != null
-                        ? Chewie(controller: _chewieController)
-                        : AspectRatio(
-                            aspectRatio: 16 / 9,
-                            child: Container(
-                              color: Colors.black,
-                              child: Center(
-                                  child: Text(
-                                'loading ···',
-                                style: TextStyle(color: Colors.white),
-                              )),
-                            ),
-                          ),
-                    Container(
-                      width: double.infinity,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color:
-                                Theme.of(context).primaryColor.withOpacity(0.2),
-                            offset: Offset(0, 5),
-                            blurRadius: 12,
-                            spreadRadius: -10,
-                          ),
-                        ],
-                        color: Colors.white,
-                      ),
-                      child: TabBar(
-                        tabs: <Widget>[Tab(text: '剧集'), Tab(text: '简介')],
-                        controller: _tabController,
-                        isScrollable: true,
-                        indicatorSize: TabBarIndicatorSize.tab,
-                        indicatorPadding:
-                            EdgeInsets.symmetric(horizontal: 25, vertical: 0),
-                        labelColor: Theme.of(context).primaryColor,
-                        labelStyle: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        unselectedLabelStyle: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.normal,
+      child: videoList.length > 0
+          ? Column(
+              children: <Widget>[
+                _chewieController != null
+                    ? Chewie(controller: _chewieController)
+                    : AspectRatio(
+                        aspectRatio: 16 / 9,
+                        child: Container(
+                          color: Colors.black,
+                          child: Center(
+                              child: Text(
+                            'loading ···',
+                            style: TextStyle(color: Colors.white),
+                          )),
                         ),
                       ),
+                Container(
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Theme.of(context).primaryColor.withOpacity(0.2),
+                        offset: Offset(0, 5),
+                        blurRadius: 12,
+                        spreadRadius: -10,
+                      ),
+                    ],
+                    color: Colors.white,
+                  ),
+                  child: TabBar(
+                    tabs: <Widget>[Tab(text: '剧集'), Tab(text: '简介')],
+                    controller: _tabController,
+                    isScrollable: true,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    indicatorPadding:
+                        EdgeInsets.symmetric(horizontal: 25, vertical: 0),
+                    labelColor: Theme.of(context).primaryColor,
+                    labelStyle: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Expanded(
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: <Widget>[buildProfile(), buildComments()],
-                      ),
-                    )
-                  ],
-                )
-              : Column(
-                  children: <Widget>[Expanded(child: buildComments())],
+                    unselectedLabelStyle: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
                 ),
-        ));
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: <Widget>[buildProfile(), buildComments()],
+                  ),
+                )
+              ],
+            )
+          : Column(
+              children: <Widget>[
+                FixedAppBar(
+                  title: Text(
+                    detail['title'],
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Expanded(child: buildComments())
+              ],
+            ),
+    ));
   }
 
   Widget buildProfile() {
@@ -348,11 +354,11 @@ class _PlayerPageState extends State<PlayerPage>
 
   Widget buildComments() {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: MarkdownBody(
           // selectable: true,
           data:
-              '# ${detail['title']}\r\n> ${detail['uname']}    ${detail['time']}   id ${detail['id']}\r\n #  ' +
+              '> ${detail['uname']}    ${detail['time']}   id ${detail['id']}\r\n #  ' +
                   detail['content'],
           onTapLink: (url) async {
             showDialog<Null>(
@@ -374,7 +380,7 @@ class _PlayerPageState extends State<PlayerPage>
                           if (await canLaunch(url)) {
                             await launch(url);
                           } else {
-                            showCenterErrorShortToast('打开链接失败');
+                            showErrorSnackBar('打开链接失败');
                           }
                           Navigator.of(context).pop();
                         },

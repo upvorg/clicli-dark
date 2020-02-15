@@ -366,7 +366,7 @@ class _MaterialControlsState extends State<MaterialControls> {
                 color: chewieController.fontColor,
               ),
               onPressed: () {
-                showShortToast('coming soon...');
+                showSnackBar('coming soon...');
                 // showPop = !showPop;
               },
             )

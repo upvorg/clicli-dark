@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/pages/home_stack/home_page.dart';
 import 'package:clicli_dark/pages/home_stack/time_line_page.dart';
 import 'package:clicli_dark/pages/home_stack/ugc_page.dart';
@@ -27,9 +28,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.purple,
-      ),
+      navigatorKey: Instances.navigatorKey,
+      theme: ThemeData(primarySwatch: Colors.purple),
       home: MyHomePage(),
     );
   }
@@ -63,10 +63,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<bool> doubleBackExit() {
     int now = DateTime.now().millisecondsSinceEpoch;
     if (now - lastBack > 1000) {
-      showShortToast("再按一次退出应用");
+      showSnackBar("再按一次退出应用");
       lastBack = DateTime.now().millisecondsSinceEpoch;
     } else {
-      cancelToast();
+      cancelSnackBar();
       //  SystemNavigator.pop();
       return Future.value(true);
     }
@@ -84,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return WillPopScope(
       onWillPop: doubleBackExit,
       child: Scaffold(
+          key: Instances.scaffoldKey,
           body: PageView(
             controller: _pageController,
             children: [HomePage(), TimeLinePage(), UGCPage()],
