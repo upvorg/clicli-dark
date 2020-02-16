@@ -19,7 +19,7 @@ void main() async {
       systemNavigationBarColor: Colors.white,
     ));
   }
-
+  await Future.delayed(Duration(milliseconds: 2000));
   runApp(MyApp());
 }
 

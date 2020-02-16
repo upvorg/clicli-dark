@@ -57,12 +57,15 @@ class _PlayerPageState extends State<PlayerPage>
 
     final videoRes = jsonDecode((await getVideoList(widget.id)).data)['videos'];
     videoList = videoRes ?? [];
-    if (videoList.length > 1) {
+    if (videoList.length > 0) {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Colors.black,
         statusBarIconBrightness: Brightness.light,
       ));
     }
+
+    final pv = jsonDecode((await getPV(widget.id)).toString())['pv'];
+    detail['pv'] = pv;
 
     if (mounted) {
       setState(() {});
@@ -255,6 +258,9 @@ class _PlayerPageState extends State<PlayerPage>
   Widget buildProfile() {
     final caption = Theme.of(context).textTheme.caption;
     final List tags = detail['tag'].substring(1).split(' ');
+    final time = DateTime.parse(detail['time']);
+    final m = time.month < 10 ? '0${time.month}' : time.month;
+    final d = time.day < 10 ? '0${time.day}' : time.day;
     return Container(
         child: ListView(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
@@ -263,8 +269,14 @@ class _PlayerPageState extends State<PlayerPage>
           SizedBox(height: 10),
           Row(
             children: <Widget>[
-              Text('gv ${widget.id}  ', style: caption),
-              Text(detail['time'], style: caption),
+              Text('GV${widget.id}  ', style: caption),
+              Text(' $m-$d  ', style: caption),
+              Icon(
+                Icons.whatshot,
+                size: 12,
+                color: caption.color,
+              ),
+              Text(' ${detail['pv']?.toString() ?? 0}', style: caption),
             ],
           ),
           SizedBox(height: 10),

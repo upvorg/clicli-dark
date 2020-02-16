@@ -32,12 +32,12 @@ class PlayerWithControls extends StatelessWidget {
     return Container(
       child: Stack(
         children: <Widget>[
-          chewieController.placeholder ?? Container(),
+          // chewieController.placeholder ?? Container(),
           CroppedVideo(
             controller: chewieController.videoPlayerController,
             cropAspectRatio: chewieController.aspectRatio,
           ),
-          chewieController.overlay ?? Container(),
+          // chewieController.overlay ?? Container(),
           _buildControls(context, chewieController),
         ],
       ),

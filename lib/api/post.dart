@@ -33,3 +33,7 @@ getSearch(String key) {
 getRank() {
   return NetUtils.get('https://api.clicli.us/rank');
 }
+
+getPV(int id) {
+  return NetUtils.get('https://jx.clicli.us/get/pv?pid=$id');
+}

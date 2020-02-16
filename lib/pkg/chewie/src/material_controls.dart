@@ -124,7 +124,6 @@ class _MaterialControlsState extends State<MaterialControls> {
         _cancelAndRestartTimer();
       },
       child: GestureDetector(
-        // 横向进度条
         onHorizontalDragStart: _onHorizontalDragStart,
         onHorizontalDragDown: _onHorizontalDragDown,
         onHorizontalDragUpdate: _onHorizontalDragUpdate,
@@ -162,6 +161,7 @@ class _MaterialControlsState extends State<MaterialControls> {
     _hideTimer?.cancel();
     _initTimer?.cancel();
     _showAfterExpandCollapseTimer?.cancel();
+    // Volume.dispose();
     if (initBri != null) Screen.setBrightness(initBri);
   }
 
@@ -190,6 +190,7 @@ class _MaterialControlsState extends State<MaterialControls> {
   bool showVolTip = false;
   double initVol;
   double voling = 0.0;
+  // double volProgress = 0.0;
 
   void _onVerticalDragDown(DragDownDetails d) {
     _startVerticalDragX = d.localPosition.dx;
@@ -201,7 +202,7 @@ class _MaterialControlsState extends State<MaterialControls> {
       initBri = await Screen.brightness;
       showBrightness = true;
     } else {
-      initVol = controller.value.volume;
+      initVol = controller.value.volume; /*await Volume.getVol*/
       showVolTip = true;
     }
     setState(() {});
@@ -217,6 +218,11 @@ class _MaterialControlsState extends State<MaterialControls> {
       brighting = _ <= 0 ? 0.0 : _ >= 1 ? 1.0 : _;
       await Screen.setBrightness(brighting);
     } else {
+      // final _m = chewieController.maxVol;
+      // final _ = initVol + drag / totalHor * _m;
+      // voling = _ > _m ? _m : _ < 0.0 ? 0.0 : _;
+      // volProgress = voling / _m;
+      // await chewieController.setVol(voling.toInt());
       final _ = initVol + drag / totalHor;
       voling = _ > 1.0 ? 1.0 : _ < 0.0 ? 0.0 : _;
       await controller.setVolume(voling);

@@ -2,14 +2,15 @@ cache:
   directories:
     - '$HOME/.pub-cache'
 
-notifications:
-  email:
-    recipients:
-      - 468549471@qq.com
-      - 1175896881@qq.com
-      - 595211737@qq.com
-    on_success: always
-    on_failure: always
+# notifications:
+#   email:
+#     recipients:
+#       - 468549471@qq.com
+#       - 1175896881@qq.com
+#       - 595211737@qq.com
+#     on_success: always
+#     on_failure: always
+
 jobs:
   include:
     - stage: deployAPK

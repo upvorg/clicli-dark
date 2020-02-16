@@ -327,6 +327,8 @@ class ChewieController extends ChangeNotifier {
     if (fullScreenByDefault) {
       videoPlayerController.addListener(_fullScreenListener);
     }
+
+    // await Volume.controlVolume(AudioManager.STREAM_MUSIC);
   }
 
   void _fullScreenListener() async {
@@ -366,6 +368,17 @@ class ChewieController extends ChangeNotifier {
   Future<void> seekTo(Duration moment) async {
     await videoPlayerController.seekTo(moment);
   }
+
+  // int maxVol, currentVol;
+
+  // Future<void> updateVolumes() async {
+  //   maxVol = await Volume.getMaxVol;
+  //   currentVol = await Volume.getVol;
+  // }
+
+  // Future<void> setVol(int i) async {
+  //   await Volume.setVol(i);
+  // }
 }
 
 class _ChewieControllerProvider extends InheritedWidget {
