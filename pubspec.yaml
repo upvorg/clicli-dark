@@ -16,7 +16,6 @@ dev_dependencies:
     sdk: flutter
 
   dio: any
-  cached_network_image: any
   flutter_markdown: any
   url_launcher: any
   flutter_downloader: any

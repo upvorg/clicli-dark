@@ -349,10 +349,19 @@ class _PlayerPageState extends State<PlayerPage>
                   color: caption.color,
                 ),
                 onPressed: () async {
-                  showSnackBar('下载中···');
                   final path = (await getExternalStorageDirectory()).path;
                   final downloadPath = Directory('$path/${detail['title']}');
                   if (!downloadPath.existsSync()) downloadPath.createSync();
+                  final fileName =
+                      '$currPlayIndex  ${_chewieController.videoTitle}';
+
+                  final tasks = await FlutterDownloader.loadTasks();
+                  if (tasks.any((task) => task.filename == fileName)) {
+                    showSnackBar('正在下载···');
+                    return;
+                  }
+
+                  showSnackBar('开始下载···');
                   await FlutterDownloader.enqueue(
                     url: _videoPlayerController.dataSource,
                     savedDir: downloadPath.path,
