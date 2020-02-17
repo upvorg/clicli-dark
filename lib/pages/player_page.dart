@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:clicli_dark/api/post.dart';
+import 'package:clicli_dark/pages/downloader_page.dart';
 import 'package:clicli_dark/pages/search_page.dart';
 import 'package:clicli_dark/pkg/chewie/chewie.dart';
 import 'package:clicli_dark/utils/reg_utils.dart';
@@ -9,7 +11,9 @@ import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
@@ -227,7 +231,7 @@ class _PlayerPageState extends State<PlayerPage>
                 Expanded(
                   child: TabBarView(
                     controller: _tabController,
-                    children: <Widget>[buildProfile(), buildComments()],
+                    children: <Widget>[buildProfile(context), buildComments()],
                   ),
                 )
               ],
@@ -255,7 +259,7 @@ class _PlayerPageState extends State<PlayerPage>
     ));
   }
 
-  Widget buildProfile() {
+  Widget buildProfile(BuildContext context) {
     final caption = Theme.of(context).textTheme.caption;
     final List tags = detail['tag'].substring(1).split(' ');
     final time = DateTime.parse(detail['time']);
@@ -316,6 +320,18 @@ class _PlayerPageState extends State<PlayerPage>
                   ),
                 )
           ]),
+          // SizedBox(height: 10),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //   children: <Widget>[
+          //     // IconButton(
+          //     //   icon: Icon(
+          //     //     Icons.favorite_border,
+          //     //     color: caption.color,
+          //     //   ),
+          //     // ),
+          //   ],
+          // ),
           SizedBox(height: 10),
           Row(
             children: <Widget>[
@@ -328,6 +344,26 @@ class _PlayerPageState extends State<PlayerPage>
               ),
               SizedBox(width: 15),
               Text(detail['uname'], style: caption),
+              IconButton(
+                icon: Icon(
+                  Icons.file_download,
+                  color: caption.color,
+                ),
+                onPressed: () async {
+                  final path = (await getExternalStorageDirectory()).path;
+                  final downloadPath = Directory('$path/${detail['title']}');
+                  if (!downloadPath.existsSync()) downloadPath.createSync();
+                  await FlutterDownloader.enqueue(
+                    url: _videoPlayerController.dataSource,
+                    savedDir: downloadPath.path,
+                    showNotification: true,
+                    openFileFromNotification: true,
+                    fileName: '$currPlayIndex  ${_chewieController.videoTitle}',
+                  );
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => DownloaderPage()));
+                },
+              )
             ],
           ),
           SizedBox(height: 10),

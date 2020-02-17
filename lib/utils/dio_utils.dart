@@ -19,7 +19,7 @@ class NetUtils {
   static final Dio dio = Dio(baseOptions);
   static final Dio tokenDio = Dio();
 
-  static void initConfig() async {
+  static Future<void> initConfig() async {
     dio.interceptors.add(InterceptorsWrapper(
       onError: (DioError e) async {
         if (e?.response?.statusCode == 401) {}

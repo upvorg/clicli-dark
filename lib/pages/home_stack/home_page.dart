@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:clicli_dark/api/post.dart';
+import 'package:clicli_dark/pages/downloader_page.dart';
 import 'package:clicli_dark/pages/rank_page.dart';
 import 'package:clicli_dark/pages/search_page.dart';
 import 'package:clicli_dark/widgets//post_card.dart';
@@ -126,6 +127,20 @@ class _HomePageState extends State<HomePage>
               ),
               Row(
                 children: <Widget>[
+                  IconButton(
+                    icon: Icon(
+                      Icons.file_download,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => DownloaderPage(),
+                        ),
+                      );
+                    },
+                  ),
                   IconButton(
                     icon: Icon(
                       Icons.whatshot,

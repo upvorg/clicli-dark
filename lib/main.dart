@@ -8,6 +8,7 @@ import 'package:clicli_dark/utils/dio_utils.dart';
 import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +20,9 @@ void main() async {
       systemNavigationBarColor: Colors.white,
     ));
   }
-  await Future.delayed(Duration(milliseconds: 2000));
+  await NetUtils.initConfig();
+  await FlutterDownloader.initialize();
+  await Future.delayed(Duration(milliseconds: 1000));
   runApp(MyApp());
 }
 
@@ -84,7 +87,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    NetUtils.initConfig();
   }
 
   @override

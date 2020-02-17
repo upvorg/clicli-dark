@@ -24,6 +24,8 @@ dev_dependencies:
   # super_rich_text: any
   flutter_markdown: any
   url_launcher: any
+  flutter_downloader: any
+  path_provider: any
 
 flutter:
   uses-material-design: true
