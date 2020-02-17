@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:clicli_dark/api/post.dart';
-import 'package:clicli_dark/pages/downloader_page.dart';
 import 'package:clicli_dark/pages/search_page.dart';
 import 'package:clicli_dark/pkg/chewie/chewie.dart';
 import 'package:clicli_dark/utils/reg_utils.dart';
@@ -16,7 +15,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:screen/screen.dart';
 
 //https://stackoverflow.com/questions/52431109/flutter-video-player-fullscreen
 class PlayerPage extends StatefulWidget with WidgetsBindingObserver {
@@ -136,7 +135,7 @@ class _PlayerPageState extends State<PlayerPage>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    Wakelock.enable();
+    Screen.keepOn(true);
     getDetail();
     WidgetsBinding.instance.addObserver(this);
   }
@@ -248,7 +247,7 @@ class _PlayerPageState extends State<PlayerPage>
                     IconButton(
                       icon: Icon(Icons.more_horiz),
                       onPressed: () {
-                        showSnackBar(context, '这里不可以哦 o(*////▽////*)q');
+                        showSnackBar('这里不可以哦 o(*////▽////*)q');
                       },
                     )
                   ],
@@ -350,6 +349,7 @@ class _PlayerPageState extends State<PlayerPage>
                   color: caption.color,
                 ),
                 onPressed: () async {
+                  showSnackBar('下载中···');
                   final path = (await getExternalStorageDirectory()).path;
                   final downloadPath = Directory('$path/${detail['title']}');
                   if (!downloadPath.existsSync()) downloadPath.createSync();
@@ -360,8 +360,6 @@ class _PlayerPageState extends State<PlayerPage>
                     openFileFromNotification: true,
                     fileName: '$currPlayIndex  ${_chewieController.videoTitle}',
                   );
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => DownloaderPage()));
                 },
               )
             ],
@@ -436,7 +434,7 @@ class _PlayerPageState extends State<PlayerPage>
                           if (await canLaunch(url)) {
                             await launch(url);
                           } else {
-                            showErrorSnackBar(context, '打开链接失败');
+                            showErrorSnackBar('打开链接失败');
                           }
                           Navigator.of(context).pop();
                         },

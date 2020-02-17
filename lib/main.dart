@@ -5,7 +5,6 @@ import 'package:clicli_dark/pages/home_stack/home_page.dart';
 import 'package:clicli_dark/pages/home_stack/time_line_page.dart';
 import 'package:clicli_dark/pages/home_stack/ugc_page.dart';
 import 'package:clicli_dark/utils/dio_utils.dart';
-import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -72,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (now - lastBack > 1000) {
       Instances.scaffoldState.showSnackBar(
         SnackBar(
-          duration: snackBarDisplayDuration,
+          duration: Duration(milliseconds: 1000),
           content: Text('再按一次退出应用'),
         ),
       );

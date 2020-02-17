@@ -97,6 +97,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.4.1"
+  flutter_flexible_toast:
+    dependency: "direct dev"
+    description:
+      name: flutter_flexible_toast
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.3"
   flutter_markdown:
     dependency: "direct dev"
     description:
@@ -350,13 +357,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.1.2"
-  wakelock:
-    dependency: "direct dev"
-    description:
-      name: wakelock
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.1.3+4"
   xml:
     dependency: transitive
     description:

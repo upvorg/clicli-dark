@@ -351,7 +351,7 @@ class _MaterialControlsState extends State<MaterialControls> {
           children: <Widget>[
             IconButton(
               icon: Icon(
-                Icons.arrow_back_ios,
+                Icons.arrow_back,
                 color: chewieController.fontColor,
               ),
               onPressed: () {
@@ -368,11 +368,11 @@ class _MaterialControlsState extends State<MaterialControls> {
             ),
             IconButton(
               icon: Icon(
-                Icons.screen_share,
+                Icons.more_horiz,
                 color: chewieController.fontColor,
               ),
               onPressed: () {
-                showSnackBar(context, 'coming soon...');
+                showSnackBar('coming soon···');
                 // showPop = !showPop;
               },
             )

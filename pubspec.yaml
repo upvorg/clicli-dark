@@ -17,15 +17,16 @@ dev_dependencies:
 
   dio: any
   cached_network_image: any
-  video_player: any
-  wakelock: any
-  screen: any
-  open_iconic_flutter: any
-  # super_rich_text: any
   flutter_markdown: any
   url_launcher: any
   flutter_downloader: any
   path_provider: any
+  flutter_flexible_toast: any
+
+  # chewie
+  video_player: any
+  screen: any
+  open_iconic_flutter: any
 
 flutter:
   uses-material-design: true

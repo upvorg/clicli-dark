@@ -1,37 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:clicli_dark/instance.dart';
+import 'package:flutter_flexible_toast/flutter_flexible_toast.dart';
 
-const Duration snackBarDisplayDuration = Duration(milliseconds: 1000);
+const int duration = 1;
 
-void showSnackBar(BuildContext ctx, String text,
-    {Color color, Duration duration = snackBarDisplayDuration}) {
-  Scaffold.of(ctx).hideCurrentSnackBar();
-  Scaffold.of(ctx).showSnackBar(
-    SnackBar(
-      duration: duration,
-      backgroundColor: Instances.currentThemeColor.withOpacity(0.8),
-      content: Text(
-        text,
-        style: TextStyle(color: color),
-      ),
-    ),
+void showSnackBar(String text) {
+  FlutterFlexibleToast.cancel();
+  FlutterFlexibleToast.showToast(
+    message: text,
+    toastLength: Toast.LENGTH_LONG,
+    toastGravity: ToastGravity.BOTTOM,
+    icon: ICON.INFO,
+    radius: 10,
+    elevation: 10,
+    textColor: Colors.white,
+    backgroundColor: Colors.black,
+    timeInSeconds: duration,
   );
 }
 
-void showErrorSnackBar(BuildContext ctx, String text) {
-  Scaffold.of(ctx).hideCurrentSnackBar();
-  Scaffold.of(ctx).showSnackBar(
-    SnackBar(
-      duration: snackBarDisplayDuration,
-      backgroundColor: Colors.red,
-      content: Text(
-        text,
-        style: const TextStyle(color: Colors.white),
-      ),
-    ),
+void showErrorSnackBar(String text) {
+  FlutterFlexibleToast.cancel();
+  FlutterFlexibleToast.showToast(
+    message: text,
+    toastLength: Toast.LENGTH_LONG,
+    toastGravity: ToastGravity.BOTTOM,
+    icon: ICON.ERROR,
+    radius: 100,
+    elevation: 10,
+    textColor: Colors.white,
+    backgroundColor: Colors.black,
+    timeInSeconds: duration,
   );
 }
 
-void cancelSnackBar(BuildContext ctx) {
-  Scaffold.of(ctx).hideCurrentSnackBar();
+void cancelSnackBar() {
+  FlutterFlexibleToast.cancel();
 }
