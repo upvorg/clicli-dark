@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-// import 'package:clicli_dark/utils/toast_utils.dart';
+import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:dio/dio.dart';
 //import 'package:flutter/foundation.dart';
 
@@ -26,7 +26,7 @@ class NetUtils {
         if (e?.type == DioErrorType.CONNECT_TIMEOUT ||
             e?.type == DioErrorType.RECEIVE_TIMEOUT ||
             e?.type == DioErrorType.SEND_TIMEOUT) {
-          // showErrorSnackBar('NETWORK TIMEOUT, TRY AGAIN LATER.');
+          showErrorSnackBar('NETWORK TIMEOUT, TRY AGAIN LATER.');
         }
         return e;
       },

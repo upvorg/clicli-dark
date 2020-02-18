@@ -1,6 +1,8 @@
 import 'dart:isolate';
 import 'dart:ui';
 
+import 'package:clicli_dark/widgets/appbar.dart';
+import 'package:clicli_dark/widgets/common_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 
@@ -25,8 +27,8 @@ class _DownloaderPageState extends State<DownloaderPage> {
     loadTask();
     IsolateNameServer.registerPortWithName(
         _port.sendPort, 'downloader_send_port');
-    _port.listen((dynamic data) {
-      loadTask();
+    _port.listen((dynamic data) async {
+      await loadTask();
     });
 
     FlutterDownloader.registerCallback(downloadCallback);
@@ -44,7 +46,7 @@ class _DownloaderPageState extends State<DownloaderPage> {
     DownloadTaskStatus.paused: Icons.play_arrow,
     DownloadTaskStatus.complete: Icons.done,
     DownloadTaskStatus.failed: Icons.error,
-    DownloadTaskStatus.canceled: Icons.pause,
+    DownloadTaskStatus.canceled: Icons.not_interested,
     DownloadTaskStatus.enqueued: Icons.access_time,
     DownloadTaskStatus.undefined: Icons.not_interested,
   };
@@ -59,66 +61,154 @@ class _DownloaderPageState extends State<DownloaderPage> {
     DownloadTaskStatus.undefined: (String id) {},
   };
 
-  void loadTask() async {
+  Future<void> loadTask() async {
     final tasks = await FlutterDownloader.loadTasks();
     _tasks = tasks;
     setState(() {});
   }
 
-  static _retryTaskById(String id) {
-    FlutterDownloader.retry(taskId: id);
+  static Future<void> _retryTaskById(String id) async {
+    await FlutterDownloader.retry(taskId: id);
   }
 
-  static _resumeTaskById(String id) {
-    FlutterDownloader.resume(taskId: id);
+  static Future<void> _resumeTaskById(String id) async {
+    await FlutterDownloader.resume(taskId: id);
   }
 
-  static _stopTaskById(String id) {
-    FlutterDownloader.pause(taskId: id);
+  static Future<void> _stopTaskById(String id) async {
+    await FlutterDownloader.pause(taskId: id);
   }
 
   Future<void> _removeAllDownloadedTask() async {
     _tasks.forEach((task) async {
       await FlutterDownloader.remove(taskId: task.taskId);
     });
-    loadTask();
-    setState(() {});
+    await loadTask();
   }
 
   static Future<bool> _openDownloadedFile(String taskId) {
     return FlutterDownloader.open(taskId: taskId);
   }
 
+  bool hasDoingTasks() {
+    return _tasks.any(
+      (task) =>
+          task.status == DownloadTaskStatus.running ||
+          task.status == DownloadTaskStatus.enqueued,
+    );
+  }
+
+  Future<void> startAllPausedTask() async {
+    _tasks.forEach((task) async {
+      if (task.status == DownloadTaskStatus.paused) {
+        await _resumeTaskById(task.taskId);
+      }
+
+      if (task.status == DownloadTaskStatus.canceled) {
+        await _retryTaskById(task.taskId);
+      }
+    });
+  }
+
+  Future<void> pauseAllPausedTask() async {
+    _tasks.forEach((task) async {
+      if (task.status == DownloadTaskStatus.running) {
+        await _stopTaskById(task.taskId);
+        setState(() {});
+      }
+    });
+  }
+
+  bool hasTaskId(String id) {
+    return _tasks.any((task) => task.taskId == id);
+  }
+
+  void removeSelectedTasks() async {
+    for (var i = 0; i < selectedTasks.length; i++) {
+      await FlutterDownloader.remove(taskId: selectedTasks[i]);
+    }
+    await loadTask();
+  }
+
+  List<String> selectedTasks = [];
+
   @override
   Widget build(BuildContext context) {
+    final hasDoingTask = hasDoingTasks();
     return Scaffold(
-      appBar: AppBar(
-        title: Text('下载管理'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.pause),
-            onPressed: () {
-              FlutterDownloader.cancelAll();
-              setState(() {});
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.clear_all),
-            onPressed: _removeAllDownloadedTask,
-          ),
-        ],
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: FixedAppBar(
+          title: Text('下载管理'),
+          actions: selectedTasks.length < 1
+              ? [
+                  IconButton(
+                    icon: Icon(hasDoingTask ? Icons.pause : Icons.play_arrow),
+                    onPressed: () async {
+                      if (hasDoingTask) {
+                        await pauseAllPausedTask();
+                      } else {
+                        await startAllPausedTask();
+                      }
+                      setState(() {});
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.select_all),
+                    onPressed: () {
+                      _tasks.forEach((t) {
+                        selectedTasks.add(t.taskId);
+                      });
+                      setState(() {});
+                    },
+                  )
+                ]
+              : [
+                  IconButton(
+                    icon: Icon(Icons.delete_outline),
+                    onPressed: removeSelectedTasks,
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.cancel),
+                    onPressed: () {
+                      selectedTasks = [];
+                      setState(() {});
+                    },
+                  ),
+                ],
+        ),
       ),
       body: ListView.builder(
         itemBuilder: (ctx, i) {
-          print(_tasks[i].status);
-          return ListTile(
-            title: Text(_tasks[i].filename ?? ''),
-            leading: Icon(downloadStatusIcons[_tasks[i].status]),
-            trailing: Text('${_tasks[i].progress} %'),
-            onTap: () async {
-              await downloadStatusFn[_tasks[i].status](_tasks[i].taskId);
-              setState(() {});
-            },
+          final DownloadTask task = _tasks[i];
+          final bool isSelected = selectedTasks.any((t) => t == task.taskId);
+          return Container(
+            color: isSelected ? Theme.of(context).primaryColor : null,
+            child: ListTile(
+              title: ellipsisText(task.filename ?? ''),
+              leading: Icon(downloadStatusIcons[task.status]),
+              trailing: Text('${task.progress > 100 ? '∞' : task.progress} %'),
+              onTap: () async {
+                if (selectedTasks.length > 0) {
+                  if (isSelected) {
+                    selectedTasks.removeWhere((t) => t == task.taskId);
+                  } else {
+                    selectedTasks.add(task.taskId);
+                  }
+                } else {
+                  await downloadStatusFn[task.status](task.taskId);
+                }
+                setState(() {});
+              },
+              onLongPress: () {
+                if (isSelected) {
+                  selectedTasks.removeWhere((t) => t == task.taskId);
+                } else {
+                  selectedTasks.add(task.taskId);
+                }
+                setState(() {});
+              },
+            ),
           );
         },
         itemCount: _tasks.length,

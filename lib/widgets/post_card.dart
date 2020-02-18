@@ -2,6 +2,7 @@ import 'package:clicli_dark/pages/player_page.dart';
 import 'package:clicli_dark/utils/reg_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class PostCard extends StatelessWidget {
   final Map data;
@@ -32,11 +33,21 @@ class PostCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Image(
-              image: NetworkImage(getSuo(data['content'])),
+            CachedNetworkImage(
+              imageUrl: getSuo(data['content']),
+              placeholder: (ctx, url) => SizedBox(
+                height: 115,
+                width: double.infinity,
+                child: Center(child: CircularProgressIndicator()),
+              ),
               height: 115,
               width: double.infinity,
               fit: BoxFit.cover,
+              errorWidget: (_, __, ___) => SizedBox(
+                height: 115,
+                width: double.infinity,
+                child: Center(child: Icon(Icons.error_outline)),
+              ),
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(10, 0, 10, 8),

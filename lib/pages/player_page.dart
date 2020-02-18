@@ -7,6 +7,7 @@ import 'package:clicli_dark/pkg/chewie/chewie.dart';
 import 'package:clicli_dark/utils/reg_utils.dart';
 import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:clicli_dark/widgets/appbar.dart';
+import 'package:clicli_dark/widgets/common_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -259,7 +260,8 @@ class _PlayerPageState extends State<PlayerPage>
   }
 
   Widget buildProfile(BuildContext context) {
-    final caption = Theme.of(context).textTheme.caption;
+    final theme = Theme.of(context);
+    final caption = theme.textTheme.caption;
     final List tags = detail['tag'].substring(1).split(' ');
     final time = DateTime.parse(detail['time']);
     final m = time.month < 10 ? '0${time.month}' : time.month;
@@ -277,9 +279,10 @@ class _PlayerPageState extends State<PlayerPage>
               Icon(
                 Icons.whatshot,
                 size: 12,
-                color: caption.color,
+                color: theme.primaryColor,
               ),
-              Text(' ${detail['pv']?.toString() ?? 0}', style: caption),
+              Text('${detail['pv']?.toString() ?? 0} ℃',
+                  style: caption.copyWith(color: theme.primaryColor)),
             ],
           ),
           SizedBox(height: 10),
@@ -379,36 +382,35 @@ class _PlayerPageState extends State<PlayerPage>
   }
 
   Widget buildVideoList() {
+    final color = Color.fromRGBO(148, 108, 230, 1);
     return Column(
         children: List.generate(videoList.length, (int i) {
       return Container(
         margin: EdgeInsets.symmetric(vertical: 5),
         child: InkWell(
-            splashColor: Color.fromRGBO(148, 108, 230, 0.6),
-            highlightColor: Color.fromRGBO(148, 108, 230, 0.4),
+            splashColor: color.withOpacity(0.6),
+            highlightColor: color.withOpacity(0.4),
             onTap: () {
               toggleVideo(i);
             },
             child: Container(
               color: i == currPlayIndex
-                  ? Color.fromRGBO(148, 108, 230, 0.5)
-                  : Color.fromRGBO(148, 108, 230, 0.2),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      '     ${videoList[i]['oid']}      ',
-                      style: TextStyle(color: Color.fromRGBO(148, 108, 230, 1)),
-                    ),
-                    Text(
+                  ? color.withOpacity(0.5)
+                  : color.withOpacity(0.2),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    '  ${videoList[i]['oid']}  ',
+                    style: TextStyle(color: color),
+                  ),
+                  Expanded(
+                    child: ellipsisText(
                       '${videoList[i]['title']}',
-                      style: TextStyle(color: Color.fromRGBO(148, 108, 230, 1)),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    )
-                  ],
-                ),
+                      style: TextStyle(color: color),
+                    ),
+                  )
+                ],
               ),
             )),
       );
@@ -416,13 +418,17 @@ class _PlayerPageState extends State<PlayerPage>
   }
 
   Widget buildComments() {
+    final i = detail['content'].indexOf('# 播放出错');
+    final content =
+        i < 0 ? detail['content'] : detail['content'].substring(0, i);
+    final meta =
+        '''${videoList.length > 0 ? '# ${detail['title']} \r\n ' : ''}> ${detail['uname']}  ${detail['time']}   GV${detail['id']} \r\n#  ''';
+
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: MarkdownBody(
           // selectable: true,
-          data:
-              '${videoList.length > 0 ? '# ' + detail['title'] + '\r\n' : ''} > ${detail['uname']}    ${detail['time']}   id ${detail['id']}\r\n #  ' +
-                  detail['content'],
+          data: meta + content,
           onTapLink: (url) async {
             showDialog<Null>(
                 context: context,
