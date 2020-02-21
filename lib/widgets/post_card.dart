@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 class PostCard extends StatelessWidget {
   final Map data;
+
   PostCard(this.data);
 
   @override
@@ -21,57 +22,61 @@ class PostCard extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(5.0)),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.2),
-              offset: Offset(0.5, 0.5),
-              blurRadius: 0.5,
+              offset: Offset(2, 2),
+              blurRadius: 5,
             )
           ],
           color: Colors.white,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            CachedNetworkImage(
-              imageUrl: getSuo(data['content']),
-              placeholder: (ctx, url) => SizedBox(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              CachedNetworkImage(
+                imageUrl: getSuo(data['content']),
+                placeholder: (ctx, url) => SizedBox(
+                  height: 115,
+                  width: double.infinity,
+                  child: Center(child: CircularProgressIndicator()),
+                ),
                 height: 115,
                 width: double.infinity,
-                child: Center(child: CircularProgressIndicator()),
+                fit: BoxFit.cover,
+                errorWidget: (_, __, ___) => SizedBox(
+                  height: 115,
+                  width: double.infinity,
+                  child: Center(child: Icon(Icons.error_outline)),
+                ),
               ),
-              height: 115,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              errorWidget: (_, __, ___) => SizedBox(
-                height: 115,
-                width: double.infinity,
-                child: Center(child: Icon(Icons.error_outline)),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(top: 4),
-                    child: Text(
-                      data['title'],
+              Padding(
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(top: 4),
+                      child: Text(
+                        data['title'],
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Text(
+                      data['tag'].substring(1).replaceAll(' ', ' · '),
+                      style: Theme.of(context).textTheme.caption,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  Text(
-                    data['tag'].substring(1).replaceAll(' ', ' · '),
-                    style: Theme.of(context).textTheme.caption,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
