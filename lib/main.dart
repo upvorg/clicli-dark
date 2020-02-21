@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:clicli_dark/config.dart';
 import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/pages/home_stack/home_page.dart';
 import 'package:clicli_dark/pages/home_stack/time_line_page.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       navigatorKey: Instances.navigatorKey,
       theme: ThemeData(
-        primarySwatch: Colors.purple,
+        primarySwatch: Config.colorCustom,
         splashFactory: const NoSplashFactory(),
       ),
       home: MyHomePage(),
