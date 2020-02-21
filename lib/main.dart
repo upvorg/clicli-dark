@@ -22,7 +22,6 @@ void main() async {
   }
   await NetUtils.initConfig();
   await FlutterDownloader.initialize();
-  await Future.delayed(Duration(milliseconds: 1000));
   runApp(MyApp());
 }
 
