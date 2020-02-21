@@ -99,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
             physics: NeverScrollableScrollPhysics(),
           ),
           bottomNavigationBar: BottomAppBar(
-            elevation: 2.0,
+            elevation: 0,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(
@@ -196,6 +196,7 @@ class NoSplash extends InteractiveInkFeature {
             onRemoved: onRemoved) {
     controller.addInkFeature(this);
   }
+
   @override
   void paintFeature(Canvas canvas, Matrix4 transform) {}
 }

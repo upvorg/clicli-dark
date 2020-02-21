@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage>
 
   get appbar => FixedAppBar(
         automaticallyImplyLeading: false,
-        elevation: 0.5,
+        elevation: 0,
         title: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: Row(
@@ -92,11 +92,12 @@ class _HomePageState extends State<HomePage>
               TabBar(
                 controller: _tabController,
                 isScrollable: true,
+                indicator: const BoxDecoration(),
                 indicatorPadding:
-                    EdgeInsets.symmetric(horizontal: 25, vertical: 0),
+                    EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                 labelColor: Theme.of(context).primaryColor,
                 labelStyle: TextStyle(
-                  fontSize: 18,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
                 unselectedLabelStyle: TextStyle(
@@ -160,6 +161,7 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: <Widget>[
           appbar,

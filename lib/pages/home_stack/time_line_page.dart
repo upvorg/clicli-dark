@@ -44,6 +44,7 @@ class _TimeLineState extends State<TimeLinePage>
     super.build(context);
     final theme = Theme.of(context);
     return Scaffold(
+        backgroundColor: Colors.white,
         body: Column(children: <Widget>[
       HomeStackTitleAppbar('时间表'),
       Expanded(

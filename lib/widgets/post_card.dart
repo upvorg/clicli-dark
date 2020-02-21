@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 class PostCard extends StatelessWidget {
   final Map data;
+
   PostCard(this.data);
 
   @override
@@ -20,12 +21,14 @@ class PostCard extends StatelessWidget {
         }), (Route<dynamic> route) => true);
       },
       child: Container(
+        margin: EdgeInsets.only(bottom: 5),
         decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(5.0)),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.2),
-              offset: Offset(0.5, 0.5),
-              blurRadius: 0.5,
+              offset: Offset(2, 2),
+              blurRadius: 5,
             )
           ],
           color: Colors.white,
