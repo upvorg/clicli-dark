@@ -58,42 +58,50 @@ class _SearchPageState extends State<SearchPage> {
         child: Column(
           children: <Widget>[
             Container(
-              padding: EdgeInsets.zero,
-              margin: EdgeInsets.all(5),
-              height: 30,
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor.withOpacity(0.1),
-                borderRadius: BorderRadius.all(Radius.circular(4)),
-              ),
-              child: Row(
-                children: <Widget>[
-                  GestureDetector(
-                    child: Padding(
-                      padding: EdgeInsets.all(4),
-                      child: Icon(
-                        Icons.arrow_back,
-                        color: Theme.of(context).primaryColor.withOpacity(0.6),
+              color: Colors.white,
+              padding: EdgeInsets.all(5),
+              child: Container(
+                padding: EdgeInsets.zero,
+                margin: EdgeInsets.all(2),
+                height: 35,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                ),
+                child: Row(
+                  children: <Widget>[
+                    GestureDetector(
+                      child: Padding(
+                        padding: EdgeInsets.all(4),
+                        child: Icon(
+                          Icons.arrow_back,
+                          color:
+                              Theme.of(context).primaryColor.withOpacity(0.6),
+                        ),
+                      ),
+                      onTap: () => Navigator.pop(context),
+                    ),
+                    Expanded(
+                      child: TextField(
+                        maxLines: 1,
+                        maxLengthEnforced: true,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          isDense: true,
+                          border: InputBorder.none,
+                        ),
+                        onChanged: (v) {
+                          key = v;
+                          timer?.cancel();
+                          timer = Timer(durationTime, () {
+                            _loadData(reset: true);
+                          });
+                        },
+                        inputFormatters: [LengthLimitingTextInputFormatter(15)],
                       ),
                     ),
-                    onTap: () => Navigator.pop(context),
-                  ),
-                  Expanded(
-                    child: TextField(
-                      maxLines: 1,
-                      maxLengthEnforced: true,
-                      autofocus: true,
-                      decoration: InputDecoration(border: InputBorder.none),
-                      onChanged: (v) {
-                        key = v;
-                        timer?.cancel();
-                        timer = Timer(durationTime, () {
-                          _loadData(reset: true);
-                        });
-                      },
-                      inputFormatters: [LengthLimitingTextInputFormatter(15)],
-                    ),
-                  )
-                ],
+                  ],
+                ),
               ),
             ),
             if (data != null)
