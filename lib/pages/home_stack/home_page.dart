@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage>
                 isScrollable: true,
                 indicator: const BoxDecoration(),
                 indicatorPadding:
-                    EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                 labelColor: Theme.of(context).primaryColor,
                 labelStyle: TextStyle(
                   fontSize: 18,

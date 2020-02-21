@@ -25,21 +25,31 @@ void main() async {
   runApp(MyApp());
 }
 
+const Map<int, Color> color = {
+  50: Color.fromRGBO(148, 108, 230, .1),
+  100: Color.fromRGBO(148, 108, 230, .2),
+  200: Color.fromRGBO(148, 108, 230, .3),
+  300: Color.fromRGBO(148, 108, 230, .4),
+  400: Color.fromRGBO(148, 108, 230, .5),
+  500: Color.fromRGBO(148, 108, 230, .6),
+  600: Color.fromRGBO(148, 108, 230, .7),
+  700: Color.fromRGBO(148, 108, 230, .8),
+  800: Color.fromRGBO(148, 108, 230, .9),
+  900: Color.fromRGBO(148, 108, 230, 1),
+};
+
+const MaterialColor colorCustom = MaterialColor(0xff946ce6, color);
 
 class MyApp extends StatelessWidget {
-
-  MaterialColor colorCustom = MaterialColor(0xff946ce6, new Map());
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       navigatorKey: Instances.navigatorKey,
       theme: ThemeData(
-        primarySwatch: colorCustom,
-        highlightColor: Colors.transparent,
-        splashFactory: const NoSplashFactory(),
-      ),
+          primarySwatch: colorCustom,
+          highlightColor: Colors.transparent,
+          splashFactory: const NoSplashFactory()),
       home: MyHomePage(),
     );
   }
@@ -104,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
             physics: NeverScrollableScrollPhysics(),
           ),
           bottomNavigationBar: BottomAppBar(
-            elevation: 2.0,
+            elevation: 0,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(
@@ -201,6 +211,7 @@ class NoSplash extends InteractiveInkFeature {
             onRemoved: onRemoved) {
     controller.addInkFeature(this);
   }
+
   @override
   void paintFeature(Canvas canvas, Matrix4 transform) {}
 }
