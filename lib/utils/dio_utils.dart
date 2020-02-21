@@ -17,7 +17,6 @@ BaseOptions baseOptions = BaseOptions(
 
 class NetUtils {
   static final Dio dio = Dio(baseOptions);
-  static final Dio tokenDio = Dio();
 
   static Future<void> initConfig() async {
     dio.interceptors.add(InterceptorsWrapper(
@@ -31,13 +30,6 @@ class NetUtils {
         return e;
       },
     ));
-
-    tokenDio.interceptors.add(InterceptorsWrapper(
-      onError: (DioError e) async {
-        // debugPrint("Token DioError: ${e.message}");
-        return e;
-      },
-    ));
   }
 
   static Future<Response<T>> get<T>(String url, {data}) async =>
@@ -46,19 +38,13 @@ class NetUtils {
         queryParameters: data,
       );
 
-  static Future<Response> getWithHeaderSet(
-    String url, {
-    data,
-    headers,
-  }) async =>
+  static Future<Response> getWithHeaderSet(String url, {data, headers}) async =>
       await dio.get(
         url,
         queryParameters: data,
         options: Options(),
       );
 
-  static Future<Response> post(String url, {data}) async => await dio.post(
-        url,
-        data: data,
-      );
+  static Future<Response> post(String url, {data}) async =>
+      await dio.post(url, data: data);
 }

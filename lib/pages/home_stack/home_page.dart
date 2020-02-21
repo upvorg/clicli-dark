@@ -37,14 +37,16 @@ class _HomePageState extends State<HomePage>
       length: tabs.length,
       vsync: this,
     );
-    initLoad();
   }
 
   Future<void> initLoad() async {
     final res = (await getPost('', tabs[0], 1, 10)).data;
-    final res1 = (await getPost('bgm', '', 1, 10)).data;
-
     _reList = jsonDecode(res)['posts'];
+    setState(() {});
+  }
+
+  Future<void> initNewList() async {
+    final res1 = (await getPost('bgm', '', 1, 10)).data;
     _newList = jsonDecode(res1)['posts'];
     setState(() {});
   }
@@ -77,25 +79,6 @@ class _HomePageState extends State<HomePage>
       page[index] = _page;
     }
     setState(() {});
-  }
-
-  Widget getTabPage(List data, ScrollController c) {
-    if (data.length < 1) Center(child: CircularProgressIndicator());
-
-    return RefreshWrapper(
-      onLoadMore: _loadData,
-      onRefresh: () async {
-        await _loadData(reset: true);
-      },
-      scrollController: c,
-      child: Grid2RowView(
-        List<PostCard>.generate(
-          data.length,
-          (i) => PostCard(data[i]),
-        ),
-        controller: c,
-      ),
-    );
   }
 
   get appbar => FixedAppBar(
@@ -184,8 +167,30 @@ class _HomePageState extends State<HomePage>
             child: TabBarView(
               controller: _tabController,
               children: <Widget>[
-                getTabPage(_reList, _scrollController),
-                getTabPage(_newList, _scrollController1),
+                RefreshWrapper(
+                  onLoadMore: _loadData,
+                  onRefresh: initLoad,
+                  scrollController: _scrollController,
+                  child: Grid2RowView(
+                    List<PostCard>.generate(
+                      _reList.length,
+                      (i) => PostCard(_reList[i]),
+                    ),
+                    controller: _scrollController,
+                  ),
+                ),
+                RefreshWrapper(
+                  onLoadMore: _loadData,
+                  onRefresh: initNewList,
+                  scrollController: _scrollController1,
+                  child: Grid2RowView(
+                    List<PostCard>.generate(
+                      _newList.length,
+                      (i) => PostCard(_newList[i]),
+                    ),
+                    controller: _scrollController1,
+                  ),
+                ),
               ],
             ),
           )

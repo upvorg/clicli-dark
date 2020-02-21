@@ -33,7 +33,6 @@ class MyApp extends StatelessWidget {
       navigatorKey: Instances.navigatorKey,
       theme: ThemeData(
         primarySwatch: Colors.purple,
-        highlightColor: Colors.transparent,
         splashFactory: const NoSplashFactory(),
       ),
       home: MyHomePage(),

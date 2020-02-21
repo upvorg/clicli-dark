@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:clicli_dark/api/post.dart';
+import 'package:clicli_dark/config.dart';
 import 'package:clicli_dark/pages/search_page.dart';
 import 'package:clicli_dark/pkg/chewie/chewie.dart';
 import 'package:clicli_dark/utils/reg_utils.dart';
@@ -13,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 import 'package:screen/screen.dart';
@@ -43,6 +43,13 @@ class _PlayerPageState extends State<PlayerPage>
   List videoList = [];
   Map videoSrc = {};
   int currPlayIndex = 0;
+  bool showDownloadIcon = false;
+
+  toggleShowDownloadIcon() {
+    setState(() {
+      showDownloadIcon = !showDownloadIcon;
+    });
+  }
 
   Future<String> getVideoSrc(String _src) async {
     if (videoSrc[currPlayIndex] == null) {
@@ -66,14 +73,18 @@ class _PlayerPageState extends State<PlayerPage>
         statusBarColor: Colors.black,
         statusBarIconBrightness: Brightness.light,
       ));
+      Screen.keepOn(true);
+      _tabController = TabController(length: 2, vsync: this);
+      WidgetsBinding.instance.addObserver(this);
     }
-
-    final pv = jsonDecode((await getPV(widget.id)).toString())['pv'];
-    detail['pv'] = pv;
 
     if (mounted) {
       setState(() {});
       if (videoList.length > 0) await initPlayer();
+      final pv = jsonDecode((await getPV(widget.id)).toString())['pv'];
+      setState(() {
+        detail['pv'] = pv;
+      });
     }
   }
 
@@ -85,7 +96,7 @@ class _PlayerPageState extends State<PlayerPage>
     debugPrint('start playing $currPlayIndex $src');
 
     _videoPlayerController = VideoPlayerController.network(src);
-    _videoPlayerController.addListener(autoNextLis);
+    // _videoPlayerController.addListener(autoNextLis);
 
     _chewieController = ChewieController(
       videoPlayerController: _videoPlayerController,
@@ -100,7 +111,12 @@ class _PlayerPageState extends State<PlayerPage>
       enableDLNA: true,
       thumbnail: thumbnail,
     );
-    setState(() {});
+
+    if (mounted) {
+      setState(() {});
+    } else {
+      _dispose();
+    }
   }
 
   autoNextLis() {
@@ -128,17 +144,17 @@ class _PlayerPageState extends State<PlayerPage>
             !_videoPlayerController.value.hasError &&
             _videoPlayerController != null)) return;
     await _videoPlayerController.pause();
-    currPlayIndex = i;
+    _chewieController = null;
+    setState(() {
+      currPlayIndex = i;
+    });
     await initPlayer();
   }
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-    Screen.keepOn(true);
     getDetail();
-    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -157,10 +173,14 @@ class _PlayerPageState extends State<PlayerPage>
 
   @override
   void dispose() {
-    _videoPlayerController?.removeListener(autoNextLis);
+    _dispose();
+    super.dispose();
+  }
+
+  _dispose() {
+    // _videoPlayerController?.removeListener(autoNextLis);
     _chewieController?.dispose();
     _videoPlayerController?.dispose();
-    super.dispose();
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.white,
@@ -197,41 +217,61 @@ class _PlayerPageState extends State<PlayerPage>
                         ),
                       ),
                 Container(
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Theme.of(context).primaryColor.withOpacity(0.2),
-                        offset: Offset(0, 5),
-                        blurRadius: 12,
-                        spreadRadius: -10,
-                      ),
-                    ],
-                    color: Colors.white,
-                  ),
-                  child: TabBar(
-                    tabs: <Widget>[Tab(text: '剧集'), Tab(text: '简介')],
-                    controller: _tabController,
-                    isScrollable: true,
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    indicatorPadding:
-                        EdgeInsets.symmetric(horizontal: 25, vertical: 0),
-                    labelColor: Theme.of(context).primaryColor,
-                    labelStyle: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color:
+                              Theme.of(context).primaryColor.withOpacity(0.2),
+                          offset: Offset(0, 5),
+                          blurRadius: 12,
+                          spreadRadius: -10,
+                        ),
+                      ],
+                      color: Colors.white,
                     ),
-                    unselectedLabelStyle: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        TabBar(
+                          tabs: <Widget>[Tab(text: '剧集'), Tab(text: '简介')],
+                          controller: _tabController,
+                          isScrollable: true,
+                          indicatorSize: TabBarIndicatorSize.tab,
+                          labelColor: Theme.of(context).primaryColor,
+                          indicatorPadding:
+                              EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                          labelStyle: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          unselectedLabelStyle: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                        GestureDetector(
+                          onDoubleTap: toggleShowDownloadIcon,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: ClipOval(
+                              child: Image.network(
+                                getAvatar(avatar: detail['uqq']),
+                                width: 35,
+                                height: 35,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    )),
                 Expanded(
                   child: TabBarView(
                     controller: _tabController,
-                    children: <Widget>[buildProfile(context), buildComments()],
+                    children: <Widget>[
+                      buildProfile(context),
+                      PlayerProfile(detail, videoList.length > 0)
+                    ],
                   ),
                 )
               ],
@@ -253,7 +293,7 @@ class _PlayerPageState extends State<PlayerPage>
                     )
                   ],
                 ),
-                Expanded(child: buildComments())
+                Expanded(child: PlayerProfile(detail, videoList.length > 0))
               ],
             ),
     ));
@@ -335,48 +375,6 @@ class _PlayerPageState extends State<PlayerPage>
           //   ],
           // ),
           SizedBox(height: 10),
-          Row(
-            children: <Widget>[
-              ClipOval(
-                child: Image.network(
-                  getAvatar(avatar: detail['uqq']),
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              SizedBox(width: 15),
-              Text(detail['uname'], style: caption),
-              IconButton(
-                icon: Icon(
-                  Icons.file_download,
-                  color: caption.color,
-                ),
-                onPressed: () async {
-                  final path = (await getExternalStorageDirectory()).path;
-                  final downloadPath = Directory('$path/${detail['title']}');
-                  if (!downloadPath.existsSync()) downloadPath.createSync();
-                  final fileName =
-                      '$currPlayIndex  ${_chewieController.videoTitle}';
-
-                  final tasks = await FlutterDownloader.loadTasks();
-                  if (tasks.any((task) => task.filename == fileName)) {
-                    showSnackBar('正在下载···');
-                    return;
-                  }
-
-                  showSnackBar('开始下载···');
-                  await FlutterDownloader.enqueue(
-                    url: _videoPlayerController.dataSource,
-                    savedDir: downloadPath.path,
-                    showNotification: true,
-                    openFileFromNotification: true,
-                    fileName: '$currPlayIndex  ${_chewieController.videoTitle}',
-                  );
-                },
-              )
-            ],
-          ),
-          SizedBox(height: 10),
           buildVideoList()
         ]));
   }
@@ -409,7 +407,16 @@ class _PlayerPageState extends State<PlayerPage>
                       '${videoList[i]['title']}',
                       style: TextStyle(color: color),
                     ),
-                  )
+                  ),
+                  if (showDownloadIcon)
+                    InkWell(
+                      child: Icon(Icons.file_download, color: color),
+                      onTap: () {
+                        downloadByUrl(videoList[i]['content'],
+                            fileName:
+                                '${videoList[i]['oid']}${videoList[i]['title']}');
+                      },
+                    )
                 ],
               ),
             )),
@@ -417,13 +424,52 @@ class _PlayerPageState extends State<PlayerPage>
     }));
   }
 
-  Widget buildComments() {
+  Future<void> downloadByUrl(String url, {String fileName}) async {
+    final path = await Config.downloadPath();
+    final downloadPath = Directory('$path/${detail['title']}');
+    if (!downloadPath.existsSync()) downloadPath.createSync();
+
+    final tasks = await FlutterDownloader.loadTasks();
+    if (tasks.any((task) => task.filename == fileName)) {
+      showSnackBar('正在下载···');
+      return;
+    }
+
+    showSnackBar('开始下载···');
+    await FlutterDownloader.enqueue(
+      url: url,
+      savedDir: downloadPath.path,
+      showNotification: true,
+      openFileFromNotification: true,
+      fileName: fileName,
+    );
+  }
+}
+
+class PlayerProfile extends StatefulWidget {
+  PlayerProfile(this.detail, this.needTitle);
+
+  final Map detail;
+  final bool needTitle;
+
+  @override
+  State<StatefulWidget> createState() => _PlayerProfile();
+}
+
+class _PlayerProfile extends State<PlayerProfile>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final detail = widget.detail;
     final i = detail['content'].indexOf('# 播放出错');
     final content =
         i < 0 ? detail['content'] : detail['content'].substring(0, i);
     final meta =
-        '''${videoList.length > 0 ? '# ${detail['title']} \r\n ' : ''}> ${detail['uname']}  ${detail['time']}   GV${detail['id']} \r\n#  ''';
-
+        '''${widget.needTitle ? '# ${detail['title']} \r\n ' : ''}> ${detail['uname']}  ${detail['time']}   GV${detail['id']} \r\n#  ''';
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: MarkdownBody(
@@ -461,8 +507,13 @@ class _PlayerPageState extends State<PlayerPage>
           styleSheetTheme: MarkdownStyleSheetBaseTheme.platform,
           styleSheet: MarkdownStyleSheet(
             blockquotePadding: EdgeInsets.fromLTRB(10.0, 0, 0, 0),
-            blockquoteDecoration:
-                BoxDecoration(border: Border(left: BorderSide(width: 2.0))),
+            blockquoteDecoration: BoxDecoration(
+              border: Border(
+                  left: BorderSide(
+                width: 2.0,
+                color: Theme.of(context).primaryColor,
+              )),
+            ),
             code: TextStyle(fontFamily: "Source Code Pro"),
             a: TextStyle(color: Theme.of(context).primaryColor),
           )),

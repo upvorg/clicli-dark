@@ -1,10 +1,14 @@
+// import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
+// import 'package:clicli_dark/config.dart';
+// import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:clicli_dark/widgets/common_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+// import 'package:url_launcher/url_launcher.dart';
 
 class DownloaderPage extends StatefulWidget {
   @override
@@ -24,13 +28,14 @@ class _DownloaderPageState extends State<DownloaderPage> {
   @override
   void initState() {
     super.initState();
-    loadTask();
     IsolateNameServer.registerPortWithName(
         _port.sendPort, 'downloader_send_port');
     _port.listen((dynamic data) async {
       await loadTask();
     });
 
+    loadTask();
+    // loadDownloadedFiles();
     FlutterDownloader.registerCallback(downloadCallback);
   }
 
@@ -63,9 +68,47 @@ class _DownloaderPageState extends State<DownloaderPage> {
 
   Future<void> loadTask() async {
     final tasks = await FlutterDownloader.loadTasks();
+    tasks.sort((l, r) => l.progress.compareTo(r.progress));
     _tasks = tasks;
     setState(() {});
   }
+
+  final downloadedFileList = [];
+  // Future<void> loadDownloadedFiles() async {
+  //   final path = await Config.downloadPath();
+  //   final list = Directory(path).listSync();
+
+  //   for (var i = 0; i < list.length; i++) {
+  //     final dir = list[i];
+  //     if ((await dir.stat()).type == FileSystemEntityType.directory) {
+  //       final fileDir = dir.path.replaceAll('$path/', '');
+  //       print('---目录名 $fileDir----');
+
+  //       final fileList = Directory(dir.path).listSync();
+
+  //       final _fileList = [];
+  //       for (var i = 0; i < fileList.length; i++) {
+  //         if (fileList[i].statSync().type == FileSystemEntityType.file) {
+  //           _fileList.add({
+  //             'name': fileList[i].path.replaceAll('$path/$fileDir/', ''),
+  //             'path': fileList[i].path
+  //           });
+
+  //           print('---文件名 ${fileList[i].uri}----');
+  //           if (await canLaunch(fileList[i].uri.path)) {
+  //             await launch(fileList[i].uri.path);
+  //           } else {
+  //             showErrorSnackBar('打开链接失败');
+  //           }
+  //         }
+  //       }
+
+  //       downloadedFileList.add({'name': fileDir, 'children': _fileList});
+  //     }
+  //   }
+
+  //   list.forEach((l) async {});
+  // }
 
   static Future<void> _retryTaskById(String id) async {
     await FlutterDownloader.retry(taskId: id);
@@ -81,7 +124,10 @@ class _DownloaderPageState extends State<DownloaderPage> {
 
   Future<void> _removeAllDownloadedTask() async {
     _tasks.forEach((task) async {
-      await FlutterDownloader.remove(taskId: task.taskId);
+      await FlutterDownloader.remove(
+        taskId: task.taskId,
+        shouldDeleteContent: true,
+      );
     });
     await loadTask();
   }
@@ -112,7 +158,8 @@ class _DownloaderPageState extends State<DownloaderPage> {
 
   Future<void> pauseAllPausedTask() async {
     _tasks.forEach((task) async {
-      if (task.status == DownloadTaskStatus.running) {
+      if (task.status == DownloadTaskStatus.running ||
+          task.status == DownloadTaskStatus.enqueued) {
         await _stopTaskById(task.taskId);
         setState(() {});
       }
@@ -125,7 +172,10 @@ class _DownloaderPageState extends State<DownloaderPage> {
 
   void removeSelectedTasks() async {
     for (var i = 0; i < selectedTasks.length; i++) {
-      await FlutterDownloader.remove(taskId: selectedTasks[i]);
+      await FlutterDownloader.remove(
+        taskId: selectedTasks[i],
+        shouldDeleteContent: true,
+      );
     }
     await loadTask();
   }

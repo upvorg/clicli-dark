@@ -94,14 +94,14 @@ class Grid2RowView extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: Container(
-                margin: EdgeInsets.fromLTRB(10, 5, 5, 5),
+                margin: EdgeInsets.fromLTRB(15, 5, 8, 8),
                 child: widgets[i * 2],
               ),
             ),
             widgets.length > i * 2 + 1
                 ? Expanded(
                     child: Container(
-                      margin: EdgeInsets.fromLTRB(5, 5, 10, 5),
+                      margin: EdgeInsets.fromLTRB(8, 5, 15, 8),
                       child: widgets[i * 2 + 1],
                     ),
                   )
