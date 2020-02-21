@@ -21,6 +21,7 @@ class PostCard extends StatelessWidget {
         }), (Route<dynamic> route) => true);
       },
       child: Container(
+        margin: EdgeInsets.only(bottom: 5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(5.0)),
           boxShadow: [
