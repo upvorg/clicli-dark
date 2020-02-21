@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:clicli_dark/config.dart';
 import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/pages/home_stack/home_page.dart';
 import 'package:clicli_dark/pages/home_stack/time_line_page.dart';
@@ -21,24 +22,8 @@ void main() async {
   }
   await NetUtils.initConfig();
   await FlutterDownloader.initialize();
-  await Future.delayed(Duration(milliseconds: 1000));
   runApp(MyApp());
 }
-
-const Map<int, Color> color = {
-  50: Color.fromRGBO(148, 108, 230, .1),
-  100: Color.fromRGBO(148, 108, 230, .2),
-  200: Color.fromRGBO(148, 108, 230, .3),
-  300: Color.fromRGBO(148, 108, 230, .4),
-  400: Color.fromRGBO(148, 108, 230, .5),
-  500: Color.fromRGBO(148, 108, 230, .6),
-  600: Color.fromRGBO(148, 108, 230, .7),
-  700: Color.fromRGBO(148, 108, 230, .8),
-  800: Color.fromRGBO(148, 108, 230, .9),
-  900: Color.fromRGBO(148, 108, 230, 1),
-};
-
-const MaterialColor colorCustom = MaterialColor(0xff946ce6, color);
 
 class MyApp extends StatelessWidget {
   @override
@@ -47,9 +32,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       navigatorKey: Instances.navigatorKey,
       theme: ThemeData(
-          primarySwatch: colorCustom,
-          highlightColor: Colors.transparent,
-          splashFactory: const NoSplashFactory()),
+        primarySwatch: Config.colorCustom,
+        splashFactory: const NoSplashFactory(),
+      ),
       home: MyHomePage(),
     );
   }
