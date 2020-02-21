@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clicli_dark/api/post.dart';
 import 'package:clicli_dark/pages/player_page.dart';
 import 'package:clicli_dark/utils/reg_utils.dart';
@@ -52,8 +51,9 @@ class _RankPageState extends State<RankPage> {
                         children: <Widget>[
                           Padding(
                             padding: EdgeInsets.only(right: 20),
-                            child: CachedNetworkImage(
-                              imageUrl: getSuo(rankList[i]['content']),
+                            child: Image(
+                              image:
+                                  NetworkImage(getSuo(rankList[i]['content'])),
                               height: MediaQuery.of(context).size.height / 6,
                               width: MediaQuery.of(context).size.width / 5,
                               fit: BoxFit.cover,

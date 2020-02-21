@@ -1,8 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clicli_dark/pages/player_page.dart';
 import 'package:clicli_dark/utils/reg_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class PostCard extends StatelessWidget {
   final Map data;
@@ -34,7 +34,6 @@ class PostCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             CachedNetworkImage(
-              //TODO 回收图片内存
               imageUrl: getSuo(data['content']),
               placeholder: (ctx, url) => SizedBox(
                 height: 115,
@@ -95,14 +94,14 @@ class Grid2RowView extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: Container(
-                margin: EdgeInsets.fromLTRB(10, 5, 5, 5),
+                margin: EdgeInsets.fromLTRB(15, 5, 8, 8),
                 child: widgets[i * 2],
               ),
             ),
             widgets.length > i * 2 + 1
                 ? Expanded(
                     child: Container(
-                      margin: EdgeInsets.fromLTRB(5, 5, 10, 5),
+                      margin: EdgeInsets.fromLTRB(8, 5, 15, 8),
                       child: widgets[i * 2 + 1],
                     ),
                   )

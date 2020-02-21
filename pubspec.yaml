@@ -21,7 +21,8 @@ dev_dependencies:
   url_launcher: any
   flutter_downloader: any
   path_provider: any
-  flutter_flexible_toast: any
+  flutter_flexible_toast:
+    git: https://github.com/sanket-vekariya/flutter_flexible_toast
 
   # chewie
   video_player: any

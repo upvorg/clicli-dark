@@ -31,14 +31,7 @@ class FixedAppBar extends StatelessWidget {
         top: MediaQuery.of(context).padding.top,
       ),
       decoration: BoxDecoration(
-        boxShadow: elevation != null
-            ? <BoxShadow>[
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 0,
-                ),
-              ]
-            : null,
+        boxShadow: null,
         color: backgroundColor ?? Colors.white,
       ),
       child: Row(

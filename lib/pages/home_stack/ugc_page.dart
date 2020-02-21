@@ -33,6 +33,7 @@ class _UGCPageState extends State<UGCPage> with AutomaticKeepAliveClientMixin {
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
+        backgroundColor: Colors.white,
         body: Column(
       children: <Widget>[
         HomeStackTitleAppbar('UGC'),

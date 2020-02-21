@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-// import 'package:clicli_dark/utils/toast_utils.dart';
+import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:dio/dio.dart';
 //import 'package:flutter/foundation.dart';
 
@@ -17,7 +17,6 @@ BaseOptions baseOptions = BaseOptions(
 
 class NetUtils {
   static final Dio dio = Dio(baseOptions);
-  static final Dio tokenDio = Dio();
 
   static Future<void> initConfig() async {
     dio.interceptors.add(InterceptorsWrapper(
@@ -26,15 +25,8 @@ class NetUtils {
         if (e?.type == DioErrorType.CONNECT_TIMEOUT ||
             e?.type == DioErrorType.RECEIVE_TIMEOUT ||
             e?.type == DioErrorType.SEND_TIMEOUT) {
-          // showErrorSnackBar('NETWORK TIMEOUT, TRY AGAIN LATER.');
+          showErrorSnackBar('NETWORK TIMEOUT, TRY AGAIN LATER.');
         }
-        return e;
-      },
-    ));
-
-    tokenDio.interceptors.add(InterceptorsWrapper(
-      onError: (DioError e) async {
-        // debugPrint("Token DioError: ${e.message}");
         return e;
       },
     ));
@@ -46,19 +38,13 @@ class NetUtils {
         queryParameters: data,
       );
 
-  static Future<Response> getWithHeaderSet(
-    String url, {
-    data,
-    headers,
-  }) async =>
+  static Future<Response> getWithHeaderSet(String url, {data, headers}) async =>
       await dio.get(
         url,
         queryParameters: data,
         options: Options(),
       );
 
-  static Future<Response> post(String url, {data}) async => await dio.post(
-        url,
-        data: data,
-      );
+  static Future<Response> post(String url, {data}) async =>
+      await dio.post(url, data: data);
 }
