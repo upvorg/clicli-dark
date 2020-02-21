@@ -35,7 +35,7 @@ class FixedAppBar extends StatelessWidget {
             ? <BoxShadow>[
                 BoxShadow(
                   color: Colors.black26,
-                  blurRadius: elevation * 2.0,
+                  blurRadius: 0,
                 ),
               ]
             : null,
@@ -67,7 +67,7 @@ class HomeStackTitleAppbar extends StatelessWidget {
     final textStyle =
         TextStyle(color: Theme.of(context).primaryColor, fontSize: 24);
     return FixedAppBar(
-      elevation: 0.5,
+      elevation: 0,
       automaticallyImplyLeading: false,
       title: Container(
         padding: EdgeInsets.symmetric(horizontal: 16),

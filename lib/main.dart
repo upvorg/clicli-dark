@@ -25,14 +25,18 @@ void main() async {
   runApp(MyApp());
 }
 
+
 class MyApp extends StatelessWidget {
+
+  MaterialColor colorCustom = MaterialColor(0xff946ce6, new Map());
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       navigatorKey: Instances.navigatorKey,
       theme: ThemeData(
-        primarySwatch: Colors.purple,
+        primarySwatch: colorCustom,
         highlightColor: Colors.transparent,
         splashFactory: const NoSplashFactory(),
       ),
