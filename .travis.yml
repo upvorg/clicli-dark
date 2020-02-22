@@ -48,10 +48,12 @@ jobs:
         - cd build/app/outputs/apk/release
         - git config user.name "cy"
         - git config user.email "i@runtua.cn"
-        - git init
+        - git clone git@github.com:cliclitv/app.clicli.me.git
+        - cd ./app.clicli.me
+        - mv $APK_OUTPUT ./
         - git add -A
         - git commit -m 'update release By TravisCI With Build $TRAVIS_BUILD_NUMBER'
-        - git push -f https://${GH_TOKEN}@github.com/cliclitv/clicli-dark.git master:release
+        - git push -f https://${GH_TOKEN}@github.com/cliclitv/app.clicli.me.git master
       #deploy:
       #provider: releases
       # skip_cleanup: true

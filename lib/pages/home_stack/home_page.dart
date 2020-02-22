@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage>
                     EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                 labelColor: Theme.of(context).primaryColor,
                 labelStyle: TextStyle(
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
                 unselectedLabelStyle: TextStyle(
