@@ -44,7 +44,7 @@ jobs:
         - git clone https://github.com/flutter/flutter.git -b stable --depth 1
       script:
         - './flutter/bin/flutter --version'
-        - './flutter/bin/flutter build apk --target-platform android-arm --release'
+        - './flutter/bin/flutter -v build apk --target-platform android-arm --release'
         - cd build/app/outputs/apk/release
         - git config user.name "cy"
         - git config user.email "i@runtua.cn"
