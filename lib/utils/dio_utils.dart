@@ -1,22 +1,11 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:dio/dio.dart';
 //import 'package:flutter/foundation.dart';
 
-BaseOptions baseOptions = BaseOptions(
-//  baseUrl: Constants.BASE_URL,
-  headers: {HttpHeaders.acceptHeader: "*"},
-  connectTimeout: 10000,
-  receiveTimeout: 10000,
-  sendTimeout: 10000,
-  contentType: "accept: application/json",
-  responseType: ResponseType.json,
-);
-
 class NetUtils {
-  static final Dio dio = Dio(baseOptions);
+  static final Dio dio = Dio();
 
   static Future<void> initConfig() async {
     dio.interceptors.add(InterceptorsWrapper(
