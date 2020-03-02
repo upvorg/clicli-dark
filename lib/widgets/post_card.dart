@@ -33,12 +33,12 @@ class PostCard extends StatelessWidget {
           ],
           color: Colors.white,
         ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(5),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              CachedNetworkImage(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ClipRRect(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(5.0)),
+              child: CachedNetworkImage(
                 imageUrl: getSuo(data['content']),
                 placeholder: (ctx, url) => SizedBox(
                   height: 115,
@@ -54,30 +54,30 @@ class PostCard extends StatelessWidget {
                   child: Center(child: Icon(Icons.error_outline)),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(top: 4),
-                      child: Text(
-                        data['title'],
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    Text(
-                      data['tag'].substring(1).replaceAll(' ', ' · '),
-                      style: Theme.of(context).textTheme.caption,
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(top: 4),
+                    child: Text(
+                      data['title'],
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                  ],
-                ),
+                  ),
+                  Text(
+                    data['tag'].substring(1).replaceAll(' ', ' · '),
+                    style: Theme.of(context).textTheme.caption,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -15,7 +15,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  dio: any
   cached_network_image: any
   flutter_markdown: any
   url_launcher: any

@@ -1,39 +1,45 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:clicli_dark/utils/toast_utils.dart';
-import 'package:dio/dio.dart';
-//import 'package:flutter/foundation.dart';
+
+class Response {
+  Response(this.data);
+  String data;
+}
 
 class NetUtils {
-  static final Dio dio = Dio();
+  static final HttpClient httpClient = HttpClient();
 
-  static Future<void> initConfig() async {
-    dio.interceptors.add(InterceptorsWrapper(
-      onError: (DioError e) async {
-        if (e?.response?.statusCode == 401) {}
-        if (e?.type == DioErrorType.CONNECT_TIMEOUT ||
-            e?.type == DioErrorType.RECEIVE_TIMEOUT ||
-            e?.type == DioErrorType.SEND_TIMEOUT) {
-          showErrorSnackBar('NETWORK TIMEOUT, TRY AGAIN LATER.');
-        }
-        return e;
-      },
-    ));
+  static sink() {
+    httpClient.close();
   }
 
-  static Future<Response<T>> get<T>(String url, {data}) async =>
-      await dio.get<T>(
-        url,
-        queryParameters: data,
-      );
+  static Future<Response> _send(String methond, String url, {data}) async {
+    httpClient.connectionTimeout = Duration(milliseconds: 5000);
+    HttpClientResponse response;
+    try {
+      final HttpClientRequest request =
+          await httpClient.openUrl(methond, Uri.parse(url));
+      request
+        ..followRedirects = false
+        ..persistentConnection = true;
+      if (data != null) request.add(data);
+      response = await request.close();
+    } catch (e) {
+      showErrorSnackBar(e.toString());
+    }
 
-  static Future<Response> getWithHeaderSet(String url, {data, headers}) async =>
-      await dio.get(
-        url,
-        queryParameters: data,
-        options: Options(),
-      );
+    final String _text = await response.transform(utf8.decoder).join();
+    return Response(_text);
+  }
 
-  static Future<Response> post(String url, {data}) async =>
-      await dio.post(url, data: data);
+  static Future get(String url, {data}) async {
+    return await _send('GET', url);
+  }
+
+  static Future post(String url, {data}) async {
+    return await _send('POST', url);
+  }
 }

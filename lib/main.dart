@@ -5,7 +5,6 @@ import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/pages/home_stack/home_page.dart';
 import 'package:clicli_dark/pages/home_stack/time_line_page.dart';
 import 'package:clicli_dark/pages/home_stack/ugc_page.dart';
-import 'package:clicli_dark/utils/dio_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -20,7 +19,6 @@ void main() async {
       systemNavigationBarColor: Colors.white,
     ));
   }
-  await NetUtils.initConfig();
   await FlutterDownloader.initialize();
   runApp(MyApp());
 }

@@ -53,8 +53,8 @@ class _PlayerPageState extends State<PlayerPage>
 
   Future<String> getVideoSrc(String _src) async {
     if (videoSrc[currPlayIndex] == null) {
-      final _videoSrc = (await getPlayUrl(_src)).data['url'];
-      videoSrc[currPlayIndex] = _videoSrc;
+      final _videoSrc = (await getPlayUrl(_src)).data;
+      videoSrc[currPlayIndex] = jsonDecode(_videoSrc)['url'];
     }
     return videoSrc[currPlayIndex];
   }
@@ -81,7 +81,7 @@ class _PlayerPageState extends State<PlayerPage>
     if (mounted) {
       setState(() {});
       if (videoList.length > 0) await initPlayer();
-      final pv = jsonDecode((await getPV(widget.id)).toString())['pv'];
+      final pv = jsonDecode((await getPV(widget.id)).data)['pv'];
       setState(() {
         detail['pv'] = pv;
       });
