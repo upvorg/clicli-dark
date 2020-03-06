@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/pages/login_page.dart';
 import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +16,22 @@ class _MePageState extends State<MePage> {
   @override
   void initState() {
     super.initState();
+
+    Instances.eventBus.on<TriggerLogin>().listen((e) {
+      getLocalProfile();
+    });
+
+    getLocalProfile();
   }
 
-  getLocalProfile() {}
+  Map userInfo;
+  getLocalProfile() {
+    final u = Instances.sp.getString('userinfo');
+    userInfo = u != null
+        ? jsonDecode(u)
+        : {'name': '点击登录', 'desc': '这个人很酷，没有签名', 'qq': '1'};
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,30 +40,36 @@ class _MePageState extends State<MePage> {
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            HomeStackTitleAppbar('个人中心'),
             GestureDetector(
-              child: HomeStackTitleAppbar('个人中心'),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => LoginPage(),
-                  ),
-                );
+                if (userInfo['qq'] == '1' || userInfo['qq'] == null)
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => LoginPage(),
+                    ),
+                  );
               },
-            ),
-            Container(
-              color: Colors.white,
-              child: ListTile(
-                leading: CachedNetworkImage(
-                  imageUrl:
-                      'https://wx4.sinaimg.cn/mw690/0060lm7Tly1fvmtrka9p5j30b40b43yo.jpg',
-                  height: 40,
-                  width: 40,
-                  fit: BoxFit.cover,
+              onDoubleTap: () {
+                Instances.sp.remove('usertoken');
+                Instances.sp.remove('userinfo');
+                getLocalProfile();
+              },
+              child: Container(
+                color: Colors.white,
+                child: ListTile(
+                  leading: CachedNetworkImage(
+                    imageUrl:
+                        'http://q1.qlogo.cn/g?b=qq&nk=${userInfo['qq']}&s=5',
+                    height: 40,
+                    width: 40,
+                    fit: BoxFit.cover,
+                  ),
+                  title: Text(userInfo['name']),
+                  subtitle: Text(userInfo['desc']),
+                  trailing: Icon(Icons.settings),
                 ),
-                title: Text('江河'),
-                subtitle: Text('这个人很酷，没有签名'),
-                trailing: Icon(Icons.settings),
               ),
             ),
             Container(

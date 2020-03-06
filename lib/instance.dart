@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:event_bus/event_bus.dart';
 
 class Instances {
   static final homeStackscaffoldKey = GlobalKey<ScaffoldState>();
@@ -16,4 +18,14 @@ class Instances {
   static ThemeData get currentTheme => Theme.of(navigatorState.context);
 
   static Color get currentThemeColor => currentTheme.primaryColor;
+
+  static SharedPreferences sp;
+
+  static EventBus eventBus = EventBus();
+
+  static init() async {
+    sp = await SharedPreferences.getInstance();
+  }
 }
+
+class TriggerLogin {}

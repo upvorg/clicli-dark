@@ -21,6 +21,7 @@ void main() async {
     ));
   }
   await FlutterDownloader.initialize();
+  await Instances.init();
   runApp(MyApp());
 }
 

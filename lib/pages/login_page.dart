@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:clicli_dark/api/post.dart';
+import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +17,8 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
   }
 
-  String name;
-  String pwd;
+  String name = '';
+  String pwd = '';
   bool isDo = false;
 
   @override
@@ -53,6 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                   maxLines: 1,
                   maxLengthEnforced: true,
                   decoration: InputDecoration(labelText: '密码'),
+                  obscureText: true,
                   onChanged: (v) {
                     pwd = v;
                   },
@@ -80,8 +82,14 @@ class _LoginPageState extends State<LoginPage> {
                               isDo = false;
                             });
                           } else {
+                            setState(() {
+                              isDo = false;
+                            });
+                            Instances.sp.setString('usertoken', res['token']);
+                            Instances.sp
+                                .setString('userinfo', jsonEncode(res['user']));
+                            Instances.eventBus.fire(TriggerLogin());
                             Navigator.pop(context);
-                            showSnackBar('登录成功');
                           }
                         },
                 )

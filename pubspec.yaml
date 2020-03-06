@@ -22,6 +22,7 @@ dev_dependencies:
   path_provider: any
   flutter_flexible_toast: any
   shared_preferences: any
+  event_bus: any
 
   # chewie
   video_player: any
