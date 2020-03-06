@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:clicli_dark/config.dart';
 import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/pages/home_stack/home_page.dart';
+import 'package:clicli_dark/pages/home_stack/me_page.dart';
 import 'package:clicli_dark/pages/home_stack/time_line_page.dart';
 import 'package:clicli_dark/pages/home_stack/ugc_page.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +48,8 @@ class _MyHomePageState extends State<MyHomePage> {
   static final List<IconData> pagesIcon = [
     Icons.home,
     Icons.timeline,
-    Icons.explore
+    Icons.explore,
+    Icons.supervised_user_circle
   ];
 
   int _currentPageIndex = 0;
@@ -93,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
           key: Instances.homeStackscaffoldKey,
           body: PageView(
             controller: _pageController,
-            children: [HomePage(), TimeLinePage(), UGCPage()],
+            children: [HomePage(), TimeLinePage(), UGCPage(), MePage()],
             physics: NeverScrollableScrollPhysics(),
           ),
           bottomNavigationBar: BottomAppBar(

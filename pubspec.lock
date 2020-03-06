@@ -93,11 +93,9 @@ packages:
   flutter_flexible_toast:
     dependency: "direct dev"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "77ed460276bcbdd7c868f5c7eeb6ae8c220d2497"
-      url: "https://github.com/sanket-vekariya/flutter_flexible_toast"
-    source: git
+      name: flutter_flexible_toast
+      url: "https://pub.flutter-io.cn"
+    source: hosted
     version: "0.1.4"
   flutter_markdown:
     dependency: "direct dev"
@@ -178,7 +176,21 @@ packages:
       name: path_provider
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.6.1"
+    version: "1.6.5"
+  path_provider_macos:
+    dependency: transitive
+    description:
+      name: path_provider_macos
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.4"
+  path_provider_platform_interface:
+    dependency: transitive
+    description:
+      name: path_provider_platform_interface
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.1"
   pedantic:
     dependency: transitive
     description:
@@ -221,6 +233,34 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.0.5"
+  shared_preferences:
+    dependency: "direct dev"
+    description:
+      name: shared_preferences
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.5.6+2"
+  shared_preferences_macos:
+    dependency: transitive
+    description:
+      name: shared_preferences_macos
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.1+6"
+  shared_preferences_platform_interface:
+    dependency: transitive
+    description:
+      name: shared_preferences_platform_interface
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.3"
+  shared_preferences_web:
+    dependency: transitive
+    description:
+      name: shared_preferences_web
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.2+4"
   sky_engine:
     dependency: transitive
     description: flutter

@@ -25,21 +25,26 @@ class NetUtils {
       request
         ..followRedirects = false
         ..persistentConnection = true;
-      if (data != null) request.add(data);
+      if (data != null) {
+        request.headers.set('content-type', 'application/json');
+        request.add(utf8.encode((json.encode(data))));
+      }
       response = await request.close();
     } catch (e) {
       showErrorSnackBar(e.toString());
     }
+
+    if (response == null) return Response('');
 
     final String _text = await response.transform(utf8.decoder).join();
     return Response(_text);
   }
 
   static Future get(String url, {data}) async {
-    return await _send('GET', url);
+    return await _send('GET', url, data: data);
   }
 
   static Future post(String url, {data}) async {
-    return await _send('POST', url);
+    return await _send('POST', url, data: data);
   }
 }
