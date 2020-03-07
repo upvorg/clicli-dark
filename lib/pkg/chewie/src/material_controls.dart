@@ -4,6 +4,7 @@ import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:screen/screen.dart';
 import 'package:video_player/video_player.dart';
+import 'package:music_volume/music_volume.dart';
 
 import './chewie_player.dart';
 import './chewie_progress_colors.dart';
@@ -188,9 +189,9 @@ class _MaterialControlsState extends State<MaterialControls> {
   double brighting = 0.0;
 
   bool showVolTip = false;
-  double initVol;
+  int initVol;
   double voling = 0.0;
-  // double volProgress = 0.0;
+  double volProgress = 0.0;
 
   void _onVerticalDragDown(DragDownDetails d) {
     _startVerticalDragX = d.localPosition.dx;
@@ -202,7 +203,7 @@ class _MaterialControlsState extends State<MaterialControls> {
       initBri = await Screen.brightness;
       showBrightness = true;
     } else {
-      initVol = controller.value.volume; /*await Volume.getVol*/
+      initVol = await MusicVolume.currentVolume; /*await Volume.getVol*/
       showVolTip = true;
     }
     setState(() {});
@@ -218,14 +219,11 @@ class _MaterialControlsState extends State<MaterialControls> {
       brighting = _ <= 0 ? 0.0 : _ >= 1 ? 1.0 : _;
       await Screen.setBrightness(brighting);
     } else {
-      // final _m = chewieController.maxVol;
-      // final _ = initVol + drag / totalHor * _m;
-      // voling = _ > _m ? _m : _ < 0.0 ? 0.0 : _;
-      // volProgress = voling / _m;
-      // await chewieController.setVol(voling.toInt());
-      final _ = initVol + drag / totalHor;
-      voling = _ > 1.0 ? 1.0 : _ < 0.0 ? 0.0 : _;
-      await controller.setVolume(voling);
+      final int maxVol = await MusicVolume.maxVolume;
+      final _ = initVol + drag / totalHor * maxVol;
+      voling = _ > maxVol ? maxVol.toDouble() : _ < 0.0 ? 0.0 : _;
+      volProgress = voling / maxVol;
+      await MusicVolume.changeVolume(_.toInt(), 0);
     }
     setState(() {});
   }
@@ -416,7 +414,7 @@ class _MaterialControlsState extends State<MaterialControls> {
               children: <Widget>[
                 if (showBrightness)
                   LinearProgress(brighting, Icons.brightness_6),
-                if (showVolTip) LinearProgress(voling, Icons.volume_up),
+                if (showVolTip) LinearProgress(volProgress, Icons.volume_up),
                 if (showTimeLine)
                   Container(
                     color: Colors.black.withOpacity(0.5),

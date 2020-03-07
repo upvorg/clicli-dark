@@ -23,6 +23,7 @@ dev_dependencies:
   flutter_flexible_toast: any
   shared_preferences: any
   event_bus: any
+  music_volume: any
 
   # chewie
   video_player: any

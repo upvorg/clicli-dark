@@ -196,7 +196,7 @@ class ChewieController extends ChangeNotifier {
     this.controllerBackGroundColor = Colors.black,
     this.fontColor = Colors.white,
     this.enableDLNA = false,
-    backgroundColor = Colors.black,
+    this.backgroundColor = Colors.black,
   }) : assert(videoPlayerController != null,
             'You must provide a controller to play a video') {
     _initialize();
@@ -286,9 +286,9 @@ class ChewieController extends ChangeNotifier {
 
   final bool enableDLNA;
 
-  List devices = [];
+  final List devices = [];
 
-  Color backgroundColor;
+  final Color backgroundColor;
 
   static ChewieController of(BuildContext context) {
     final chewieControllerProvider =

@@ -17,7 +17,7 @@ class NetUtils {
   }
 
   static Future<Response> _send(String methond, String url, {data}) async {
-    httpClient.connectionTimeout = Duration(milliseconds: 5000);
+    httpClient.connectionTimeout = Duration(milliseconds: 10000);
     HttpClientResponse response;
     try {
       final HttpClientRequest request =
