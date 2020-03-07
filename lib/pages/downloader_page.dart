@@ -122,15 +122,15 @@ class _DownloaderPageState extends State<DownloaderPage> {
     await FlutterDownloader.pause(taskId: id);
   }
 
-  Future<void> _removeAllDownloadedTask() async {
-    _tasks.forEach((task) async {
-      await FlutterDownloader.remove(
-        taskId: task.taskId,
-        shouldDeleteContent: true,
-      );
-    });
-    await loadTask();
-  }
+  // Future<void> _removeAllDownloadedTask() async {
+  //   _tasks.forEach((task) async {
+  //     await FlutterDownloader.remove(
+  //       taskId: task.taskId,
+  //       shouldDeleteContent: true,
+  //     );
+  //   });
+  //   await loadTask();
+  // }
 
   static Future<bool> _openDownloadedFile(String taskId) {
     return FlutterDownloader.open(taskId: taskId);

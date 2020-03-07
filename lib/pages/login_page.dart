@@ -37,12 +37,6 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               children: <Widget>[
                 TextField(
-                  decoration: InputDecoration(
-                    isDense: true,
-                    border: InputBorder.none,
-                  ),
-                ),
-                TextField(
                   maxLines: 1,
                   maxLengthEnforced: true,
                   decoration: InputDecoration(labelText: '用户名'),
