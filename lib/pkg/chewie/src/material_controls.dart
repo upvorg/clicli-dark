@@ -82,14 +82,26 @@ class _MaterialControlsState extends State<MaterialControls> {
               context, _latestValue.errorDescription)
           : Container(
               color: chewieController.backgroundColor,
+              width: double.infinity,
+              height: double.infinity,
               child: Stack(
                 children: <Widget>[
                   _buildVideoBar(isErr: true),
                   Center(
-                    child: Icon(
-                      Icons.error_outline,
-                      color: chewieController.fontColor,
-                      size: 42,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.error_outline,
+                          color: chewieController.fontColor,
+                          size: 42,
+                        ),
+                        Text(
+                          '播放出错',
+                          style: TextStyle(color: chewieController.fontColor),
+                        )
+                      ],
                     ),
                   )
                 ],

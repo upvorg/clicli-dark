@@ -80,21 +80,16 @@ class _PlayerPageState extends State<PlayerPage>
 
     if (mounted) {
       setState(() {});
-      if (videoList.length > 0) await initPlayer();
-      final pv = jsonDecode((await getPV(widget.id)).data)['pv'];
-      setState(() {
-        detail['pv'] = pv;
-      });
+      if (videoList.length > 0) {
+        await initPlayer();
+        detail['pv'] = jsonDecode((await getPV(widget.id)).data)['pv'];
+        setState(() {});
+      }
     }
   }
 
   initPlayer() async {
-    if (videoList.length < 1) return;
-
     final String src = await getVideoSrc(videoList[currPlayIndex]['content']);
-
-    debugPrint('start playing $currPlayIndex $src');
-
     _videoPlayerController = VideoPlayerController.network(src);
     // _videoPlayerController.addListener(autoNextLis);
 
