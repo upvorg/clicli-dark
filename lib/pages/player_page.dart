@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:clicli_dark/api/post.dart';
 import 'package:clicli_dark/config.dart';
+import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/pages/search_page.dart';
 import 'package:clicli_dark/pkg/chewie/chewie.dart';
 import 'package:clicli_dark/utils/reg_utils.dart';
@@ -143,7 +144,31 @@ class _PlayerPageState extends State<PlayerPage>
     setState(() {
       currPlayIndex = i;
     });
+    setHistory(i);
     await initPlayer();
+  }
+
+  setHistory(int i) async {
+    final List o = jsonDecode(Instances.sp.getString('history') ?? '[]');
+
+    final hasHis = o.firstWhere((f) {
+      if (f['id'] = detail['id']) {
+        f['curr'] = i;
+        f['name'] = videoList[i]['title'];
+        return true;
+      }
+      return false;
+    });
+    if (!hasHis) {
+      final historyInfo = jsonEncode({
+        'curr': i,
+        'thumb': thumbnail,
+        'name': videoList[i]['title'],
+        'id': detail['id'],
+      });
+      o.add(historyInfo);
+    }
+    Instances.sp.setString('history', jsonEncode(o));
   }
 
   @override
