@@ -1,0 +1,29 @@
+name: Dart CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '12.x'
+    - uses: subosito/flutter-action@v1
+      with:
+        channel: 'stable'
+    - run: flutter pub get
+    - run: flutter test
+    - run: flutter -v build apk --release --target-platform android-arm
+    - name: Set Git Config
+      run: git config --global user.name ${{ secrets.GIT_USER_NAME }} &&  git config --global user.email ${{ secrets.GIT_EMAL }}
+    - name: Clone and push apk to clicli.me
+      run: git clone https://${{ secrets.GH_TOKEN }}@github.com/cliclitv/app.clicli.me.git && cd ./app.clicli.me && mv build/app/outputs/apk/release/app-release.apk ./ && git add -A && git commit -m 'update release By TravisCI With Build ${TRAVIS_BUILD_NUMBER}' &&  git push -f https://${{ secrets.GH_TOKEN }}@github.com/cliclitv/app.clicli.me.git
+      
