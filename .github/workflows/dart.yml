@@ -17,9 +17,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies
-      run: pub get
+      run: flutter pub get
     - name: Run tests
-      run: pub run test
+      run: flutter pub run test
     - name: Build Flutter Android APK
       run: flutter -v build apk --target-platform android-arm --release
     - name: Set Git Config
