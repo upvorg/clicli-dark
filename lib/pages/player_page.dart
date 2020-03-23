@@ -72,11 +72,10 @@ class _PlayerPageState extends State<PlayerPage>
       Screen.keepOn(true);
       _tabController = TabController(length: 2, vsync: this);
       WidgetsBinding.instance.addObserver(this);
-      isLoading = false;
-      setState(() {});
     }
 
     if (mounted) {
+      isLoading = false;
       setState(() {});
       if (videoList.length > 0) {
         await initPlayer();
