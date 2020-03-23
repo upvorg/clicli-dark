@@ -15,9 +15,7 @@ class PostCard extends StatelessWidget {
       onTap: () {
         Navigator.pushAndRemoveUntil(context,
             MaterialPageRoute(builder: (BuildContext context) {
-          return PlayerPage(
-            id: data['id'],
-          );
+          return PlayerPage(data: data);
         }), (Route<dynamic> route) => true);
       },
       child: Container(

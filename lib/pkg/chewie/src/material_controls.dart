@@ -225,7 +225,9 @@ class _MaterialControlsState extends State<MaterialControls> {
     final w = MediaQuery.of(context).size.width;
     _endVerticalDragY = d.localPosition.dy;
     final drag = -(_endVerticalDragY - _startVerticalDragY);
-    final totalHor = w / chewieController.aspectRatio - 2 * barHeight;
+    final totalHor =
+        w / chewieController.videoPlayerController.value.aspectRatio -
+            2 * barHeight;
     if (_startHorizontalDragX < w / 2) {
       final _ = initBri + (drag / totalHor);
       brighting = _ <= 0 ? 0.0 : _ >= 1 ? 1.0 : _;
@@ -243,10 +245,8 @@ class _MaterialControlsState extends State<MaterialControls> {
   void _onVerticalDragEnd(DragEndDetails d) async {
     if (_startVerticalDragX < MediaQuery.of(context).size.width / 2) {
       showBrightness = false;
-      // await Screen.setBrightness(brighting);
     } else {
       showVolTip = false;
-      // await controller.setVolume(voling);
     }
     setState(() {});
   }

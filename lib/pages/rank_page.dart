@@ -41,7 +41,7 @@ class _RankPageState extends State<RankPage> {
                           context,
                           MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  PlayerPage(id: rankList[i]['id'])));
+                                  PlayerPage(data: rankList[i])));
                     },
                     child: Container(
                       color: Colors.white,

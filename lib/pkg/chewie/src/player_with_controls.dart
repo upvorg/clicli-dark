@@ -17,7 +17,7 @@ class PlayerWithControls extends StatelessWidget {
 
     return Center(
       child: Container(
-        width: MediaQuery.of(context).size.width,
+        color: Colors.black,
         child: AspectRatio(
           aspectRatio:
               chewieController.aspectRatio ?? _calculateAspectRatio(context),
@@ -34,6 +34,7 @@ class PlayerWithControls extends StatelessWidget {
         children: <Widget>[
           // chewieController.placeholder ?? Container(),
           CroppedVideo(
+            chewieController: chewieController,
             controller: chewieController.videoPlayerController,
             cropAspectRatio: chewieController.aspectRatio,
           ),
@@ -70,9 +71,10 @@ class PlayerWithControls extends StatelessWidget {
 }
 
 class CroppedVideo extends StatefulWidget {
-  CroppedVideo({this.controller, this.cropAspectRatio});
+  CroppedVideo({this.controller, this.chewieController, this.cropAspectRatio});
 
   final VideoPlayerController controller;
+  final ChewieController chewieController;
   final double cropAspectRatio;
 
   @override
@@ -121,7 +123,9 @@ class CroppedVideoState extends State<CroppedVideo> {
     if (initialized) {
       return Center(
         child: AspectRatio(
-          aspectRatio: cropAspectRatio ?? controller.value.aspectRatio,
+          aspectRatio: widget.chewieController.keepVideoAspectRatio
+              ? controller.value.aspectRatio
+              : cropAspectRatio ?? controller.value.aspectRatio,
           child: FittedBox(
             fit: BoxFit.cover,
             child: SizedBox(

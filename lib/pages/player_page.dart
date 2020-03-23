@@ -21,9 +21,9 @@ import 'package:screen/screen.dart';
 
 //https://stackoverflow.com/questions/52431109/flutter-video-player-fullscreen
 class PlayerPage extends StatefulWidget with WidgetsBindingObserver {
-  final int id;
+  final Map data;
 
-  PlayerPage({Key key, this.id}) : super(key: key);
+  PlayerPage({Key key, this.data}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -40,7 +40,6 @@ class _PlayerPageState extends State<PlayerPage>
 
   String thumbnail;
   bool isLoading = true;
-  Map detail;
   List videoList = [];
   Map videoSrc = {};
   int currPlayIndex = 0;
@@ -61,14 +60,10 @@ class _PlayerPageState extends State<PlayerPage>
   }
 
   getDetail() async {
-    final res = jsonDecode((await getPostDetail(widget.id)).data)['result'];
-
-    thumbnail = getSuo(res['content']);
-    detail = res;
-    isLoading = false;
-
-    final videoRes = jsonDecode((await getVideoList(widget.id)).data)['videos'];
-    videoList = videoRes ?? [];
+    thumbnail = getSuo(widget.data['content']);
+    videoList =
+        jsonDecode((await getVideoList(widget.data['id'])).data)['videos'] ??
+            [];
     if (videoList.length > 0) {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Colors.black,
@@ -77,13 +72,16 @@ class _PlayerPageState extends State<PlayerPage>
       Screen.keepOn(true);
       _tabController = TabController(length: 2, vsync: this);
       WidgetsBinding.instance.addObserver(this);
+      isLoading = false;
+      setState(() {});
     }
 
     if (mounted) {
       setState(() {});
       if (videoList.length > 0) {
         await initPlayer();
-        detail['pv'] = jsonDecode((await getPV(widget.id)).data)['pv'];
+        widget.data['pv'] =
+            jsonDecode((await getPV(widget.data['id'])).data)['pv'];
         setState(() {});
       }
     }
@@ -152,7 +150,7 @@ class _PlayerPageState extends State<PlayerPage>
     final List o = jsonDecode(Instances.sp.getString('history') ?? '[]');
 
     final hasHis = o.firstWhere((f) {
-      if (f['id'] = detail['id']) {
+      if (f['id'] = widget.data['id']) {
         f['curr'] = i;
         f['name'] = videoList[i]['title'];
         return true;
@@ -164,7 +162,7 @@ class _PlayerPageState extends State<PlayerPage>
         'curr': i,
         'thumb': thumbnail,
         'name': videoList[i]['title'],
-        'id': detail['id'],
+        'id': widget.data['id'],
       });
       o.add(historyInfo);
     }
@@ -218,6 +216,7 @@ class _PlayerPageState extends State<PlayerPage>
         ),
       );
     }
+    final detail = widget.data;
     return Scaffold(
         body: SafeArea(
       child: videoList.length > 0
@@ -276,7 +275,7 @@ class _PlayerPageState extends State<PlayerPage>
                             padding: EdgeInsets.symmetric(horizontal: 10),
                             child: ClipOval(
                               child: Image.network(
-                                getAvatar(avatar: detail['uqq']),
+                                getAvatar(avatar: detail['uqq'] ?? ''),
                                 width: 35,
                                 height: 35,
                               ),
@@ -320,6 +319,7 @@ class _PlayerPageState extends State<PlayerPage>
   }
 
   Widget buildProfile(BuildContext context) {
+    final detail = widget.data;
     final theme = Theme.of(context);
     final caption = theme.textTheme.caption;
     final List tags = detail['tag'].substring(1).split(' ');
@@ -334,13 +334,9 @@ class _PlayerPageState extends State<PlayerPage>
           SizedBox(height: 10),
           Row(
             children: <Widget>[
-              Text('GV${widget.id}  ', style: caption),
+              Text('GV${widget.data['id']}  ', style: caption),
               Text(' $m-$d  ', style: caption),
-              Icon(
-                Icons.whatshot,
-                size: 12,
-                color: theme.primaryColor,
-              ),
+              Icon(Icons.whatshot, size: 12, color: theme.primaryColor),
               Text('${detail['pv']?.toString() ?? 0} ℃',
                   style: caption.copyWith(color: theme.primaryColor)),
             ],
@@ -382,18 +378,6 @@ class _PlayerPageState extends State<PlayerPage>
                   ),
                 )
           ]),
-          // SizedBox(height: 10),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //   children: <Widget>[
-          //     // IconButton(
-          //     //   icon: Icon(
-          //     //     Icons.favorite_border,
-          //     //     color: caption.color,
-          //     //   ),
-          //     // ),
-          //   ],
-          // ),
           SizedBox(height: 10),
           buildVideoList()
         ]));
@@ -446,7 +430,7 @@ class _PlayerPageState extends State<PlayerPage>
 
   Future<void> downloadByUrl(String url, {String fileName}) async {
     final path = await Config.downloadPath();
-    final downloadPath = Directory('$path/${detail['title']}');
+    final downloadPath = Directory('$path/${widget.data['title']}');
     if (!downloadPath.existsSync()) downloadPath.createSync();
 
     final tasks = await FlutterDownloader.loadTasks();
@@ -489,7 +473,7 @@ class _PlayerProfile extends State<PlayerProfile>
     final content =
         i < 0 ? detail['content'] : detail['content'].substring(0, i);
     final meta =
-        '''${widget.needTitle ? '# ${detail['title']} \r\n ' : ''}> ${detail['uname']}  ${detail['time']}   GV${detail['id']} \r\n#  ''';
+        '''${widget.needTitle ? '# ${detail['title']} \r\n ' : ''}> ${detail['uname'] ?? ''}  ${detail['time']}   GV${detail['id']} \r\n#  ''';
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: MarkdownBody(

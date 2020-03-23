@@ -196,6 +196,7 @@ class ChewieController extends ChangeNotifier {
     this.fontColor = Colors.white,
     this.enableDLNA = false,
     this.backgroundColor = Colors.black,
+    this.keepVideoAspectRatio = true,
   }) : assert(videoPlayerController != null,
             'You must provide a controller to play a video') {
     _initialize();
@@ -234,7 +235,7 @@ class ChewieController extends ChangeNotifier {
   /// video!
   ///
   /// Will fallback to fitting within the space allowed.
-  final double aspectRatio;
+  double aspectRatio;
 
   /// The colors to use for controls on iOS. By default, the iOS player uses
   /// colors sampled from the original iOS 11 designs.
@@ -288,6 +289,8 @@ class ChewieController extends ChangeNotifier {
   final List devices = [];
 
   final Color backgroundColor;
+
+  final bool keepVideoAspectRatio;
 
   static ChewieController of(BuildContext context) {
     final chewieControllerProvider =
