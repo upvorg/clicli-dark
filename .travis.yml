@@ -1,6 +1,6 @@
-cache:
-  directories:
-    - '$HOME/.pub-cache'
+# cache:
+#   directories:
+#     - '$HOME/.pub-cache'
 
 # notifications:
 #   email:
@@ -11,87 +11,87 @@ cache:
 #     on_success: always
 #     on_failure: always
 
-jobs:
-  include:
-    - stage: deployAPK
-      os: linux
-      language: android
-      # licenses:
-      #   - android-sdk-preview-license-.+
-      #   - android-sdk-license-.+
-      #   - google-gdk-license-.+
-      android:
-        components:
-          - tools
-          - platform-tools
-          - build-tools-28.0.3
-          - android-28
-          - sys-img-armeabi-v7a-google_apis-25
-          - extra-android-m2repository
-          - extra-google-m2repository
-          - extra-google-android-support
-      jdk: oraclejdk8
-      sudo: required
-      env: APK_OUTPUT=build/app/outputs/apk/release/app-release.apk
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - libstdc++6
-            - fonts-droid
-      before_script:
-        - git clone https://github.com/flutter/flutter.git -b stable --depth 1
-      script:
-        - './flutter/bin/flutter --version'
-        - './flutter/bin/flutter -v build apk --target-platform android-arm --release'
-        - cd build/app/outputs/apk/release
-        - git config user.name "cy"
-        - git config user.email "i@runtua.cn"
-        - git clone https://${GH_TOKEN}@github.com/cliclitv/app.clicli.me.git
-        - cd ./app.clicli.me
-        - mv ../app-release.apk ./
-        - git add -A
-        - git commit -m 'update release By TravisCI With Build ${TRAVIS_BUILD_NUMBER}'
-        - git push -f https://${GH_TOKEN}@github.com/cliclitv/app.clicli.me.git
-      #deploy:
-      #provider: releases
-      # skip_cleanup: true
-      #api_key: $GH_TOKEN
-      #cleanup: false
-      #file: $APK_OUTPUT
-      #on:
-      #branch: master
-      # tags: true
-    # - stage: deployIPA
-    #   os: osx
-    #   language: generic
-    #   osx_image: xcode10.2
-    #   before_script:
-    #     - brew update
-    #     - brew install --HEAD usbmuxd
-    #     - brew unlink usbmuxd
-    #     - brew link usbmuxd
-    #     - brew install --HEAD libimobiledevice
-    #     - brew install ideviceinstaller
-    #     - brew install ios-deploy
-    #     - git clone https://github.com/flutter/flutter.git -b stable --depth 1
-    #   script:
-    #     - ./flutter/bin/flutter -v build ios --no-codesign
-    #   before_deploy:
-    #     - pushd build/ios/iphoneos
-    #     - mkdir Payload
-    #     - cd Payload
-    #     - ln -s ../Runner.app
-    #     - cd ..
-    #     - zip -r app.ipa Payload
-    #     - popd
-    #   deploy:
-    #     provider: releases
-    #     # api_key:
-    #     #   secure: #your api key will be here
-    #     file: build/ios/iphoneos/app.ipa
-    #   # skip_cleanup: true #important or your built app would be deleted
-    #   cleanup: false
-    #   on:
-    #     tags: true
+# jobs:
+#   include:
+#     - stage: deployAPK
+#       os: linux
+#       language: android
+#       # licenses:
+#       #   - android-sdk-preview-license-.+
+#       #   - android-sdk-license-.+
+#       #   - google-gdk-license-.+
+#       android:
+#         components:
+#           - tools
+#           - platform-tools
+#           - build-tools-28.0.3
+#           - android-28
+#           - sys-img-armeabi-v7a-google_apis-25
+#           - extra-android-m2repository
+#           - extra-google-m2repository
+#           - extra-google-android-support
+#       jdk: oraclejdk8
+#       sudo: required
+#       env: APK_OUTPUT=build/app/outputs/apk/release/app-release.apk
+#       addons:
+#         apt:
+#           sources:
+#             - ubuntu-toolchain-r-test
+#           packages:
+#             - libstdc++6
+#             - fonts-droid
+#       before_script:
+#         - git clone https://github.com/flutter/flutter.git -b stable --depth 1
+#       script:
+#         - './flutter/bin/flutter --version'
+#         - './flutter/bin/flutter -v build apk --target-platform android-arm --release'
+#         - cd build/app/outputs/apk/release
+#         - git config user.name "cy"
+#         - git config user.email "i@runtua.cn"
+#         - git clone https://${GH_TOKEN}@github.com/cliclitv/app.clicli.me.git
+#         - cd ./app.clicli.me
+#         - mv ../app-release.apk ./
+#         - git add -A
+#         - git commit -m 'update release By TravisCI With Build ${TRAVIS_BUILD_NUMBER}'
+#         - git push -f https://${GH_TOKEN}@github.com/cliclitv/app.clicli.me.git
+#deploy:
+#provider: releases
+# skip_cleanup: true
+#api_key: $GH_TOKEN
+#cleanup: false
+#file: $APK_OUTPUT
+#on:
+#branch: master
+# tags: true
+# - stage: deployIPA
+#   os: osx
+#   language: generic
+#   osx_image: xcode10.2
+#   before_script:
+#     - brew update
+#     - brew install --HEAD usbmuxd
+#     - brew unlink usbmuxd
+#     - brew link usbmuxd
+#     - brew install --HEAD libimobiledevice
+#     - brew install ideviceinstaller
+#     - brew install ios-deploy
+#     - git clone https://github.com/flutter/flutter.git -b stable --depth 1
+#   script:
+#     - ./flutter/bin/flutter -v build ios --no-codesign
+#   before_deploy:
+#     - pushd build/ios/iphoneos
+#     - mkdir Payload
+#     - cd Payload
+#     - ln -s ../Runner.app
+#     - cd ..
+#     - zip -r app.ipa Payload
+#     - popd
+#   deploy:
+#     provider: releases
+#     # api_key:
+#     #   secure: #your api key will be here
+#     file: build/ios/iphoneos/app.ipa
+#   # skip_cleanup: true #important or your built app would be deleted
+#   cleanup: false
+#   on:
+#     tags: true

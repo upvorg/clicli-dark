@@ -24,4 +24,4 @@ jobs:
       - name: Set Git Config
         run: git config --global user.name ${{ secrets.GIT_USER_NAME }} &&  git config --global user.email ${{ secrets.GIT_EMAL }}
       - name: Clone and push apk to clicli.me
-        run: git clone https://${{ secrets.GH_TOKEN }}@github.com/cliclitv/app.clicli.me.git && cd ./app.clicli.me && mv ../build/app/outputs/apk/release/app-release.apk ./ && git add -A && git commit -m 'update release By TravisCI With Build ${TRAVIS_BUILD_NUMBER}' &&  git push -f https://${{ secrets.GH_TOKEN }}@github.com/cliclitv/app.clicli.me.git
+        run: git clone https://${{ secrets.GH_TOKEN }}@github.com/cliclitv/app.clicli.me.git && cd ./app.clicli.me && mv ../build/app/outputs/apk/release/app-release.apk ./ && git add -A && git commit -m 'update release' &&  git push -f https://${{ secrets.GH_TOKEN }}@github.com/cliclitv/app.clicli.me.git
