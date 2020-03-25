@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:clicli_dark/instance.dart';
+import 'package:clicli_dark/pages/bgi_page.dart';
+import 'package:clicli_dark/pages/history_page.dart';
 import 'package:clicli_dark/pages/login_page.dart';
 import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:flutter/material.dart';
@@ -80,10 +82,22 @@ class _MePageState extends State<MePage> {
                   ListTile(
                     title: Text('我的追番'),
                     trailing: Icon(Icons.keyboard_arrow_right),
+                    onTap: () {
+                      Navigator.pushAndRemoveUntil(context,
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return BgiPage();
+                      }), (Route<dynamic> route) => true);
+                    },
                   ),
                   ListTile(
                     title: Text('历史记录'),
                     trailing: Icon(Icons.keyboard_arrow_right),
+                    onTap: () {
+                      Navigator.pushAndRemoveUntil(context,
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return HistoryPage();
+                      }), (Route<dynamic> route) => true);
+                    },
                   ),
                   ListTile(
                     title: Text('稿件管理'),

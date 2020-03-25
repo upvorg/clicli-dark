@@ -78,6 +78,7 @@ class _PlayerPageState extends State<PlayerPage>
       isLoading = false;
       setState(() {});
       if (videoList.length > 0) {
+        setHistory(0);
         await initPlayer();
         widget.data['pv'] =
             jsonDecode((await getPV(widget.data['id'])).data)['pv'];
@@ -146,23 +147,29 @@ class _PlayerPageState extends State<PlayerPage>
   }
 
   setHistory(int i) async {
+    // Instances.sp.remove('history');
     final List o = jsonDecode(Instances.sp.getString('history') ?? '[]');
-
-    final hasHis = o.firstWhere((f) {
-      if (f['id'] = widget.data['id']) {
-        f['curr'] = i;
-        f['name'] = videoList[i]['title'];
-        return true;
+    bool hasHis = false;
+    for (int i = 0; i < o.length; i++) {
+      if (o[i]['id'] == widget.data['id']) {
+        o[i]['time'] = DateTime.now().millisecond;
+        o[i]['curr'] = i;
+        o[i]['name'] = videoList[i]['title'];
+        o[i]['data'] = widget.data;
+        hasHis = true;
+        return;
       }
-      return false;
-    });
+    }
+
     if (!hasHis) {
-      final historyInfo = jsonEncode({
+      final historyInfo = {
         'curr': i,
-        'thumb': thumbnail,
+        'thumb': getSuo(widget.data['content']),
         'name': videoList[i]['title'],
         'id': widget.data['id'],
-      });
+        'data': widget.data,
+        'time': DateTime.now().millisecond
+      };
       o.add(historyInfo);
     }
     Instances.sp.setString('history', jsonEncode(o));
@@ -172,6 +179,7 @@ class _PlayerPageState extends State<PlayerPage>
   void initState() {
     super.initState();
     getDetail();
+    getFollowBgi();
   }
 
   @override
@@ -317,6 +325,40 @@ class _PlayerPageState extends State<PlayerPage>
     ));
   }
 
+  bool hasFollowBgi = false;
+  getFollowBgi() {
+    final List o = jsonDecode(Instances.sp.getString('followBgi') ?? '[]');
+
+    for (int i = 0; i < o.length; i++) {
+      if (o[i]['id'] == widget.data['id']) {
+        hasFollowBgi = true;
+        return;
+      }
+    }
+  }
+
+  followBgi() {
+    // Instances.sp.remove('followBgi');
+    final List o = jsonDecode(Instances.sp.getString('followBgi') ?? '[]');
+
+    if (hasFollowBgi) {
+      o.removeWhere((f) => f['id'] == widget.data['id']);
+    } else {
+      final historyInfo = {
+        'thumb': getSuo(widget.data['content']),
+        'name': widget.data['title'],
+        'id': widget.data['id'],
+        'data': widget.data,
+        'time': DateTime.now().millisecond
+      };
+      o.add(historyInfo);
+    }
+
+    hasFollowBgi = !hasFollowBgi;
+    Instances.sp.setString('followBgi', jsonEncode(o));
+    setState(() {});
+  }
+
   Widget buildProfile(BuildContext context) {
     final detail = widget.data;
     final theme = Theme.of(context);
@@ -329,7 +371,23 @@ class _PlayerPageState extends State<PlayerPage>
         child: ListView(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
             children: <Widget>[
-          Text(detail['title']),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(detail['title']),
+              InkWell(
+                onTap: followBgi,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 4),
+                  color: theme.primaryColor.withOpacity(0.4),
+                  child: Text(
+                    hasFollowBgi ? '取消追番' : '追番',
+                    style: TextStyle(color: theme.primaryColor),
+                  ),
+                ),
+              )
+            ],
+          ),
           SizedBox(height: 10),
           Row(
             children: <Widget>[
