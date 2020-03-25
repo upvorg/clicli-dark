@@ -78,7 +78,7 @@ class _PlayerPageState extends State<PlayerPage>
       isLoading = false;
       setState(() {});
       if (videoList.length > 0) {
-        setHistory(0);
+        setHistory();
         await initPlayer();
         widget.data['pv'] =
             jsonDecode((await getPV(widget.data['id'])).data)['pv'];
@@ -142,18 +142,18 @@ class _PlayerPageState extends State<PlayerPage>
     setState(() {
       currPlayIndex = i;
     });
-    setHistory(i);
+    setHistory();
     await initPlayer();
   }
 
-  setHistory(int i) async {
+  setHistory() async {
     // Instances.sp.remove('history');
     final List o = jsonDecode(Instances.sp.getString('history') ?? '[]');
     bool hasHis = false;
     for (int i = 0; i < o.length; i++) {
       if (o[i]['id'] == widget.data['id']) {
         o[i]['time'] = DateTime.now().millisecond;
-        o[i]['curr'] = i;
+        o[i]['curr'] = currPlayIndex;
         o[i]['name'] = videoList[i]['title'];
         o[i]['data'] = widget.data;
         hasHis = true;
@@ -163,9 +163,9 @@ class _PlayerPageState extends State<PlayerPage>
 
     if (!hasHis) {
       final historyInfo = {
-        'curr': i,
+        'curr': currPlayIndex,
         'thumb': getSuo(widget.data['content']),
-        'name': videoList[i]['title'],
+        'name': videoList[currPlayIndex]['title'],
         'id': widget.data['id'],
         'data': widget.data,
         'time': DateTime.now().millisecond

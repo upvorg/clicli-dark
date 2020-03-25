@@ -8,6 +8,7 @@ import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:package_info/package_info.dart';
 
 class MePage extends StatefulWidget {
   @override
@@ -15,6 +16,8 @@ class MePage extends StatefulWidget {
 }
 
 class _MePageState extends State<MePage> {
+  String version = '';
+
   @override
   void initState() {
     super.initState();
@@ -23,6 +26,12 @@ class _MePageState extends State<MePage> {
       getLocalProfile();
     });
 
+    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+      final String v = packageInfo.version;
+      final String buildNumber = packageInfo.buildNumber;
+      version = '$v.$buildNumber';
+      setState(() {});
+    });
     getLocalProfile();
   }
 
@@ -117,6 +126,14 @@ class _MePageState extends State<MePage> {
                 ],
               ),
             ),
+            Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(top: 20),
+              child: Text(
+                'APP VERSION $version',
+                style: Theme.of(context).textTheme.caption,
+              ),
+            )
           ],
         ),
       ),

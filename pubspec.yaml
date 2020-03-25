@@ -24,6 +24,7 @@ dev_dependencies:
   shared_preferences: any
   event_bus: any
   music_volume: any
+  package_info: any
 
   # chewie
   video_player: any
