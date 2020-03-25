@@ -108,7 +108,7 @@ class _MePageState extends State<MePage> {
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: () async {
                       const QQGroupLink =
-                          'https://jq.qq.com/?_wv=1027&k=5iTBWlY';
+                          'https://jq.qq.com/?_wv=1027&k=5lfSD1B';
                       if (await canLaunch(QQGroupLink)) {
                         await launch(QQGroupLink);
                       }
