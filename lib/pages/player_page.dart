@@ -21,9 +21,10 @@ import 'package:screen/screen.dart';
 
 //https://stackoverflow.com/questions/52431109/flutter-video-player-fullscreen
 class PlayerPage extends StatefulWidget with WidgetsBindingObserver {
-  final Map data;
+  PlayerPage({Key key, this.data, this.pos}) : super(key: key);
 
-  PlayerPage({Key key, this.data}) : super(key: key);
+  final Map data;
+  final int pos;
 
   @override
   State<StatefulWidget> createState() {
@@ -152,12 +153,12 @@ class _PlayerPageState extends State<PlayerPage>
     bool hasHis = false;
     for (int i = 0; i < o.length; i++) {
       if (o[i]['id'] == widget.data['id']) {
-        o[i]['time'] = DateTime.now().millisecond;
+        o[i]['time'] = DateTime.now().millisecondsSinceEpoch;
         o[i]['curr'] = currPlayIndex;
-        o[i]['name'] = videoList[i]['title'];
+        o[i]['name'] = videoList[currPlayIndex]['title'];
         o[i]['data'] = widget.data;
         hasHis = true;
-        return;
+        break;
       }
     }
 
@@ -168,7 +169,7 @@ class _PlayerPageState extends State<PlayerPage>
         'name': videoList[currPlayIndex]['title'],
         'id': widget.data['id'],
         'data': widget.data,
-        'time': DateTime.now().millisecond
+        'time': DateTime.now().millisecondsSinceEpoch
       };
       o.add(historyInfo);
     }
@@ -178,6 +179,8 @@ class _PlayerPageState extends State<PlayerPage>
   @override
   void initState() {
     super.initState();
+    if (widget.pos != null) currPlayIndex = widget.pos;
+
     getDetail();
     getFollowBgi();
   }
@@ -349,7 +352,7 @@ class _PlayerPageState extends State<PlayerPage>
         'name': widget.data['title'],
         'id': widget.data['id'],
         'data': widget.data,
-        'time': DateTime.now().millisecond
+        'time': DateTime.now().millisecondsSinceEpoch
       };
       o.add(historyInfo);
     }
@@ -378,10 +381,10 @@ class _PlayerPageState extends State<PlayerPage>
               InkWell(
                 onTap: followBgi,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                   color: theme.primaryColor.withOpacity(0.4),
                   child: Text(
-                    hasFollowBgi ? '取消追番' : '追番',
+                    hasFollowBgi ? '已追番' : '追番',
                     style: TextStyle(color: theme.primaryColor),
                   ),
                 ),
