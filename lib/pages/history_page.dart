@@ -69,7 +69,7 @@ class _HistoryPageState extends State<HistoryPage> {
                           children: <Widget>[
                             ellipsisText(hisList[i]['name']),
                             SizedBox(height: 5),
-                            Text('第 ${hisList[i]['curr']} 集'),
+                            Text('第 ${hisList[i]['curr'] + 1} 集'),
                             if (hisList[i]['time'] != null)
                               Padding(
                                 padding: EdgeInsets.only(top: 5),
