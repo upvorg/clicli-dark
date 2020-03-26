@@ -40,3 +40,8 @@ getPV(int id) {
 login(data) {
   return NetUtils.post('https://admin.clicli.me/user/login', data: data);
 }
+
+checkAppUpdateApi() {
+  return NetUtils.get(
+      'https://cdn.jsdelivr.net/gh/cliclitv/app.clicli.me@master/output.json');
+}

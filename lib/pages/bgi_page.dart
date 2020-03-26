@@ -29,7 +29,6 @@ class _BgiPageState extends State<BgiPage> {
     await Future.delayed(Duration(seconds: 1));
   }
 
-  //TODO 获取历史记录定位当前观看集数
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size.height / 8;
