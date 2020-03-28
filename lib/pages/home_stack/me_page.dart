@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/pages/bgi_page.dart';
+import 'package:clicli_dark/pages/faq_page.dart';
 import 'package:clicli_dark/pages/history_page.dart';
 import 'package:clicli_dark/pages/login_page.dart';
 import 'package:clicli_dark/utils/toast_utils.dart';
@@ -152,7 +153,7 @@ class _MePageState extends State<MePage> {
                     trailing: Icon(Icons.keyboard_arrow_right),
                   ),
                   ListTile(
-                    title: Text(' QQ 群'),
+                    title: Text('QQ 群'),
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: () async {
                       const QQGroupLink =
@@ -160,6 +161,16 @@ class _MePageState extends State<MePage> {
                       if (await canLaunch(QQGroupLink)) {
                         await launch(QQGroupLink);
                       }
+                    },
+                  ),
+                  ListTile(
+                    title: Text('FAQ'),
+                    trailing: Icon(Icons.keyboard_arrow_right),
+                    onTap: () {
+                      Navigator.pushAndRemoveUntil(context,
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return FAQPage();
+                      }), (Route<dynamic> route) => true);
                     },
                   ),
                   ListTile(

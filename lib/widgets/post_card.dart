@@ -21,7 +21,6 @@ class PostCard extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(bottom: 5),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(5.0)),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.2),
@@ -34,23 +33,20 @@ class PostCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(5.0)),
-              child: CachedNetworkImage(
-                imageUrl: getSuo(data['content']),
-                placeholder: (ctx, url) => SizedBox(
-                  height: 115,
-                  width: double.infinity,
-                  child: Center(child: CircularProgressIndicator()),
-                ),
+            CachedNetworkImage(
+              imageUrl: getSuo(data['content']),
+              placeholder: (ctx, url) => SizedBox(
                 height: 115,
                 width: double.infinity,
-                fit: BoxFit.cover,
-                errorWidget: (_, __, ___) => SizedBox(
-                  height: 115,
-                  width: double.infinity,
-                  child: Center(child: Icon(Icons.error_outline)),
-                ),
+                child: Center(child: CircularProgressIndicator()),
+              ),
+              height: 115,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              errorWidget: (_, __, ___) => SizedBox(
+                height: 115,
+                width: double.infinity,
+                child: Center(child: Icon(Icons.error_outline)),
               ),
             ),
             Padding(

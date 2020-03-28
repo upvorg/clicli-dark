@@ -96,14 +96,8 @@ class _HomePageState extends State<HomePage>
                 indicatorPadding:
                     EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                 labelColor: Theme.of(context).primaryColor,
-                labelStyle: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-                unselectedLabelStyle: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.normal,
-                ),
+                labelStyle: TextStyle(fontSize: 18),
+                unselectedLabelStyle: TextStyle(fontSize: 18),
                 tabs: List<Tab>.generate(
                   tabs.length,
                   (index) => Tab(text: tabs[index]),
