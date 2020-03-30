@@ -14,7 +14,6 @@ class VersionManager {
 
     List<String> v1Arr = v1.split('.');
     List<String> v2Arr = v2.split('.');
-
     int i = 0;
     int diff = 0;
     int v1l = v1Arr.length;
@@ -23,8 +22,6 @@ class VersionManager {
 
     if (v1l < maxLen) v1Arr.addAll(List.generate(maxLen - v1l, (i) => '0'));
     if (v2l < maxLen) v2Arr.addAll(List.generate(maxLen - v2l, (i) => '0'));
-
-    print('v1 $v1Arr v2 $v2Arr $maxLen');
 
     while (i < maxLen &&
         (diff = int.parse(v1Arr[i]) - int.parse(v2Arr[i])) == 0) ++i;
@@ -40,12 +37,14 @@ class VersionManager {
   static Future<int> checkUpdate() async {
     final appInfo = jsonDecode((await checkAppUpdateApi()).data);
     final localAppInfo = (await getAppVersion());
-    final int major = compare(appInfo[0]['versionName'], localAppInfo.version);
+    final int major = compare(
+        appInfo[0]['apkData']['versionName'].toString(), localAppInfo.version);
 
     if (major > 0 || major < 0) {
       return major;
     } else if (major == 0) {
-      return appInfo[0]['versionCode'] - localAppInfo.buildNumber;
+      return appInfo[0]['apkData']['versionCode'] -
+          int.parse(localAppInfo.buildNumber);
     }
 
     return 0;

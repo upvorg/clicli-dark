@@ -1,3 +1,4 @@
+import 'package:clicli_dark/widgets/loading2load.dart';
 import 'package:flutter/material.dart';
 
 class RefreshWrapper extends StatefulWidget {
@@ -96,9 +97,11 @@ class _RefreshWrapperState extends State<RefreshWrapper>
       onRefresh: _onRefresh,
       child: hasError
           ? Container(
-              child: IconButton(
-                icon: Icon(Icons.refresh),
-                onPressed: _onRefresh,
+              child: InkWell(
+                onTap: _onRefresh,
+                child: Image.asset(
+                  'assets/error.png',
+                ),
               ),
             )
           : firstLoaded
@@ -135,7 +138,7 @@ class _RefreshWrapperState extends State<RefreshWrapper>
                           ))
                   ],
                 )
-              : Center(child: CircularProgressIndicator()),
+              : Center(child: loadingWidget),
     );
   }
 }

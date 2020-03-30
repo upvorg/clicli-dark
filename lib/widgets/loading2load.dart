@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+final loadingWidget = Image.asset(
+  'assets/loading.gif',
+  width: 150,
+  height: 150,
+);
+
 class Loading2Load extends StatefulWidget {
   Loading2Load({@required this.child, @required this.load});
 
@@ -43,10 +49,14 @@ class _Loading2LoadState extends State<Loading2Load> {
     return hasError
         ? Container(
             child: IconButton(
-              icon: Icon(Icons.refresh),
+              icon: Image.asset(
+                'assets/error.png',
+                width: 150,
+                height: 150,
+              ),
               onPressed: load,
             ),
           )
-        : loaded ? widget.child : Center(child: CircularProgressIndicator());
+        : loaded ? widget.child : Center(child: loadingWidget);
   }
 }

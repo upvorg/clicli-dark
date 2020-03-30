@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:clicli_dark/api/post.dart';
 import 'package:clicli_dark/widgets/appbar.dart';
+import 'package:clicli_dark/widgets/loading2load.dart';
 import 'package:clicli_dark/widgets/post_card.dart';
 import 'package:clicli_dark/widgets/refresh.dart';
 import 'package:flutter/material.dart';
@@ -107,7 +108,7 @@ class _SearchPageState extends State<SearchPage> {
             if (data != null)
               Expanded(
                 child: isLoading
-                    ? Center(child: CircularProgressIndicator())
+                    ? Center(child: loadingWidget)
                     : data.length > 0
                         ? Grid2RowView(List<PostCard>.generate(
                             data.length, (i) => PostCard(data[i])))

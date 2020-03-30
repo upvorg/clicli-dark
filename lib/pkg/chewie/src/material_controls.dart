@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:clicli_dark/utils/toast_utils.dart';
+import 'package:clicli_dark/widgets/loading2load.dart';
 import 'package:flutter/material.dart';
 import 'package:screen/screen.dart';
 import 'package:video_player/video_player.dart';
@@ -125,8 +126,8 @@ class _MaterialControlsState extends State<MaterialControls> {
                     ),
                   )
                 : null,
-            child: const Center(
-              child: const CircularProgressIndicator(),
+            child: Center(
+              child: loadingWidget,
             ),
           ))
         ],

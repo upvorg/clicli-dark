@@ -1,7 +1,7 @@
 name: clicli_dark
 description: CliCli Dark. clicli 纯黑.
 
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: '>=2.2.2 <3.0.0'
@@ -33,3 +33,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/loading.gif
+    - assets/error.png

@@ -10,6 +10,7 @@ import 'package:clicli_dark/utils/reg_utils.dart';
 import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:clicli_dark/widgets/common_widget.dart';
+import 'package:clicli_dark/widgets/loading2load.dart' show loadingWidget;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -222,7 +223,7 @@ class _PlayerPageState extends State<PlayerPage>
     if (isLoading) {
       return Scaffold(
         body: Center(
-          child: CircularProgressIndicator(),
+          child: loadingWidget,
         ),
       );
     }

@@ -49,6 +49,7 @@ class _MePageState extends State<MePage> {
 
   Future<void> checkAppUpdate(BuildContext ctx) async {
     int status;
+
     try {
       status = await VersionManager.checkUpdate();
       if (status > 0) {
@@ -78,8 +79,11 @@ class _MePageState extends State<MePage> {
                 ],
               );
             });
+      } else {
+        showSnackBar('已是最新版本');
       }
     } catch (e) {
+      debugPrint(e);
       showErrorSnackBar('检测更新失败');
     }
   }
