@@ -27,12 +27,10 @@ class FixedAppBar extends StatelessWidget {
       _title = Center(child: _title);
     }
     return Container(
-      margin: EdgeInsets.only(
-        top: MediaQuery.of(context).padding.top,
-      ),
+      margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
       decoration: BoxDecoration(
         boxShadow: null,
-        color: backgroundColor ?? Colors.white,
+        color: backgroundColor ?? Theme.of(context).appBarTheme.color,
       ),
       child: Row(
         children: <Widget>[

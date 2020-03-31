@@ -25,14 +25,51 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangePlatformBrightness() {
+    final Brightness brightness =
+        WidgetsBinding.instance.window.platformBrightness;
+
+    if (brightness != _brightness) {
+      setState(() {
+        _brightness = brightness;
+      });
+    }
+  }
+
+  Brightness _brightness = WidgetsBinding.instance.window.platformBrightness;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       navigatorKey: Instances.navigatorKey,
       theme: ThemeData(
-        primarySwatch: Config.colorCustom,
+        brightness: Brightness.light,
+        primarySwatch: Config.lightColor,
+        splashFactory: const NoSplashFactory(),
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Config.darkColor,
         splashFactory: const NoSplashFactory(),
       ),
       home: MyHomePage(),

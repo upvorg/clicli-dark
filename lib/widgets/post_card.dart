@@ -29,7 +29,7 @@ class PostCard extends StatelessWidget {
               blurRadius: 5,
             )
           ],
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

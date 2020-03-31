@@ -258,7 +258,6 @@ class _PlayerPageState extends State<PlayerPage>
                           spreadRadius: -10,
                         ),
                       ],
-                      color: Colors.white,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

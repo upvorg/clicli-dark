@@ -47,14 +47,14 @@ class _Loading2LoadState extends State<Loading2Load> {
   @override
   Widget build(BuildContext context) {
     return hasError
-        ? Container(
-            child: IconButton(
-              icon: Image.asset(
+        ? Center(
+            child: InkWell(
+              child: Image.asset(
                 'assets/error.png',
                 width: 150,
                 height: 150,
               ),
-              onPressed: load,
+              onTap: load,
             ),
           )
         : loaded ? widget.child : Center(child: loadingWidget);

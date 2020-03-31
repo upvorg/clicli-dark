@@ -90,6 +90,7 @@ class _MePageState extends State<MePage> {
 
   @override
   Widget build(BuildContext context) {
+    final ctx = Theme.of(context);
     return Scaffold(
         body: SafeArea(
       child: SingleChildScrollView(
@@ -112,7 +113,7 @@ class _MePageState extends State<MePage> {
                 getLocalProfile();
               },
               child: Container(
-                color: Colors.white,
+                color: ctx.cardColor,
                 child: ListTile(
                   leading: CachedNetworkImage(
                     imageUrl:
@@ -129,7 +130,7 @@ class _MePageState extends State<MePage> {
             ),
             Container(
               margin: EdgeInsets.only(top: 10),
-              color: Colors.white,
+              color: ctx.cardColor,
               child: ListBody(
                 children: <Widget>[
                   ListTile(

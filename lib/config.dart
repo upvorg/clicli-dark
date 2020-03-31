@@ -6,7 +6,7 @@ class Config {
     return (await getExternalStorageDirectory()).path;
   }
 
-  static const Map<int, Color> color = {
+  static const Map<int, Color> _lightColor = {
     50: Color.fromRGBO(148, 108, 230, .1),
     100: Color.fromRGBO(148, 108, 230, .2),
     200: Color.fromRGBO(148, 108, 230, .3),
@@ -19,5 +19,13 @@ class Config {
     900: Color.fromRGBO(148, 108, 230, 1),
   };
 
-  static const MaterialColor colorCustom = MaterialColor(0xff946ce6, color);
+  static const Map<int, Color> _darkColor = {
+    //TODO 132
+  };
+
+  static const MaterialColor lightColor =
+      MaterialColor(0xff946ce6, _lightColor);
+
+  static const MaterialColor darkColor =
+      MaterialColor(0xff946ce6, _darkColor); //TODO 132
 }
