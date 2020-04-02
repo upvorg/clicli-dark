@@ -24,7 +24,6 @@ class _MePageState extends State<MePage> {
   @override
   void initState() {
     super.initState();
-
     Instances.eventBus.on<TriggerLogin>().listen((e) {
       getLocalProfile();
     });
@@ -88,6 +87,8 @@ class _MePageState extends State<MePage> {
     }
   }
 
+  bool isDarkTheme = Instances.sp.getBool('isDarkTheme') ?? false;
+
   @override
   Widget build(BuildContext context) {
     final ctx = Theme.of(context);
@@ -97,35 +98,32 @@ class _MePageState extends State<MePage> {
         child: Column(
           children: <Widget>[
             HomeStackTitleAppbar('个人中心'),
-            GestureDetector(
-              onTap: () {
-                if (userInfo['qq'] == '1' || userInfo['qq'] == null)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => LoginPage(),
-                    ),
-                  );
-              },
-              onDoubleTap: () {
-                Instances.sp.remove('usertoken');
-                Instances.sp.remove('userinfo');
-                getLocalProfile();
-              },
-              child: Container(
-                color: ctx.cardColor,
-                child: ListTile(
-                  leading: CachedNetworkImage(
-                    imageUrl:
-                        'http://q1.qlogo.cn/g?b=qq&nk=${userInfo['qq']}&s=5',
-                    height: 40,
-                    width: 40,
-                    fit: BoxFit.cover,
-                  ),
-                  title: Text(userInfo['name']),
-                  subtitle: Text(userInfo['desc']),
-                  trailing: Icon(Icons.settings),
+            Container(
+              color: ctx.cardColor,
+              child: ListTile(
+                onLongPress: () {
+                  Instances.sp.remove('usertoken');
+                  Instances.sp.remove('userinfo');
+                  getLocalProfile();
+                },
+                onTap: () {
+                  if (userInfo['qq'] == '1' || userInfo['qq'] == null)
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => LoginPage(),
+                      ),
+                    );
+                },
+                leading: CachedNetworkImage(
+                  imageUrl:
+                      'http://q1.qlogo.cn/g?b=qq&nk=${userInfo['qq']}&s=5',
+                  height: 40,
+                  width: 40,
+                  fit: BoxFit.cover,
                 ),
+                title: Text(userInfo['name']),
+                subtitle: Text(userInfo['desc']),
               ),
             ),
             Container(
@@ -133,6 +131,20 @@ class _MePageState extends State<MePage> {
               color: ctx.cardColor,
               child: ListBody(
                 children: <Widget>[
+                  ListTile(
+                    title: const Text('夜间模式'),
+                    trailing: Switch(
+                      value: isDarkTheme,
+                      onChanged: (bool val) {
+                        setState(() {
+                          isDarkTheme = val;
+                          Instances.eventBus.fire(ChangeTheme(val));
+                          Instances.sp.setBool('isDarkTheme', val);
+                        });
+                      },
+                    ),
+                    onTap: () => {},
+                  ),
                   ListTile(
                     title: Text('我的追番'),
                     trailing: Icon(Icons.keyboard_arrow_right),
@@ -154,11 +166,7 @@ class _MePageState extends State<MePage> {
                     },
                   ),
                   ListTile(
-                    title: Text('稿件管理'),
-                    trailing: Icon(Icons.keyboard_arrow_right),
-                  ),
-                  ListTile(
-                    title: Text('QQ 群'),
+                    title: Text('企鹅 Q 群'),
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: () async {
                       const QQGroupLink =
@@ -169,7 +177,7 @@ class _MePageState extends State<MePage> {
                     },
                   ),
                   ListTile(
-                    title: Text('FAQ'),
+                    title: Text('常见问题'),
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: () {
                       Navigator.pushAndRemoveUntil(context,

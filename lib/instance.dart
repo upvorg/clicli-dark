@@ -29,3 +29,8 @@ class Instances {
 }
 
 class TriggerLogin {}
+
+class ChangeTheme {
+  ChangeTheme(this.val);
+  final bool val;
+}

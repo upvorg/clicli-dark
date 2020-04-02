@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:clicli_dark/config.dart';
 import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/pages/home_stack/home_page.dart';
@@ -12,14 +10,6 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (Platform.isAndroid) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.white,
-      statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: Colors.white,
-    ));
-  }
   await FlutterDownloader.initialize();
   await Instances.init();
   runApp(MyApp());
@@ -31,10 +21,18 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  bool isDarkTheme = Instances.sp.getBool('isDarkTheme') ?? false;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    Instances.eventBus.on<ChangeTheme>().listen((e) {
+      setState(() {
+        isDarkTheme = e.val;
+      });
+      toggleBar(val: e.val);
+    });
   }
 
   @override
@@ -45,31 +43,43 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void didChangePlatformBrightness() {
-    final Brightness brightness =
-        WidgetsBinding.instance.window.platformBrightness;
-
-    if (brightness != _brightness) {
-      setState(() {
-        _brightness = brightness;
-      });
-    }
+    final isd =
+        WidgetsBinding.instance.window.platformBrightness == Brightness.dark;
+    toggleBar(val: isd);
   }
 
-  Brightness _brightness = WidgetsBinding.instance.window.platformBrightness;
+  toggleBar({bool val}) {
+    if (val) {
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Colors.black,
+        statusBarIconBrightness: Brightness.light,
+        systemNavigationBarIconBrightness: Brightness.light,
+        systemNavigationBarColor: Colors.black,
+      ));
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: Colors.white,
+      ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       navigatorKey: Instances.navigatorKey,
+      themeMode: isDarkTheme ? ThemeMode.dark : ThemeMode.system,
       theme: ThemeData(
         brightness: Brightness.light,
         primarySwatch: Config.lightColor,
         splashFactory: const NoSplashFactory(),
       ),
       darkTheme: ThemeData(
+        primaryColor: Color.fromRGBO(223, 246, 252, 1),
         brightness: Brightness.dark,
-        primarySwatch: Config.darkColor,
         splashFactory: const NoSplashFactory(),
       ),
       home: MyHomePage(),

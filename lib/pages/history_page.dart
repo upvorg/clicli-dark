@@ -31,6 +31,7 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size.height / 8;
     final w = MediaQuery.of(context).size.width / 3;
+    final color = Theme.of(context).cardColor;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
@@ -48,7 +49,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 }), (Route<dynamic> route) => true);
               },
               child: Container(
-                  color: Colors.white,
+                  color: color,
                   margin: EdgeInsets.symmetric(vertical: 2),
                   padding: EdgeInsets.all(5),
                   height: size,

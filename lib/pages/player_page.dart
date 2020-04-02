@@ -249,11 +249,12 @@ class _PlayerPageState extends State<PlayerPage>
                 Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
                       boxShadow: [
                         BoxShadow(
                           color:
                               Theme.of(context).primaryColor.withOpacity(0.2),
-                          offset: Offset(0, 5),
+                          offset: Offset(0, 10),
                           blurRadius: 12,
                           spreadRadius: -10,
                         ),
@@ -444,7 +445,7 @@ class _PlayerPageState extends State<PlayerPage>
   }
 
   Widget buildVideoList() {
-    final color = Color.fromRGBO(148, 108, 230, 1);
+    final color = Theme.of(context).primaryColor;
     return Column(
         children: List.generate(videoList.length, (int i) {
       return Container(
