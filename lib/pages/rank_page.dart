@@ -44,7 +44,7 @@ class _RankPageState extends State<RankPage> {
                                   PlayerPage(data: rankList[i])));
                     },
                     child: Container(
-                      color: Colors.white,
+                      color: Theme.of(context).cardColor,
                       margin: EdgeInsets.symmetric(vertical: 2),
                       padding: EdgeInsets.all(5),
                       child: Row(

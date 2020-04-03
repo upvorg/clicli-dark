@@ -59,7 +59,7 @@ class _SearchPageState extends State<SearchPage> {
         child: Column(
           children: <Widget>[
             Container(
-              color: Colors.white,
+              color: Theme.of(context).canvasColor,
               padding: EdgeInsets.all(5),
               child: Container(
                 padding: EdgeInsets.zero,

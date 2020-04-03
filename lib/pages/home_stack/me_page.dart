@@ -82,7 +82,6 @@ class _MePageState extends State<MePage> {
         showSnackBar('已是最新版本');
       }
     } catch (e) {
-      debugPrint(e);
       showErrorSnackBar('检测更新失败');
     }
   }
@@ -132,7 +131,7 @@ class _MePageState extends State<MePage> {
               child: ListBody(
                 children: <Widget>[
                   ListTile(
-                    title: const Text('夜间模式'),
+                    title: const Text('暗黑模式'),
                     trailing: Switch(
                       value: isDarkTheme,
                       onChanged: (bool val) {

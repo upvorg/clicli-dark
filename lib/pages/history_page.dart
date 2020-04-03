@@ -12,7 +12,7 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  List hisList;
+  List hisList = [];
 
   @override
   void initState() {
@@ -22,7 +22,10 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Future<void> getHis() async {
     setState(() {
-      hisList = jsonDecode(Instances.sp.getString('history') ?? '[]');
+      final List _hisList =
+          jsonDecode(Instances.sp.getString('history') ?? '[]');
+      _hisList.sort((p, n) => n['time'].compareTo(p['time']));
+      hisList = _hisList;
     });
     await Future.delayed(Duration(seconds: 1));
   }

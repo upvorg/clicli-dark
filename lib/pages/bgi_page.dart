@@ -12,8 +12,8 @@ class BgiPage extends StatefulWidget {
 }
 
 class _BgiPageState extends State<BgiPage> {
-  List bgiList;
-  List hisList;
+  List bgiList = [];
+  List hisList = [];
 
   @override
   void initState() {
@@ -23,7 +23,10 @@ class _BgiPageState extends State<BgiPage> {
 
   Future<void> getBgi() async {
     setState(() {
-      bgiList = jsonDecode(Instances.sp.getString('followBgi') ?? '[]');
+      final List _bgiList =
+          jsonDecode(Instances.sp.getString('followBgi') ?? '[]');
+      _bgiList.sort((p, n) => n['time'].compareTo(p['time']));
+      bgiList = _bgiList;
       hisList = jsonDecode(Instances.sp.getString('history') ?? '[]');
     });
     await Future.delayed(Duration(seconds: 1));

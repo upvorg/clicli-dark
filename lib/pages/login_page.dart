@@ -54,12 +54,8 @@ class _LoginPageState extends State<LoginPage> {
                   },
                 ),
                 SizedBox(height: 20),
-                MaterialButton(
-                  color: Theme.of(context).primaryColor,
-                  child: Text(
-                    '登录',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                FlatButton(
+                  child: Text('登录'),
                   onPressed: isDo
                       ? null
                       : () async {

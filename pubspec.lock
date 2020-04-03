@@ -96,7 +96,7 @@ packages:
       name: flutter_downloader
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.4.1"
+    version: "1.4.2"
   flutter_flexible_toast:
     dependency: "direct dev"
     description:
