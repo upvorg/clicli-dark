@@ -13,7 +13,6 @@ import 'package:clicli_dark/widgets/common_widget.dart';
 import 'package:clicli_dark/widgets/loading2load.dart' show loadingWidget;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -67,10 +66,7 @@ class _PlayerPageState extends State<PlayerPage>
         jsonDecode((await getVideoList(widget.data['id'])).data)['videos'] ??
             [];
     if (videoList.length > 0) {
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: Colors.black,
-        statusBarIconBrightness: Brightness.light,
-      ));
+      ThemeManager.toggleDarkAppBarTheme();
       Screen.keepOn(true);
       _tabController = TabController(length: 2, vsync: this);
       WidgetsBinding.instance.addObserver(this);
@@ -181,7 +177,7 @@ class _PlayerPageState extends State<PlayerPage>
   void initState() {
     super.initState();
     if (widget.pos != null) currPlayIndex = widget.pos;
-
+    print(WidgetsBinding.instance.window.platformBrightness);
     getDetail();
     getFollowBgi();
   }
@@ -211,10 +207,7 @@ class _PlayerPageState extends State<PlayerPage>
     _chewieController?.dispose();
     _videoPlayerController?.dispose();
 
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.white,
-      statusBarIconBrightness: Brightness.dark,
-    ));
+    ThemeManager.toggleAppbarThemeByLocal();
     WidgetsBinding.instance.removeObserver(this);
   }
 

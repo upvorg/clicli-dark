@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       setState(() {
         isDarkTheme = e.val;
       });
-      toggleBar(val: e.val);
+      ThemeManager.toggleAppbarTheme(e.val);
     });
   }
 
@@ -43,27 +43,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void didChangePlatformBrightness() {
-    final isd =
-        WidgetsBinding.instance.window.platformBrightness == Brightness.dark;
-    toggleBar(val: isd);
-  }
-
-  toggleBar({bool val}) {
-    if (val) {
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: Colors.black,
-        statusBarIconBrightness: Brightness.light,
-        systemNavigationBarIconBrightness: Brightness.light,
-        systemNavigationBarColor: Colors.black,
-      ));
-    } else {
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: Colors.white,
-        statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor: Colors.white,
-      ));
-    }
+    ThemeManager.toggleAppbarTheme(
+        WidgetsBinding.instance.window.platformBrightness == Brightness.dark);
   }
 
   @override

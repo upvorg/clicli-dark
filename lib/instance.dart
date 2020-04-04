@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:event_bus/event_bus.dart';
 
@@ -25,6 +26,38 @@ class Instances {
 
   static init() async {
     sp = await SharedPreferences.getInstance();
+  }
+}
+
+class ThemeManager {
+  static bool isDark() {
+    return Instances.sp.getBool('isDarkTheme');
+  }
+
+  static void toggleAppbarThemeByLocal() {
+    toggleAppbarTheme(isDark());
+  }
+
+  static void toggleAppbarTheme(bool isDark) {
+    isDark ? toggleDarkAppBarTheme() : toggleLightAppBarTheme();
+  }
+
+  static void toggleDarkAppBarTheme() {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.black,
+      statusBarIconBrightness: Brightness.light,
+      systemNavigationBarIconBrightness: Brightness.light,
+      systemNavigationBarColor: Colors.black,
+    ));
+  }
+
+  static toggleLightAppBarTheme() {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.white,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: Colors.white,
+    ));
   }
 }
 

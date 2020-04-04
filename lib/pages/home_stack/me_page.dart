@@ -88,6 +88,20 @@ class _MePageState extends State<MePage> {
 
   bool isDarkTheme = Instances.sp.getBool('isDarkTheme') ?? false;
 
+  toggleDarkMode({bool val}) {
+    if (val == null) {
+      isDarkTheme = !isDarkTheme;
+      Instances.eventBus.fire(ChangeTheme(isDarkTheme));
+      Instances.sp.setBool('isDarkTheme', isDarkTheme);
+    } else {
+      setState(() {
+        isDarkTheme = val;
+        Instances.eventBus.fire(ChangeTheme(val));
+        Instances.sp.setBool('isDarkTheme', val);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final ctx = Theme.of(context);
@@ -135,14 +149,10 @@ class _MePageState extends State<MePage> {
                     trailing: Switch(
                       value: isDarkTheme,
                       onChanged: (bool val) {
-                        setState(() {
-                          isDarkTheme = val;
-                          Instances.eventBus.fire(ChangeTheme(val));
-                          Instances.sp.setBool('isDarkTheme', val);
-                        });
+                        toggleDarkMode(val: val);
                       },
                     ),
-                    onTap: () => {},
+                    onTap: toggleDarkMode,
                   ),
                   ListTile(
                     title: Text('我的追番'),
