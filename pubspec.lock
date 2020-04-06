@@ -29,13 +29,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.5"
-  cached_network_image:
-    dependency: "direct dev"
-    description:
-      name: cached_network_image
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.0.0"
   charcode:
     dependency: transitive
     description:
@@ -104,6 +97,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.1.4"
+  flutter_image_compress:
+    dependency: transitive
+    description:
+      name: flutter_image_compress
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.6.5+1"
   flutter_markdown:
     dependency: "direct dev"
     description:
@@ -177,6 +177,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.3.0"
+  optimized_cached_image:
+    dependency: "direct dev"
+    description:
+      name: optimized_cached_image
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.7"
   package_info:
     dependency: "direct dev"
     description:
