@@ -34,7 +34,7 @@ getRank() {
 }
 
 getPV(int id) {
-  return NetUtils.get('https://jx.clicli.us/get/pv?pid=$id');
+  return NetUtils.get('https://jx.clicli.us/pv/$id');
 }
 
 login(data) {
