@@ -69,30 +69,3 @@ class HomeStackTitleAppbar extends StatelessWidget {
     );
   }
 }
-
-class SliverFixedAppBarDelegate extends SliverPersistentHeaderDelegate {
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return FixedAppBar(
-      title: Text(
-        "集市动态",
-        style: Theme.of(context).textTheme.title.copyWith(
-              fontSize: 21.0,
-            ),
-      ),
-      centerTitle: true,
-    );
-  }
-
-  @override
-  double get maxExtent => 75 + MediaQueryData.fromWindow(ui.window).padding.top;
-
-  @override
-  double get minExtent => 75 + MediaQueryData.fromWindow(ui.window).padding.top;
-
-  @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
-    return false;
-  }
-}
