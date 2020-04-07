@@ -79,7 +79,7 @@ class _PlayerPageState extends State<PlayerPage>
         setHistory();
         await initPlayer();
         widget.data['pv'] =
-            jsonDecode((await getPV(widget.data['id'])).data.result)['pv'];
+            jsonDecode((await getPV(widget.data['id'])).data)['result']['pv'];
         setState(() {});
       }
     }
