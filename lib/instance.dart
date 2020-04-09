@@ -31,7 +31,8 @@ class Instances {
 
 class ThemeManager {
   static bool isDark() {
-    return Instances.sp.getBool('isDarkTheme');
+    final f = Instances.sp.getBool('isDarkTheme');
+    return f == null ? false : f;
   }
 
   static void toggleAppbarThemeByLocal() {

@@ -30,15 +30,13 @@ class FAQPage extends StatelessWidget {
 
 ## 视频下载路径
 
-- /Android/Data/com.cy.clicli_dark/files/
-- 使用任意商品播放器打开即可。
+- /Android/data/com.cy.clicli_dark/files/
+- 使用任意视频播放器打开即可。
 
 ## QQ 群列表
 
 - [CliCli ⑥ 群-异度侵入](https://jq.qq.com/?_wv=1027&k=5n8QbrB)
 - [CliCli ⑦ 群-来点学习资料](https://jq.qq.com/?_wv=1027&k=5BN7gor)
-- [CliCli 番剧报错]()
-- [CliCli 番剧更新补档中队](https://jq.qq.com/?_wv=1027&k=5egQFSv)
 - [admin@clicli.us](mailto:admin@clicli.us)
       ''',
           onTapLink: (url) async {

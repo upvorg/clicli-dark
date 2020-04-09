@@ -31,7 +31,7 @@ class NetUtils {
       }
       response = await request.close();
     } catch (e) {
-      showErrorSnackBar('似乎出了一点问题');
+      showErrorSnackBar('网络似乎出了一点问题');
     }
 
     if (response == null) return Response('');

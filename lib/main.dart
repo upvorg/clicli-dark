@@ -12,6 +12,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize();
   await Instances.init();
+  await Future.delayed(Duration(milliseconds: 1500));
   runApp(MyApp());
 }
 
@@ -62,6 +63,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         primaryColor: Color.fromRGBO(223, 246, 252, 1),
         brightness: Brightness.dark,
         splashFactory: const NoSplashFactory(),
+        cardColor: Colors.black,
+        canvasColor: Colors.black87,
       ),
       home: MyHomePage(),
     );
@@ -118,6 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return WillPopScope(
       onWillPop: doubleBackExit,
       child: Scaffold(
@@ -128,7 +132,8 @@ class _MyHomePageState extends State<MyHomePage> {
             physics: NeverScrollableScrollPhysics(),
           ),
           bottomNavigationBar: BottomAppBar(
-            elevation: 0,
+            color: theme.cardColor,
+            elevation: 0.5,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(
@@ -138,7 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     icon: Icon(
                       pagesIcon[i],
                       color: _currentPageIndex == i
-                          ? Theme.of(context).primaryColor
+                          ? theme.primaryColor
                           : Colors.grey,
                       size: 28,
                     ),

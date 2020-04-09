@@ -176,8 +176,18 @@ class _PlayerPageState extends State<PlayerPage>
   @override
   void initState() {
     super.initState();
-    if (widget.pos != null) currPlayIndex = widget.pos;
-    print(WidgetsBinding.instance.window.platformBrightness);
+    if (widget.pos != null) {
+      currPlayIndex = widget.pos;
+    } else {
+      final historyList = jsonDecode(Instances.sp.getString('history') ?? '[]');
+      if (historyList != null && historyList.length > 0) {
+        final history = historyList.firstWhere(
+          (his) => his['id'] == widget.data['id'],
+          orElse: () => null,
+        );
+        if (history != null) currPlayIndex = history['curr'];
+      }
+    }
     getDetail();
     getFollowBgi();
   }

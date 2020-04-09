@@ -5,6 +5,7 @@ import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -25,11 +26,19 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           FixedAppBar(
+            backgroundColor: Theme.of(context).cardColor,
             centerTitle: true,
             title: Text('登录'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('注册'),
+                onPressed: () {
+                  launch('https://admin.clicli.me/register');
+                },
+              )
+            ],
           ),
           Expanded(
               child: Container(
