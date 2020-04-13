@@ -1,7 +1,9 @@
+import 'package:clicli_dark/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:event_bus/event_bus.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
 
 class Instances {
   static final homeStackscaffoldKey = GlobalKey<ScaffoldState>();
@@ -24,7 +26,10 @@ class Instances {
 
   static EventBus eventBus = EventBus();
 
+  static JPush jp = JPush();
+
   static init() async {
+    Instances.jp.setup(appKey: Config.JPushKey, channel: 'developer-default');
     sp = await SharedPreferences.getInstance();
   }
 }

@@ -25,6 +25,8 @@ dev_dependencies:
   music_volume: any
   package_info: any
   optimized_cached_image: any
+  cached_network_image: any
+  jpush_flutter: any
 
   # chewie
   video_player: any

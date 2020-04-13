@@ -9,7 +9,8 @@ import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:clicli_dark/utils/version_util.dart';
 import 'package:flutter/material.dart';
-import 'package:optimized_cached_image/widgets.dart';
+// import 'package:optimized_cached_image/widgets.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info/package_info.dart';
 
@@ -128,7 +129,7 @@ class _MePageState extends State<MePage> {
                       ),
                     );
                 },
-                leading: OptimizedCacheImage(
+                leading: CachedNetworkImage(
                   imageUrl:
                       'http://q1.qlogo.cn/g?b=qq&nk=${userInfo['qq']}&s=5',
                   height: 40,

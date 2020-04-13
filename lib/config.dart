@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
 class Config {
+  static const String JPushKey = 'a8e4d99ac7f968133d73ff19';
+
   static Future<String> downloadPath() async {
     return (await getExternalStorageDirectory()).path;
   }

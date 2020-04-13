@@ -2,12 +2,7 @@
 
 <p align='center'> :zap: CliCli 纯黑 | <a href='https://app.clicli.me'>Download</a></p>
 
-## Current Flutter Version
-
-> Flutter 1.12.13+hotfix.7 • channel stable • https://github.com/flutter/flutter.git
-> Framework • revision 9f5ff2306b (7 days ago) • 2020-01-26 22:38:26 -0800
-> Engine • revision a67792536c
-> Tools • Dart 2.7.0
+![Dart CI](https://github.com/cliclitv/clicli-dark/workflows/Dart%20CI/badge.svg)
 
 ## Commands
 

@@ -3,7 +3,7 @@ import 'package:clicli_dark/utils/reg_utils.dart';
 import 'package:clicli_dark/widgets/loading2load.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:optimized_cached_image/widgets.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class PostCard extends StatelessWidget {
   final Map data;
@@ -34,7 +34,7 @@ class PostCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            OptimizedCacheImage(
+            CachedNetworkImage(
               imageUrl: getSuo(data['content']),
               placeholder: (ctx, url) => SizedBox(
                 height: 115,

@@ -12,7 +12,15 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize();
   await Instances.init();
-  await Future.delayed(Duration(milliseconds: 1500));
+
+  Instances.jp.addEventHandler(
+    onOpenNotification: (Map<String, dynamic> message) {
+      debugPrint(
+          'flutter 点击推送: ${message['extras']['cn.jpush.android.EXTRA']['id']}');
+      return;
+    },
+  );
+
   runApp(MyApp());
 }
 
@@ -98,6 +106,18 @@ class _MyHomePageState extends State<MyHomePage> {
   int lastBack = 0;
 
   Future<bool> doubleBackExit() {
+    // var fireDate = DateTime.fromMillisecondsSinceEpoch(
+    //     DateTime.now().millisecondsSinceEpoch + 3000);
+    // var localNotification = LocalNotification(
+    //   id: 234,
+    //   title: '我是推送测试标题',
+    //   buildId: 1,
+    //   content: '看到了说明已经成功了',
+    //   fireTime: fireDate,
+    //   subtitle: '一个测试',
+    // );
+    // Instances.jp.sendLocalNotification(localNotification).then((res) {});
+
     int now = DateTime.now().millisecondsSinceEpoch;
     if (now - lastBack > 1000) {
       Instances.scaffoldState.showSnackBar(

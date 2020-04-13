@@ -188,6 +188,7 @@ class _PlayerPageState extends State<PlayerPage>
         if (history != null) currPlayIndex = history['curr'];
       }
     }
+    if (currPlayIndex > 0) showSnackBar('已自动定位到上次播放剧集');
     getDetail();
     getFollowBgi();
   }
