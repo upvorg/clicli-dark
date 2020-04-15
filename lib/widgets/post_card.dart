@@ -80,14 +80,18 @@ class PostCard extends StatelessWidget {
 }
 
 class Grid2RowView extends StatelessWidget {
-  final List<Widget> widgets;
+  final IndexedWidgetBuilder itemBuilder;
   final ScrollController controller;
+  final int len;
 
-  Grid2RowView(this.widgets, {this.controller});
+  Grid2RowView({
+    @required this.itemBuilder,
+    @required this.len,
+    this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final isOdd = widgets.length % 2 > 0;
     return ListView.builder(
       itemBuilder: (ctx, i) {
         return Row(
@@ -96,14 +100,14 @@ class Grid2RowView extends StatelessWidget {
             Expanded(
               child: Container(
                 margin: EdgeInsets.fromLTRB(15, 5, 8, 8),
-                child: widgets[i * 2],
+                child: itemBuilder(ctx, i * 2),
               ),
             ),
-            widgets.length > i * 2 + 1
+            len > i * 2 + 1
                 ? Expanded(
                     child: Container(
                       margin: EdgeInsets.fromLTRB(8, 5, 15, 8),
-                      child: widgets[i * 2 + 1],
+                      child: itemBuilder(ctx, i * 2 + 1),
                     ),
                   )
                 : Expanded(child: Container())
@@ -112,7 +116,7 @@ class Grid2RowView extends StatelessWidget {
       },
       physics: BouncingScrollPhysics(),
       padding: EdgeInsets.all(0),
-      itemCount: isOdd ? widgets.length ~/ 2 + 1 : widgets.length ~/ 2,
+      itemCount: len % 2 > 0 ? len ~/ 2 + 1 : len ~/ 2,
       controller: controller,
     );
   }

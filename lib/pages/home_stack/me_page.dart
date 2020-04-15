@@ -1,18 +1,18 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/pages/bgi_page.dart';
 import 'package:clicli_dark/pages/faq_page.dart';
 import 'package:clicli_dark/pages/history_page.dart';
 import 'package:clicli_dark/pages/login_page.dart';
 import 'package:clicli_dark/utils/toast_utils.dart';
-import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:clicli_dark/utils/version_util.dart';
+import 'package:clicli_dark/widgets/CustomSwitch.dart';
+import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:flutter/material.dart';
-// import 'package:optimized_cached_image/widgets.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info/package_info.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MePage extends StatefulWidget {
   @override
@@ -39,6 +39,7 @@ class _MePageState extends State<MePage> {
   }
 
   Map userInfo;
+
   getLocalProfile() {
     final u = Instances.sp.getString('userinfo');
     userInfo = u != null
@@ -147,7 +148,8 @@ class _MePageState extends State<MePage> {
                 children: <Widget>[
                   ListTile(
                     title: const Text('暗黑模式'),
-                    trailing: Switch(
+                    trailing: CustomSwitch(
+                      activeColor: ctx.primaryColor,
                       value: isDarkTheme,
                       onChanged: (bool val) {
                         toggleDarkMode(val: val);

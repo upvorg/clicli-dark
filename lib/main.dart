@@ -1,25 +1,16 @@
-import 'package:clicli_dark/config.dart';
 import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/pages/home_stack/home_page.dart';
 import 'package:clicli_dark/pages/home_stack/me_page.dart';
 import 'package:clicli_dark/pages/home_stack/time_line_page.dart';
 import 'package:clicli_dark/pages/home_stack/ugc_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await FlutterDownloader.initialize();
   await Instances.init();
-
-  Instances.jp.addEventHandler(
-    onOpenNotification: (Map<String, dynamic> message) {
-      debugPrint(
-          'flutter 点击推送: ${message['extras']['cn.jpush.android.EXTRA']['id']}');
-      return;
-    },
-  );
 
   runApp(MyApp());
 }
@@ -29,13 +20,12 @@ class MyApp extends StatefulWidget {
   State<StatefulWidget> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+class _MyAppState extends State<MyApp> {
   bool isDarkTheme = Instances.sp.getBool('isDarkTheme') ?? false;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
     Instances.eventBus.on<ChangeTheme>().listen((e) {
       setState(() {
         isDarkTheme = e.val;
@@ -45,36 +35,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangePlatformBrightness() {
-    ThemeManager.toggleAppbarTheme(
-        WidgetsBinding.instance.window.platformBrightness == Brightness.dark);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       navigatorKey: Instances.navigatorKey,
       themeMode: isDarkTheme ? ThemeMode.dark : ThemeMode.system,
-      theme: ThemeData(
-        brightness: Brightness.light,
-        primarySwatch: Config.lightColor,
-        splashFactory: const NoSplashFactory(),
-      ),
-      darkTheme: ThemeData(
-        primaryColor: Color.fromRGBO(223, 246, 252, 1),
-        brightness: Brightness.dark,
-        splashFactory: const NoSplashFactory(),
-        cardColor: Colors.black,
-        canvasColor: Colors.black87,
-      ),
+      theme: ThemeManager.lightTheme,
+      darkTheme: ThemeManager.darkTheme,
       home: MyHomePage(),
+      title: 'CliCli',
     );
   }
 }
@@ -85,7 +54,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  static final List<IconData> pagesIcon = [
+  static const List<IconData> pagesIcon = [
     Icons.home,
     Icons.timeline,
     Icons.explore,
@@ -96,6 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final _pageController = PageController();
 
   void _onPageChange(int index) {
+    if (index == _currentPageIndex) return;
     setState(() {
       _currentPageIndex = index;
       _pageController.animateToPage(index,
@@ -105,20 +75,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   int lastBack = 0;
 
-  Future<bool> doubleBackExit() {
-    // var fireDate = DateTime.fromMillisecondsSinceEpoch(
-    //     DateTime.now().millisecondsSinceEpoch + 3000);
-    // var localNotification = LocalNotification(
-    //   id: 234,
-    //   title: '我是推送测试标题',
-    //   buildId: 1,
-    //   content: '看到了说明已经成功了',
-    //   fireTime: fireDate,
-    //   subtitle: '一个测试',
-    // );
-    // Instances.jp.sendLocalNotification(localNotification).then((res) {});
-
-    int now = DateTime.now().millisecondsSinceEpoch;
+  Future<bool> _doubleBackExit() {
+    final int now = DateTime.now().millisecondsSinceEpoch;
     if (now - lastBack > 1000) {
       Instances.scaffoldState.showSnackBar(
         SnackBar(
@@ -127,23 +85,18 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       );
       lastBack = DateTime.now().millisecondsSinceEpoch;
+      return Future.value(false);
     } else {
       //  SystemNavigator.pop();
       return Future.value(true);
     }
-    return Future.value(false);
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return WillPopScope(
-      onWillPop: doubleBackExit,
+      onWillPop: _doubleBackExit,
       child: Scaffold(
           key: Instances.homeStackscaffoldKey,
           body: PageView(
@@ -177,80 +130,4 @@ class _MyHomePageState extends State<MyHomePage> {
           )),
     );
   }
-}
-/*
-
-static const MethodChannel _methodChannel =
-  const MethodChannel('flutter_volume');
-  static Future<double> get volume async => (await _methodChannel.invokeMethod('volume')) as double;
-  static Future setVolume(double volume) => _methodChannel.invokeMethod('setVolume', {"volume" : volume});
-
-
-  */
-
-/*
-
-import 'package:flutter/cupertino.dart';
-
-class RankPage extends StatefulWidget {
-  @override
-  _RankPageState createState() => _RankPageState();
-}
-
-class _RankPageState extends State<RankPage> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold();
-  }
-}
-
-*/
-
-class NoSplashFactory extends InteractiveInkFeatureFactory {
-  const NoSplashFactory();
-
-  InteractiveInkFeature create({
-    @required MaterialInkController controller,
-    @required RenderBox referenceBox,
-    @required Offset position,
-    @required Color color,
-    TextDirection textDirection,
-    bool containedInkWell: false,
-    RectCallback rectCallback,
-    BorderRadius borderRadius,
-    ShapeBorder customBorder,
-    double radius,
-    VoidCallback onRemoved,
-  }) {
-    return new NoSplash(
-      controller: controller,
-      referenceBox: referenceBox,
-      color: color,
-      onRemoved: onRemoved,
-    );
-  }
-}
-
-class NoSplash extends InteractiveInkFeature {
-  NoSplash({
-    @required MaterialInkController controller,
-    @required RenderBox referenceBox,
-    Color color,
-    VoidCallback onRemoved,
-  })  : assert(controller != null),
-        assert(referenceBox != null),
-        super(
-            controller: controller,
-            referenceBox: referenceBox,
-            onRemoved: onRemoved) {
-    controller.addInkFeature(this);
-  }
-
-  @override
-  void paintFeature(Canvas canvas, Matrix4 transform) {}
 }

@@ -42,11 +42,9 @@ class _UGCPageState extends State<UGCPage> with AutomaticKeepAliveClientMixin {
             onRefresh: getUGC,
             scrollController: _scrollController,
             child: Grid2RowView(
-              List<PostCard>.generate(
-                data.length,
-                (i) => PostCard(data[i]),
-              ),
               controller: _scrollController,
+              itemBuilder: (_, i) => PostCard(data[i]),
+              len: data.length,
             ),
           ),
         )

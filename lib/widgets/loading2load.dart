@@ -6,57 +6,44 @@ final loadingWidget = Image.asset(
   height: 150,
 );
 
-class Loading2Load extends StatefulWidget {
-  Loading2Load({@required this.child, @required this.load});
-
-  final Function load;
-  final Widget child;
-  @override
-  State<StatefulWidget> createState() => _Loading2LoadState();
+Widget errorWidget({Function retryFn}) {
+  return Center(
+    child: InkWell(
+      child: Image.asset(
+        'assets/error.png',
+        width: 150,
+        height: 150,
+      ),
+      onTap: retryFn,
+    ),
+  );
 }
 
-class _Loading2LoadState extends State<Loading2Load> {
-  bool loaded = false;
-  bool hasError = false;
+typedef _AsyncWidgetBuilder<T> = Widget Function(
+    BuildContext context, T snapshot);
 
-  @override
-  void initState() {
-    load();
-    super.initState();
-  }
+class Loading2Load<T> extends StatelessWidget {
+  Loading2Load({@required this.builder, @required this.load});
 
-  load() async {
-    try {
-      if (hasError) {
-        setState(() {
-          hasError = false;
-        });
-      }
-      await widget.load();
-      setState(() {
-        loaded = true;
-      });
-    } catch (e) {
-      setState(() {
-        hasError = true;
-        loaded = false;
-      });
-    }
-  }
+  final Future<T> Function() load;
+  final _AsyncWidgetBuilder<T> builder;
 
   @override
   Widget build(BuildContext context) {
-    return hasError
-        ? Center(
-            child: InkWell(
-              child: Image.asset(
-                'assets/error.png',
-                width: 150,
-                height: 150,
-              ),
-              onTap: load,
-            ),
-          )
-        : loaded ? widget.child : Center(child: loadingWidget);
+    return FutureBuilder<T>(
+      future: load(),
+      builder: (_, __) {
+        switch (__.connectionState) {
+          case ConnectionState.active:
+          case ConnectionState.waiting:
+            return Center(child: loadingWidget);
+          case ConnectionState.done:
+            if (__.hasError) return errorWidget(retryFn: load);
+            return builder(_, __.data);
+          default:
+            return Container();
+        }
+      },
+    );
   }
 }

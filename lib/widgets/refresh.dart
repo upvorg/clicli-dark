@@ -96,14 +96,7 @@ class _RefreshWrapperState extends State<RefreshWrapper>
       key: refreshIndicatorKey,
       onRefresh: _onRefresh,
       child: hasError
-          ? Container(
-              child: InkWell(
-                onTap: _onRefresh,
-                child: Image.asset(
-                  'assets/error.png',
-                ),
-              ),
-            )
+          ? errorWidget(retryFn: _onRefresh)
           : firstLoaded
               ? Stack(
                   children: <Widget>[

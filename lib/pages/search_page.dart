@@ -110,8 +110,10 @@ class _SearchPageState extends State<SearchPage> {
                 child: isLoading
                     ? Center(child: loadingWidget)
                     : data.length > 0
-                        ? Grid2RowView(List<PostCard>.generate(
-                            data.length, (i) => PostCard(data[i])))
+                        ? Grid2RowView(
+                            itemBuilder: (_, i) => PostCard(data[i]),
+                            len: data.length,
+                          )
                         : Center(
                             child: Text(
                             '这里什么都没有 (⊙x⊙;)',
@@ -167,8 +169,9 @@ class _TagPageState extends State<TagPage> {
             onRefresh: getTagList,
             onLoadMore: getNextList,
             child: Grid2RowView(
-              List.generate(data.length, (i) => PostCard(data[i])),
               controller: _scrollController,
+              itemBuilder: (_, i) => PostCard(data[i]),
+              len: data.length,
             ),
           ),
         ),

@@ -17,7 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  final List<String> tabs = ["推荐", "最新"];
+  static const List<String> tabs = ["推荐", "最新"];
 
   TabController _tabController;
   ScrollController _scrollController =
@@ -81,6 +81,19 @@ class _HomePageState extends State<HomePage>
     setState(() {});
   }
 
+  void _to(BuildContext _, Widget w) {
+    Navigator.push(_, MaterialPageRoute(builder: (__) => w));
+  }
+
+  void _toScrollTop(int index) {
+    if ([_scrollController, _scrollController1][index] == null) return;
+    [_scrollController, _scrollController1][index].animateTo(
+      0.0,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.ease,
+    );
+  }
+
   get appbar => FixedAppBar(
         automaticallyImplyLeading: false,
         elevation: 0,
@@ -98,9 +111,12 @@ class _HomePageState extends State<HomePage>
                 labelColor: Theme.of(context).primaryColor,
                 labelStyle: TextStyle(fontSize: 18),
                 unselectedLabelStyle: TextStyle(fontSize: 18),
-                tabs: List<Tab>.generate(
+                tabs: List<GestureDetector>.generate(
                   tabs.length,
-                  (index) => Tab(text: tabs[index]),
+                  (index) => GestureDetector(
+                    child: Tab(text: tabs[index]),
+                    onDoubleTap: () => _toScrollTop(index),
+                  ),
                 ),
               ),
               Row(
@@ -111,12 +127,7 @@ class _HomePageState extends State<HomePage>
                       color: Theme.of(context).primaryColor,
                     ),
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => DownloaderPage(),
-                        ),
-                      );
+                      _to(context, DownloaderPage());
                     },
                   ),
                   IconButton(
@@ -125,10 +136,7 @@ class _HomePageState extends State<HomePage>
                       color: Theme.of(context).primaryColor,
                     ),
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => RankPage()));
+                      _to(context, RankPage());
                     },
                   ),
                   IconButton(
@@ -137,12 +145,7 @@ class _HomePageState extends State<HomePage>
                       color: Theme.of(context).primaryColor,
                     ),
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => SearchPage(),
-                        ),
-                      );
+                      _to(context, SearchPage());
                     },
                   ),
                 ],
@@ -167,11 +170,9 @@ class _HomePageState extends State<HomePage>
                   onRefresh: initLoad,
                   scrollController: _scrollController,
                   child: Grid2RowView(
-                    List<PostCard>.generate(
-                      _reList.length,
-                      (i) => PostCard(_reList[i]),
-                    ),
+                    itemBuilder: (_, i) => PostCard(_reList[i]),
                     controller: _scrollController,
+                    len: _reList.length,
                   ),
                 ),
                 RefreshWrapper(
@@ -179,11 +180,9 @@ class _HomePageState extends State<HomePage>
                   onRefresh: initNewList,
                   scrollController: _scrollController1,
                   child: Grid2RowView(
-                    List<PostCard>.generate(
-                      _newList.length,
-                      (i) => PostCard(_newList[i]),
-                    ),
+                    itemBuilder: (_, i) => PostCard(_newList[i]),
                     controller: _scrollController1,
+                    len: _newList.length,
                   ),
                 ),
               ],

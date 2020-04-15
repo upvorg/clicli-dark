@@ -9,7 +9,7 @@ class Config {
   }
 
   static const Map<int, Color> _lightColor = {
-    50: Color.fromRGBO(223, 246, 252, .1),
+    50: Color.fromRGBO(223, 246, 252, 1),
     100: Color.fromRGBO(203, 231, 250, 1),
     200: Color.fromRGBO(183, 210, 247, 1),
     300: Color.fromRGBO(163, 182, 244, 1),
