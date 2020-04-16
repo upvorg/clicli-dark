@@ -63,7 +63,7 @@ class _MePageState extends State<MePage> {
                 content: Text('有新版本可更新！'),
                 actions: <Widget>[
                   FlatButton(
-                    child: Text('算了'),
+                    child: Text('下次一定'),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },

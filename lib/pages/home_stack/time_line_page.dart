@@ -6,7 +6,6 @@ import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:clicli_dark/widgets/loading2load.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:clicli_dark/m/post_m.dart';
 
 class TimeLinePage extends StatefulWidget {
   @override
@@ -23,7 +22,7 @@ class _TimeLineState extends State<TimeLinePage>
   static const List week = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
   List<List> data = [[], [], [], [], [], [], []];
 
-  Future<List<List>> getUGC() async {
+  Future<void> getUGC() async {
     data = [[], [], [], [], [], [], []];
     final res = (await getPost('新番', '', 1, 100, status: 'nowait')).data;
     final List _res = jsonDecode(res)['posts'];
@@ -31,11 +30,12 @@ class _TimeLineState extends State<TimeLinePage>
     _res.forEach((f) {
       final t = f['time'] + ''.replaceAll('-', '/');
       final day = DateTime.parse(t).weekday - 1;
+
       if (data[day] == null) data[day] = [];
       data[day].add(f);
     });
 
-    return data;
+    setState(() {});
   }
 
   @override
@@ -46,10 +46,11 @@ class _TimeLineState extends State<TimeLinePage>
         body: Column(children: <Widget>[
       HomeStackTitleAppbar('时间表'),
       Expanded(
-          child: Loading2Load<List<List>>(
+          child: KLoading2Load(
         load: getUGC,
-        builder: (_, __) {
-          return ListView(
+        child: RefreshIndicator(
+          onRefresh: getUGC,
+          child: ListView(
             physics: BouncingScrollPhysics(),
             padding: EdgeInsets.all(0),
             children: [
@@ -92,8 +93,8 @@ class _TimeLineState extends State<TimeLinePage>
                   ],
                 )
             ],
-          );
-        },
+          ),
+        ),
       ))
     ]));
   }

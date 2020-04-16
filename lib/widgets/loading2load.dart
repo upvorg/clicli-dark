@@ -47,3 +47,58 @@ class Loading2Load<T> extends StatelessWidget {
     );
   }
 }
+
+class KLoading2Load extends StatefulWidget {
+  KLoading2Load({@required this.child, @required this.load});
+
+  final Function load;
+  final Widget child;
+  @override
+  State<StatefulWidget> createState() => _KLoading2LoadState();
+}
+
+class _KLoading2LoadState extends State<KLoading2Load> {
+  bool loaded = false;
+  bool hasError = false;
+
+  @override
+  void initState() {
+    load();
+    super.initState();
+  }
+
+  load() async {
+    try {
+      if (hasError) {
+        setState(() {
+          hasError = false;
+        });
+      }
+      await widget.load();
+      setState(() {
+        loaded = true;
+      });
+    } catch (e) {
+      setState(() {
+        hasError = true;
+        loaded = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return hasError
+        ? Center(
+            child: InkWell(
+              child: Image.asset(
+                'assets/error.png',
+                width: 150,
+                height: 150,
+              ),
+              onTap: load,
+            ),
+          )
+        : loaded ? widget.child : Center(child: loadingWidget);
+  }
+}
