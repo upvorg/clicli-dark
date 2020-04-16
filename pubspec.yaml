@@ -31,6 +31,7 @@ dev_dependencies:
   video_player: any
   screen: any
   open_iconic_flutter: any
+  auto_orientation: any
 
 flutter:
   uses-material-design: true
