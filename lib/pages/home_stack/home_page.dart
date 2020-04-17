@@ -5,7 +5,6 @@ import 'package:clicli_dark/pages/downloader_page.dart';
 import 'package:clicli_dark/pages/rank_page.dart';
 import 'package:clicli_dark/pages/search_page.dart';
 import 'package:clicli_dark/widgets//post_card.dart';
-import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:clicli_dark/widgets/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +19,9 @@ class _HomePageState extends State<HomePage>
   static const List<String> tabs = ["推荐", "最新"];
 
   TabController _tabController;
-  ScrollController _scrollController =
+  final ScrollController _scrollController =
       new ScrollController(keepScrollOffset: true);
-  ScrollController _scrollController1 =
+  final ScrollController _scrollController1 =
       new ScrollController(keepScrollOffset: true);
 
   List<int> page = [1, 1];
@@ -86,108 +85,104 @@ class _HomePageState extends State<HomePage>
   }
 
   void _toScrollTop(int index) {
-    if ([_scrollController, _scrollController1][index] == null) return;
-    [_scrollController, _scrollController1][index].animateTo(
-      0.0,
-      duration: Duration(milliseconds: 300),
-      curve: Curves.ease,
-    );
+    [_scrollController, _scrollController1][index]?.animateTo(0.0,
+        duration: Duration(milliseconds: 300), curve: Curves.ease);
   }
 
-  get appbar => FixedAppBar(
+  get appbar => AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         automaticallyImplyLeading: false,
         elevation: 0,
-        title: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              TabBar(
-                controller: _tabController,
-                isScrollable: true,
-                indicator: const BoxDecoration(),
-                indicatorPadding:
-                    EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                labelColor: Theme.of(context).primaryColor,
-                labelStyle: TextStyle(fontSize: 18),
-                unselectedLabelStyle: TextStyle(fontSize: 18),
-                tabs: List<GestureDetector>.generate(
-                  tabs.length,
-                  (index) => GestureDetector(
-                    child: Tab(text: tabs[index]),
-                    onDoubleTap: () => _toScrollTop(index),
-                  ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            TabBar(
+              controller: _tabController,
+              isScrollable: true,
+              indicator: const BoxDecoration(),
+              indicatorPadding:
+                  EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+              labelColor: Theme.of(context).primaryColor,
+              labelStyle: TextStyle(fontSize: 18),
+              unselectedLabelStyle: TextStyle(fontSize: 18),
+              tabs: List<GestureDetector>.generate(
+                tabs.length,
+                (index) => GestureDetector(
+                  child: Tab(text: tabs[index]),
+                  onDoubleTap: () => _toScrollTop(index),
                 ),
               ),
-              Row(
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(
-                      Icons.file_download,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    onPressed: () {
-                      _to(context, DownloaderPage());
-                    },
+            ),
+            Row(
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Icons.file_download,
+                    color: Theme.of(context).primaryColor,
                   ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.whatshot,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    onPressed: () {
-                      _to(context, RankPage());
-                    },
+                  onPressed: () {
+                    _to(context, DownloaderPage());
+                  },
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.whatshot,
+                    color: Theme.of(context).primaryColor,
                   ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.search,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    onPressed: () {
-                      _to(context, SearchPage());
-                    },
+                  onPressed: () {
+                    _to(context, RankPage());
+                  },
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.search,
+                    color: Theme.of(context).primaryColor,
                   ),
-                ],
-              )
-            ],
-          ),
+                  onPressed: () {
+                    _to(context, SearchPage());
+                  },
+                ),
+              ],
+            )
+          ],
         ),
       );
 
   @override
+  void dispose() {
+    _scrollController?.dispose();
+    _scrollController1?.dispose();
+    _tabController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      appBar: appbar,
+      body: TabBarView(
+        controller: _tabController,
         children: <Widget>[
-          appbar,
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: <Widget>[
-                RefreshWrapper(
-                  onLoadMore: _loadData,
-                  onRefresh: initLoad,
-                  scrollController: _scrollController,
-                  child: Grid2RowView(
-                    itemBuilder: (_, i) => PostCard(_reList[i]),
-                    controller: _scrollController,
-                    len: _reList.length,
-                  ),
-                ),
-                RefreshWrapper(
-                  onLoadMore: _loadData,
-                  onRefresh: initNewList,
-                  scrollController: _scrollController1,
-                  child: Grid2RowView(
-                    itemBuilder: (_, i) => PostCard(_newList[i]),
-                    controller: _scrollController1,
-                    len: _newList.length,
-                  ),
-                ),
-              ],
+          RefreshWrapper(
+            onLoadMore: _loadData,
+            onRefresh: initLoad,
+            scrollController: _scrollController,
+            child: Grid2RowView(
+              itemBuilder: (_, i) => PostCard(_reList[i]),
+              controller: _scrollController,
+              len: _reList.length,
             ),
-          )
+          ),
+          RefreshWrapper(
+            onLoadMore: _loadData,
+            onRefresh: initNewList,
+            scrollController: _scrollController1,
+            child: Grid2RowView(
+              itemBuilder: (_, i) => PostCard(_newList[i]),
+              controller: _scrollController1,
+              len: _newList.length,
+            ),
+          ),
         ],
       ),
     );

@@ -66,7 +66,6 @@ class _PlayerPageState extends State<PlayerPage>
         jsonDecode((await getVideoList(widget.data['id'])).data)['videos'] ??
             [];
     if (videoList.length > 0) {
-      ThemeManager.toggleDarkAppBarTheme();
       Screen.keepOn(true);
       _tabController = TabController(length: 2, vsync: this);
       WidgetsBinding.instance.addObserver(this);
@@ -217,8 +216,7 @@ class _PlayerPageState extends State<PlayerPage>
     // _videoPlayerController?.removeListener(autoNextLis);
     _chewieController?.dispose();
     _videoPlayerController?.dispose();
-
-    ThemeManager.toggleAppbarThemeByLocal();
+    _tabController?.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
 

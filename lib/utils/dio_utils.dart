@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:clicli_dark/utils/toast_utils.dart';
+import 'package:flutter/foundation.dart';
 
 class Response {
   Response(this.data);
@@ -31,6 +32,7 @@ class NetUtils {
       }
       response = await request.close();
     } catch (e) {
+      if (kDebugMode) debugPrint(e);
       showErrorSnackBar('网络似乎出了一点问题');
     }
 

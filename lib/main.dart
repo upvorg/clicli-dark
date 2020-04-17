@@ -1,8 +1,11 @@
 import 'package:clicli_dark/instance.dart';
+import 'package:clicli_dark/pages/bgi_page.dart';
 import 'package:clicli_dark/pages/home_stack/home_page.dart';
 import 'package:clicli_dark/pages/home_stack/me_page.dart';
 import 'package:clicli_dark/pages/home_stack/time_line_page.dart';
 import 'package:clicli_dark/pages/home_stack/ugc_page.dart';
+import 'package:clicli_dark/pages/login_page.dart';
+import 'package:clicli_dark/pages/player_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 
@@ -12,15 +15,21 @@ void main() async {
   await FlutterDownloader.initialize();
   await Instances.init();
 
-  runApp(MyApp());
+  // SystemChrome.setSystemUIOverlayStyle(
+  //   SystemUiOverlayStyle(
+  //     statusBarColor: Colors.transparent,
+  //   ),
+  // );
+
+  runApp(CliCliApp());
 }
 
-class MyApp extends StatefulWidget {
+class CliCliApp extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _MyAppState();
+  State<StatefulWidget> createState() => _CliCliAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _CliCliAppState extends State<CliCliApp> {
   bool isDarkTheme = Instances.sp.getBool('isDarkTheme') ?? false;
 
   @override
@@ -30,8 +39,43 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         isDarkTheme = e.val;
       });
-      ThemeManager.toggleAppbarTheme(e.val);
     });
+  }
+
+  Route<dynamic> _onGenerateRoute(RouteSettings settings) {
+    Map<String, WidgetBuilder> routes = {
+      'CliCli://': (_) => HomePage(),
+      'CliCli://home': (_) => HomePage(),
+      'CliCli://player': (_) => PlayerPage(),
+      'CliCli://login': (_) => LoginPage(),
+      'CliCli://fav': (_) => BgiPage(),
+      // '/webView': (_) {
+      //   Map arg = settings.arguments;
+      //   return WebviewScaffold(
+      //     url: arg['url'],
+      //     appBar: AppBar(
+      //       textTheme: TextTheme(
+      //         title: TextStyle(
+      //           color: Colors.white,
+      //           fontSize: 18,
+      //         ),
+      //       ),
+      //       title: Text(arg['title']),
+      //     ),
+      //   );
+      // },
+    };
+
+    final WidgetBuilder widget = routes[settings.name];
+
+    if (widget != null) {
+      return MaterialPageRoute<void>(
+        settings: settings,
+        builder: routes[settings.name],
+      );
+    }
+
+    return null;
   }
 
   @override
@@ -44,6 +88,7 @@ class _MyAppState extends State<MyApp> {
       darkTheme: ThemeManager.darkTheme,
       home: MyHomePage(),
       title: 'CliCli',
+      onGenerateRoute: _onGenerateRoute,
     );
   }
 }
@@ -60,6 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Icons.explore,
     Icons.supervised_user_circle
   ];
+  final _pages = [HomePage(), TimeLinePage(), UGCPage(), MePage()];
 
   int _currentPageIndex = 0;
   final _pageController = PageController();
@@ -68,8 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (index == _currentPageIndex) return;
     setState(() {
       _currentPageIndex = index;
-      _pageController.animateToPage(index,
-          duration: const Duration(milliseconds: 1), curve: Curves.ease);
+      _pageController.jumpToPage(index);
     });
   }
 
@@ -93,41 +138,56 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
+  void dispose() {
+    _pageController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return WillPopScope(
       onWillPop: _doubleBackExit,
       child: Scaffold(
-          key: Instances.homeStackscaffoldKey,
-          body: PageView(
-            controller: _pageController,
-            children: [HomePage(), TimeLinePage(), UGCPage(), MePage()],
-            physics: NeverScrollableScrollPhysics(),
-          ),
-          bottomNavigationBar: BottomAppBar(
-            color: theme.cardColor,
-            elevation: 0.5,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: List.generate(
-                pagesIcon.length,
-                (i) => Expanded(
-                  child: IconButton(
-                    icon: Icon(
-                      pagesIcon[i],
-                      color: _currentPageIndex == i
-                          ? theme.primaryColor
-                          : Colors.grey,
-                      size: 28,
-                    ),
-                    onPressed: () {
-                      _onPageChange(i);
-                    },
+        key: Instances.homeStackscaffoldKey,
+        body: PageView.builder(
+          itemCount: pagesIcon.length,
+          controller: _pageController,
+          itemBuilder: (context, index) => _pages[index],
+          physics: NeverScrollableScrollPhysics(),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          color: theme.cardColor,
+          elevation: 0.5,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: List.generate(
+              pagesIcon.length,
+              (i) => Expanded(
+                child: IconButton(
+                  icon: Icon(
+                    pagesIcon[i],
+                    color: _currentPageIndex == i
+                        ? theme.primaryColor
+                        : Colors.grey,
+                    size: 28,
                   ),
+                  onPressed: () {
+                    _onPageChange(i);
+                  },
                 ),
               ),
             ),
-          )),
+          ),
+        ),
+        floatingActionButton: _currentPageIndex != 0
+            ? null
+            : FloatingActionButton(
+                onPressed: () => Navigator.pushNamed(context, 'CliCli://fav'),
+                tooltip: 'FAV',
+                child: Icon(Icons.live_tv),
+              ),
+      ),
     );
   }
 }

@@ -41,8 +41,9 @@ class _RefreshWrapperState extends State<RefreshWrapper>
 
     _onRefresh();
     widget.scrollController.addListener(() {
-      if (widget.scrollController.position.pixels >=
-          widget.scrollController.position.maxScrollExtent - 300) {
+      if (widget.scrollController.position.maxScrollExtent -
+              widget.scrollController.position.pixels <=
+          300) {
         if (!_isLoading) _onLoadMore();
       }
     });

@@ -30,6 +30,12 @@ class _UGCPageState extends State<UGCPage> with AutomaticKeepAliveClientMixin {
   }
 
   @override
+  void dispose() {
+    _scrollController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
