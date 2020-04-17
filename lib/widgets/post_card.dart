@@ -24,9 +24,9 @@ class PostCard extends StatelessWidget {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).primaryColor.withOpacity(0.2),
-              offset: Offset(2, 2),
-              blurRadius: 5,
+              color: Theme.of(context).accentColor.withOpacity(0.2),
+              offset: Offset(1, 1),
+              blurRadius: 2,
             )
           ],
           color: Theme.of(context).cardColor,

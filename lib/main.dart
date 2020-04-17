@@ -7,19 +7,16 @@ import 'package:clicli_dark/pages/home_stack/ugc_page.dart';
 import 'package:clicli_dark/pages/login_page.dart';
 import 'package:clicli_dark/pages/player_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await FlutterDownloader.initialize();
   await Instances.init();
-
-  // SystemChrome.setSystemUIOverlayStyle(
-  //   SystemUiOverlayStyle(
-  //     statusBarColor: Colors.transparent,
-  //   ),
-  // );
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+  );
 
   runApp(CliCliApp());
 }
@@ -42,8 +39,8 @@ class _CliCliAppState extends State<CliCliApp> {
     });
   }
 
-  Route<dynamic> _onGenerateRoute(RouteSettings settings) {
-    Map<String, WidgetBuilder> routes = {
+  Route _onGenerateRoute(RouteSettings settings) {
+    final Map<String, WidgetBuilder> routes = {
       'CliCli://': (_) => HomePage(),
       'CliCli://home': (_) => HomePage(),
       'CliCli://player': (_) => PlayerPage(),
@@ -157,8 +154,6 @@ class _MyHomePageState extends State<MyHomePage> {
           physics: NeverScrollableScrollPhysics(),
         ),
         bottomNavigationBar: BottomAppBar(
-          color: theme.cardColor,
-          elevation: 0.5,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: List.generate(
@@ -168,7 +163,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   icon: Icon(
                     pagesIcon[i],
                     color: _currentPageIndex == i
-                        ? theme.primaryColor
+                        ? theme.accentColor
                         : Colors.grey,
                     size: 28,
                   ),

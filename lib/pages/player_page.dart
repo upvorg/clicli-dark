@@ -13,6 +13,7 @@ import 'package:clicli_dark/widgets/common_widget.dart';
 import 'package:clicli_dark/widgets/loading2load.dart' show loadingWidget;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -218,6 +219,9 @@ class _PlayerPageState extends State<PlayerPage>
     _videoPlayerController?.dispose();
     _tabController?.dispose();
     WidgetsBinding.instance.removeObserver(this);
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+    );
   }
 
   @override
@@ -230,105 +234,120 @@ class _PlayerPageState extends State<PlayerPage>
       );
     }
     final detail = widget.data;
-    return Scaffold(
-        body: SafeArea(
-      child: videoList.length > 0
-          ? Column(
-              children: <Widget>[
-                _chewieController != null
-                    ? Chewie(controller: _chewieController)
-                    : AspectRatio(
-                        aspectRatio: 16 / 9,
-                        child: Container(
-                          color: Colors.black,
-                          child: Center(
-                              child: Text(
-                            'loading ···',
-                            style: TextStyle(color: Colors.white),
-                          )),
+    return AnnotatedRegion(
+      value: videoList.length > 0
+          ? SystemUiOverlayStyle(
+              statusBarColor: Colors.black,
+              statusBarIconBrightness: Brightness.light,
+              systemNavigationBarIconBrightness: Brightness.light,
+              systemNavigationBarColor: Colors.black,
+            )
+          : SystemUiOverlayStyle(
+              statusBarColor: Colors.white,
+              statusBarIconBrightness: Brightness.dark,
+              systemNavigationBarIconBrightness: Brightness.dark,
+              systemNavigationBarColor: Colors.white,
+            ),
+      child: Scaffold(
+          body: SafeArea(
+        child: videoList.length > 0
+            ? Column(
+                children: <Widget>[
+                  _chewieController != null
+                      ? Chewie(controller: _chewieController)
+                      : AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: Container(
+                            color: Colors.black,
+                            child: Center(
+                                child: Text(
+                              'loading ···',
+                              style: TextStyle(color: Colors.white),
+                            )),
+                          ),
                         ),
+                  Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        boxShadow: [
+                          BoxShadow(
+                            color:
+                                Theme.of(context).accentColor.withOpacity(0.2),
+                            offset: Offset(0, 10),
+                            blurRadius: 12,
+                            spreadRadius: -10,
+                          ),
+                        ],
                       ),
-                Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      boxShadow: [
-                        BoxShadow(
-                          color:
-                              Theme.of(context).primaryColor.withOpacity(0.2),
-                          offset: Offset(0, 10),
-                          blurRadius: 12,
-                          spreadRadius: -10,
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        TabBar(
-                          tabs: <Widget>[Tab(text: '剧集'), Tab(text: '简介')],
-                          controller: _tabController,
-                          isScrollable: true,
-                          indicatorSize: TabBarIndicatorSize.tab,
-                          labelColor: Theme.of(context).primaryColor,
-                          indicatorPadding:
-                              EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                          labelStyle: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          unselectedLabelStyle: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                        GestureDetector(
-                          onDoubleTap: toggleShowDownloadIcon,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            child: ClipOval(
-                              child: Image.network(
-                                getAvatar(avatar: detail['uqq'] ?? ''),
-                                width: 35,
-                                height: 35,
-                              ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          TabBar(
+                            tabs: <Widget>[Tab(text: '剧集'), Tab(text: '简介')],
+                            controller: _tabController,
+                            isScrollable: true,
+                            indicatorSize: TabBarIndicatorSize.tab,
+                            labelColor: Theme.of(context).accentColor,
+                            indicatorPadding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 0),
+                            labelStyle: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            unselectedLabelStyle: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.normal,
                             ),
                           ),
-                        )
+                          GestureDetector(
+                            onDoubleTap: toggleShowDownloadIcon,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              child: ClipOval(
+                                child: Image.network(
+                                  getAvatar(avatar: detail['uqq'] ?? ''),
+                                  width: 35,
+                                  height: 35,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      )),
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: <Widget>[
+                        buildProfile(context),
+                        PlayerProfile(detail, videoList.length > 0)
                       ],
-                    )),
-                Expanded(
-                  child: TabBarView(
-                    controller: _tabController,
-                    children: <Widget>[
-                      buildProfile(context),
-                      PlayerProfile(detail, videoList.length > 0)
+                    ),
+                  )
+                ],
+              )
+            : Column(
+                children: <Widget>[
+                  FixedAppBar(
+                    title: Text(
+                      detail['title'],
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    actions: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.more_horiz),
+                        onPressed: () {
+                          showSnackBar('这里不可以哦 o(*////▽////*)q');
+                        },
+                      )
                     ],
                   ),
-                )
-              ],
-            )
-          : Column(
-              children: <Widget>[
-                FixedAppBar(
-                  title: Text(
-                    detail['title'],
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  actions: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.more_horiz),
-                      onPressed: () {
-                        showSnackBar('这里不可以哦 o(*////▽////*)q');
-                      },
-                    )
-                  ],
-                ),
-                Expanded(child: PlayerProfile(detail, videoList.length > 0))
-              ],
-            ),
-    ));
+                  Expanded(child: PlayerProfile(detail, videoList.length > 0))
+                ],
+              ),
+      )),
+    );
   }
 
   bool hasFollowBgi = false;
@@ -385,10 +404,10 @@ class _PlayerPageState extends State<PlayerPage>
                 onTap: followBgi,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                  color: theme.primaryColor.withOpacity(0.4),
+                  color: theme.accentColor.withOpacity(0.4),
                   child: Text(
                     hasFollowBgi ? '已追番' : '追番',
-                    style: TextStyle(color: theme.primaryColor),
+                    style: TextStyle(color: theme.accentColor),
                   ),
                 ),
               )
@@ -399,9 +418,9 @@ class _PlayerPageState extends State<PlayerPage>
             children: <Widget>[
               Text('GV${widget.data['id']}  ', style: caption),
               Text(' $m-$d  ', style: caption),
-              Icon(Icons.whatshot, size: 12, color: theme.primaryColor),
+              Icon(Icons.whatshot, size: 12, color: theme.accentColor),
               Text('${detail['pv']?.toString() ?? 0} ℃',
-                  style: caption.copyWith(color: theme.primaryColor)),
+                  style: caption.copyWith(color: theme.accentColor)),
             ],
           ),
           SizedBox(height: 10),
@@ -428,14 +447,14 @@ class _PlayerPageState extends State<PlayerPage>
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(4)),
-                      color: Theme.of(context).primaryColor.withOpacity(0.2),
+                      color: Theme.of(context).accentColor.withOpacity(0.2),
                     ),
                     margin: EdgeInsets.symmetric(horizontal: 2),
                     padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     child: Text(
                       tags[i],
                       style: TextStyle(
-                        color: Theme.of(context).primaryColor.withOpacity(0.6),
+                        color: Theme.of(context).accentColor.withOpacity(0.6),
                       ),
                     ),
                   ),
@@ -447,7 +466,7 @@ class _PlayerPageState extends State<PlayerPage>
   }
 
   Widget buildVideoList() {
-    final color = Theme.of(context).primaryColor;
+    final color = Theme.of(context).accentColor;
     return Column(
         children: List.generate(videoList.length, (int i) {
       return Container(
@@ -578,11 +597,11 @@ class _PlayerProfile extends State<PlayerProfile>
               border: Border(
                   left: BorderSide(
                 width: 2.0,
-                color: Theme.of(context).primaryColor,
+                color: Theme.of(context).accentColor,
               )),
             ),
             code: TextStyle(fontFamily: "Source Code Pro"),
-            a: TextStyle(color: Theme.of(context).primaryColor),
+            a: TextStyle(color: Theme.of(context).accentColor),
           )),
     );
   }

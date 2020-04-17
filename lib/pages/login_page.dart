@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
         title: Text('登录'),
         actions: <Widget>[
           FlatButton(
-            child: Text('注册', style: TextStyle(color: Colors.white)),
+            child: Text('注册'),
             onPressed: () {
               launch('https://admin.clicli.me/register');
             },

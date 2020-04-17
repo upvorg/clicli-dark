@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:clicli_dark/api/post.dart';
 import 'package:clicli_dark/widgets//post_card.dart';
-import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:clicli_dark/widgets/loading2load.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,10 +42,7 @@ class _TimeLineState extends State<TimeLinePage>
     super.build(context);
     final theme = Theme.of(context);
     return Scaffold(
-        body: Column(children: <Widget>[
-      HomeStackTitleAppbar('时间表'),
-      Expanded(
-          child: KLoading2Load(
+      body: KLoading2Load(
         load: getUGC,
         child: RefreshIndicator(
           onRefresh: getUGC,
@@ -62,7 +58,7 @@ class _TimeLineState extends State<TimeLinePage>
                       child: Text(
                         week[i],
                         style: theme.textTheme.title
-                            .copyWith(color: theme.primaryColor),
+                            .copyWith(color: theme.accentColor),
                       ),
                     ),
                     for (int j = 0;
@@ -95,7 +91,7 @@ class _TimeLineState extends State<TimeLinePage>
             ],
           ),
         ),
-      ))
-    ]));
+      ),
+    );
   }
 }

@@ -35,94 +35,68 @@ class Instances {
 }
 
 class ThemeManager {
+  static bool _isDark;
+  static const bool amoledDark = true;
+  static const currentColor = Color.fromRGBO(223, 246, 252, .9);
+
+  static bool isDark() {
+    _isDark = Instances.sp.getBool('isDarkTheme');
+    return _isDark == null ? false : _isDark;
+  }
+
   static ThemeData get lightTheme => ThemeData(
         brightness: Brightness.light,
         splashFactory: const NoSplashFactory(),
         primarySwatch: Config.lightColor,
+        appBarTheme: AppBarTheme(brightness: Brightness.light, elevation: 0),
+        bottomAppBarTheme: BottomAppBarTheme(elevation: 0.0),
+        primaryColor: Colors.white,
+        accentColor: Color.fromRGBO(141, 126, 235, 1),
       );
-
-  static bool amoledDark = true;
 
   static ThemeData get darkTheme => ThemeData(
         brightness: Brightness.dark,
         splashFactory: const NoSplashFactory(),
-        primarySwatch: Config.darkColor,
-        primaryColor: Color.fromRGBO(223, 246, 252, 1),
-        cardColor: Colors.black,
-        canvasColor: Colors.black87,
-//        brightness: Brightness.dark,
-//        primaryColor: amoledDark ? Colors.black : Colors.grey[900],
-//        primaryColorBrightness: Brightness.dark,
-//        primaryColorLight: amoledDark ? Colors.black : Colors.grey[900],
-//        primaryColorDark: amoledDark ? Colors.black : Colors.grey[900],
-//        accentColor: Color.fromRGBO(223, 246, 252, .1),
-//        accentColorBrightness: Brightness.dark,
-//        canvasColor: amoledDark ? Color(0xFF111111) : Colors.grey[850],
-//        scaffoldBackgroundColor: amoledDark ? Colors.black : Colors.grey[900],
-//        bottomAppBarColor: amoledDark ? Colors.black : Colors.grey[900],
-//        cardColor: amoledDark ? Colors.black : Colors.grey[900],
-//        highlightColor: Colors.transparent,
-//        splashFactory: const NoSplashFactory(),
-//        toggleableActiveColor: Color.fromRGBO(223, 246, 252, 1),
-//        cursorColor: Color.fromRGBO(223, 246, 252, 1),
-//        textSelectionColor: Color.fromRGBO(223, 246, 252, 1).withAlpha(100),
-//        textSelectionHandleColor: Color.fromRGBO(223, 246, 252, 1),
-//        indicatorColor: Color.fromRGBO(223, 246, 252, 1),
-//        appBarTheme: AppBarTheme(brightness: Brightness.dark, elevation: 0),
-//        iconTheme: IconThemeData(color: Colors.grey[350]),
-//        primaryIconTheme: IconThemeData(color: Colors.grey[350]),
-//        tabBarTheme: TabBarTheme(
-//          indicatorSize: TabBarIndicatorSize.tab,
-//          labelColor: Colors.grey[200],
-//          unselectedLabelColor: Colors.grey[200],
-//        ),
-//        textTheme: TextTheme(
-//          title: TextStyle(color: Colors.grey[350]),
-//          body1: TextStyle(color: Colors.grey[350]),
-//          body2: TextStyle(color: Colors.grey[500]),
-//          button: TextStyle(color: Colors.grey[350]),
-//          caption: TextStyle(color: Colors.grey[500]),
-//          subhead: TextStyle(color: Colors.grey[500]),
-//          display4: TextStyle(color: Colors.grey[500]),
-//          display3: TextStyle(color: Colors.grey[500]),
-//          display2: TextStyle(color: Colors.grey[500]),
-//          display1: TextStyle(color: Colors.grey[500]),
-//          headline: TextStyle(color: Colors.grey[350]),
-//          overline: TextStyle(color: Colors.grey[350]),
-//        ),
-//        buttonColor: Color.fromRGBO(223, 246, 252, 1),
+        primaryColor: amoledDark ? Colors.black : Colors.grey[900],
+        primaryColorBrightness: Brightness.dark,
+        primaryColorLight: amoledDark ? Colors.black : Colors.grey[900],
+        primaryColorDark: amoledDark ? Colors.black : Colors.grey[900],
+        accentColor: currentColor,
+        accentColorBrightness: Brightness.dark,
+        canvasColor: amoledDark ? Color(0xFF111111) : Colors.grey[850],
+        scaffoldBackgroundColor: amoledDark ? Colors.black : Colors.grey[900],
+        bottomAppBarColor: amoledDark ? Colors.black : Colors.grey[900],
+        cardColor: amoledDark ? Colors.black : Colors.grey[900],
+        highlightColor: Colors.transparent,
+        toggleableActiveColor: currentColor,
+        cursorColor: currentColor,
+        textSelectionColor: currentColor.withAlpha(100),
+        textSelectionHandleColor: currentColor,
+        indicatorColor: currentColor,
+        appBarTheme: AppBarTheme(brightness: Brightness.dark, elevation: 0),
+        iconTheme: IconThemeData(color: Colors.grey[350]),
+        primaryIconTheme: IconThemeData(color: Colors.grey[350]),
+        tabBarTheme: TabBarTheme(
+          indicatorSize: TabBarIndicatorSize.tab,
+          labelColor: Colors.grey[200],
+          unselectedLabelColor: Colors.grey[200],
+        ),
+        textTheme: TextTheme(
+          title: TextStyle(color: Colors.grey[350]),
+          body1: TextStyle(color: Colors.grey[350]),
+          body2: TextStyle(color: Colors.grey[500]),
+          button: TextStyle(color: Colors.grey[350]),
+          caption: TextStyle(color: Colors.grey[500]),
+          subhead: TextStyle(color: Colors.grey[500]),
+          display4: TextStyle(color: Colors.grey[500]),
+          display3: TextStyle(color: Colors.grey[500]),
+          display2: TextStyle(color: Colors.grey[500]),
+          display1: TextStyle(color: Colors.grey[500]),
+          headline: TextStyle(color: Colors.grey[350]),
+          overline: TextStyle(color: Colors.grey[350]),
+        ),
+        buttonColor: currentColor,
       );
-
-  static bool isDark() {
-    final f = Instances.sp.getBool('isDarkTheme');
-    return f == null ? false : f;
-  }
-
-  static void toggleAppbarThemeByLocal() {
-    toggleAppbarTheme(isDark());
-  }
-
-  static void toggleAppbarTheme(bool isDark) {
-    isDark ? toggleDarkAppBarTheme() : toggleLightAppBarTheme();
-  }
-
-  static void toggleDarkAppBarTheme() {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.black,
-      statusBarIconBrightness: Brightness.light,
-      systemNavigationBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: Colors.black,
-    ));
-  }
-
-  static toggleLightAppBarTheme() {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.white,
-      statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: Colors.white,
-    ));
-  }
 }
 
 class NoSplashFactory extends InteractiveInkFeatureFactory {

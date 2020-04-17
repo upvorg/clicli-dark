@@ -54,7 +54,7 @@ class HomeStackTitleAppbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle =
-        TextStyle(color: Theme.of(context).primaryColor, fontSize: 24);
+        TextStyle(color: Theme.of(context).accentColor, fontSize: 24);
     return FixedAppBar(
       elevation: 0,
       automaticallyImplyLeading: false,

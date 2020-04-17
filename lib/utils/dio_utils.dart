@@ -32,7 +32,7 @@ class NetUtils {
       }
       response = await request.close();
     } catch (e) {
-      if (kDebugMode) debugPrint(e);
+      if (kDebugMode) debugPrint('$e');
       showErrorSnackBar('网络似乎出了一点问题');
     }
 

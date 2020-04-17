@@ -19,7 +19,10 @@ class MePage extends StatefulWidget {
   _MePageState createState() => _MePageState();
 }
 
-class _MePageState extends State<MePage> {
+class _MePageState extends State<MePage> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   String version = '';
 
   @override
@@ -106,6 +109,7 @@ class _MePageState extends State<MePage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final ctx = Theme.of(context);
     return Scaffold(
         body: SafeArea(
@@ -149,7 +153,7 @@ class _MePageState extends State<MePage> {
                   ListTile(
                     title: const Text('暗黑模式'),
                     trailing: CustomSwitch(
-                      activeColor: ctx.primaryColor,
+                      activeColor: ctx.accentColor,
                       value: isDarkTheme,
                       onChanged: (bool val) {
                         toggleDarkMode(val: val);

@@ -66,7 +66,7 @@ class _SearchPageState extends State<SearchPage> {
                 margin: EdgeInsets.all(2),
                 height: 35,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor.withOpacity(0.1),
+                  color: Theme.of(context).accentColor.withOpacity(0.1),
                   borderRadius: BorderRadius.all(Radius.circular(4)),
                 ),
                 child: Row(
@@ -76,8 +76,7 @@ class _SearchPageState extends State<SearchPage> {
                         padding: EdgeInsets.all(4),
                         child: Icon(
                           Icons.arrow_back,
-                          color:
-                              Theme.of(context).primaryColor.withOpacity(0.6),
+                          color: Theme.of(context).accentColor.withOpacity(0.6),
                         ),
                       ),
                       onTap: () => Navigator.pop(context),
@@ -118,7 +117,7 @@ class _SearchPageState extends State<SearchPage> {
                             child: Text(
                             '这里什么都没有 (⊙x⊙;)',
                             style: TextStyle(
-                              color: Theme.of(context).primaryColor,
+                              color: Theme.of(context).accentColor,
                               fontSize: 16,
                             ),
                           )),

@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:clicli_dark/api/post.dart';
-import 'package:clicli_dark/pages/downloader_page.dart';
 import 'package:clicli_dark/pages/rank_page.dart';
 import 'package:clicli_dark/pages/search_page.dart';
 import 'package:clicli_dark/widgets//post_card.dart';
@@ -90,9 +89,6 @@ class _HomePageState extends State<HomePage>
   }
 
   get appbar => AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        automaticallyImplyLeading: false,
-        elevation: 0,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -100,11 +96,15 @@ class _HomePageState extends State<HomePage>
               controller: _tabController,
               isScrollable: true,
               indicator: const BoxDecoration(),
-              indicatorPadding:
-                  EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              labelColor: Theme.of(context).primaryColor,
-              labelStyle: TextStyle(fontSize: 18),
-              unselectedLabelStyle: TextStyle(fontSize: 18),
+              labelStyle: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+              unselectedLabelStyle: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.normal,
+              ),
+              labelColor: Theme.of(context).accentColor,
               tabs: List<GestureDetector>.generate(
                 tabs.length,
                 (index) => GestureDetector(
@@ -117,17 +117,8 @@ class _HomePageState extends State<HomePage>
               children: <Widget>[
                 IconButton(
                   icon: Icon(
-                    Icons.file_download,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  onPressed: () {
-                    _to(context, DownloaderPage());
-                  },
-                ),
-                IconButton(
-                  icon: Icon(
                     Icons.whatshot,
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).accentColor,
                   ),
                   onPressed: () {
                     _to(context, RankPage());
@@ -136,7 +127,7 @@ class _HomePageState extends State<HomePage>
                 IconButton(
                   icon: Icon(
                     Icons.search,
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).accentColor,
                   ),
                   onPressed: () {
                     _to(context, SearchPage());

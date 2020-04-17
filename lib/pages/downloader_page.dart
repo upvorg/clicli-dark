@@ -233,7 +233,7 @@ class _DownloaderPageState extends State<DownloaderPage> {
           final DownloadTask task = _tasks[i];
           final bool isSelected = selectedTasks.any((t) => t == task.taskId);
           return Container(
-            color: isSelected ? Theme.of(context).primaryColor : null,
+            color: isSelected ? Theme.of(context).accentColor : null,
             child: ListTile(
               title: ellipsisText(task.filename ?? ''),
               leading: Icon(downloadStatusIcons[task.status]),
