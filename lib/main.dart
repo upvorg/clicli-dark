@@ -1,3 +1,4 @@
+import 'package:clicli_dark/_key.dart';
 import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/pages/bgi_page.dart';
 import 'package:clicli_dark/pages/home_stack/home_page.dart';
@@ -9,6 +10,7 @@ import 'package:clicli_dark/pages/player_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_umplus/flutter_umplus.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +18,14 @@ void main() async {
   await Instances.init();
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+  );
+
+  FlutterUmplus.init(
+    UMENG_KEY,
+    channel: '',
+    reportCrash: false,
+    logEnable: true,
+    encrypt: true,
   );
 
   runApp(CliCliApp());

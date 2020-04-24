@@ -117,7 +117,7 @@ packages:
       name: flutter_downloader
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.4.3"
+    version: "1.4.4"
   flutter_flexible_toast:
     dependency: "direct dev"
     description:
@@ -131,12 +131,19 @@ packages:
       name: flutter_markdown
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.3.4"
+    version: "0.3.5"
   flutter_test:
     dependency: "direct dev"
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_umplus:
+    dependency: "direct dev"
+    description:
+      name: flutter_umplus
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.1"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -177,6 +184,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.5.3"
+  js:
+    dependency: transitive
+    description:
+      name: js
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.6.1+1"
   markdown:
     dependency: transitive
     description:
@@ -218,7 +232,7 @@ packages:
       name: package_info
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.4.0+16"
+    version: "0.4.0+17"
   path:
     dependency: transitive
     description:
@@ -232,14 +246,14 @@ packages:
       name: path_provider
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.6.5"
+    version: "1.6.7"
   path_provider_macos:
     dependency: transitive
     description:
       name: path_provider_macos
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.0.4"
+    version: "0.0.4+1"
   path_provider_platform_interface:
     dependency: transitive
     description:
@@ -302,14 +316,14 @@ packages:
       name: shared_preferences
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.5.6+3"
+    version: "0.5.7"
   shared_preferences_macos:
     dependency: transitive
     description:
       name: shared_preferences_macos
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.0.1+6"
+    version: "0.0.1+7"
   shared_preferences_platform_interface:
     dependency: transitive
     description:
@@ -405,14 +419,14 @@ packages:
       name: url_launcher
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "5.4.2"
+    version: "5.4.5"
   url_launcher_macos:
     dependency: transitive
     description:
       name: url_launcher_macos
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.0.1+4"
+    version: "0.0.1+5"
   url_launcher_platform_interface:
     dependency: transitive
     description:
@@ -426,7 +440,7 @@ packages:
       name: url_launcher_web
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.1.1+1"
+    version: "0.1.1+2"
   uuid:
     dependency: transitive
     description:
@@ -447,7 +461,7 @@ packages:
       name: video_player
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.10.8+1"
+    version: "0.10.9+1"
   video_player_platform_interface:
     dependency: transitive
     description:
@@ -471,4 +485,4 @@ packages:
     version: "3.5.0"
 sdks:
   dart: ">=2.7.0 <3.0.0"
-  flutter: ">=1.12.13+hotfix.4 <2.0.0"
+  flutter: ">=1.12.13+hotfix.5 <2.0.0"

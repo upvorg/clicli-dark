@@ -40,3 +40,5 @@ lib/generated_plugin_registrant.dart
 
 key.properties
 key.jks
+
+_key.dart
