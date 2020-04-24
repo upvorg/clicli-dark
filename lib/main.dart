@@ -47,6 +47,14 @@ class _CliCliAppState extends State<CliCliApp> {
         isDarkTheme = e.val;
       });
     });
+    FlutterUmplus.beginPageView('main');
+  }
+
+  @override
+  dispose() {
+    FlutterUmplus.endPageView('main');
+    Instances.eventBus.destroy();
+    super.dispose();
   }
 
   Route _onGenerateRoute(RouteSettings settings) {
