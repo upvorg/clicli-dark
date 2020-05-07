@@ -16,9 +16,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:screen/screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
-import 'package:screen/screen.dart';
 
 //https://stackoverflow.com/questions/52431109/flutter-video-player-fullscreen
 class PlayerPage extends StatefulWidget with WidgetsBindingObserver {
@@ -222,6 +222,7 @@ class _PlayerPageState extends State<PlayerPage>
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(statusBarColor: Colors.transparent),
     );
+    Screen.keepOn(false);
   }
 
   @override
@@ -338,7 +339,7 @@ class _PlayerPageState extends State<PlayerPage>
                       IconButton(
                         icon: Icon(Icons.more_horiz),
                         onPressed: () {
-                          showSnackBar('这里不可以哦 o(*////▽////*)q');
+                          showSnackBar('come soon ···');
                         },
                       )
                     ],
@@ -351,6 +352,7 @@ class _PlayerPageState extends State<PlayerPage>
   }
 
   bool hasFollowBgi = false;
+
   getFollowBgi() {
     final List o = jsonDecode(Instances.sp.getString('followBgi') ?? '[]');
 
@@ -399,7 +401,7 @@ class _PlayerPageState extends State<PlayerPage>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text(detail['title']),
+              ellipsisText(detail['title']),
               InkWell(
                 onTap: followBgi,
                 child: Container(

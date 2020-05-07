@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:video_player/video_player.dart';
 import 'package:screen/screen.dart';
+import 'package:video_player/video_player.dart';
 
 import './chewie_progress_colors.dart';
 import './player_with_controls.dart';
@@ -386,16 +386,16 @@ class ChewieController extends ChangeNotifier {
     await videoPlayerController.seekTo(moment);
   }
 
-  // int maxVol, currentVol;
+// int maxVol, currentVol;
 
-  // Future<void> updateVolumes() async {
-  //   maxVol = await Volume.getMaxVol;
-  //   currentVol = await Volume.getVol;
-  // }
+// Future<void> updateVolumes() async {
+//   maxVol = await Volume.getMaxVol;
+//   currentVol = await Volume.getVol;
+// }
 
-  // Future<void> setVol(int i) async {
-  //   await Volume.setVol(i);
-  // }
+// Future<void> setVol(int i) async {
+//   await Volume.setVol(i);
+// }
 }
 
 class _ChewieControllerProvider extends InheritedWidget {

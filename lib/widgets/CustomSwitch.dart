@@ -1,9 +1,9 @@
 import 'dart:ui' show lerpDouble;
 
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
@@ -49,11 +49,13 @@ class CustomSwitch extends StatefulWidget {
   }
 }
 
-class _CustomSwitchState extends State<CustomSwitch> with TickerProviderStateMixin {
+class _CustomSwitchState extends State<CustomSwitch>
+    with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Opacity(
-      opacity: widget.onChanged == null ? _kCupertinoSwitchDisabledOpacity : 1.0,
+      opacity:
+          widget.onChanged == null ? _kCupertinoSwitchDisabledOpacity : 1.0,
       child: _CustomSwitchRenderObjectWidget(
         value: widget.value,
         activeColor: CupertinoDynamicColor.resolve(
@@ -96,7 +98,8 @@ class _CustomSwitchRenderObjectWidget extends LeafRenderObjectWidget {
     return _RenderCustomSwitch(
       value: value,
       activeColor: activeColor,
-      trackColor: CupertinoDynamicColor.resolve(CupertinoColors.secondarySystemFill, context),
+      trackColor: CupertinoDynamicColor.resolve(
+          CupertinoColors.secondarySystemFill, context),
       onChanged: onChanged,
       textDirection: Directionality.of(context),
       vsync: vsync,
@@ -107,11 +110,13 @@ class _CustomSwitchRenderObjectWidget extends LeafRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, _RenderCustomSwitch renderObject) {
+  void updateRenderObject(
+      BuildContext context, _RenderCustomSwitch renderObject) {
     renderObject
       ..value = value
       ..activeColor = activeColor
-      ..trackColor = CupertinoDynamicColor.resolve(CupertinoColors.secondarySystemFill, context)
+      ..trackColor = CupertinoDynamicColor.resolve(
+          CupertinoColors.secondarySystemFill, context)
       ..onChanged = onChanged
       ..textDirection = Directionality.of(context)
       ..vsync = vsync
@@ -149,11 +154,11 @@ class _RenderCustomSwitch extends RenderConstrainedBox {
         _trackWidth = trackWidth,
         _trackHeight = trackHeight,
         super(
-        additionalConstraints: BoxConstraints.tightFor(
-          width: trackWidth,
-          height: trackWidth,
-        ),
-      ) {
+          additionalConstraints: BoxConstraints.tightFor(
+            width: trackWidth,
+            height: trackWidth,
+          ),
+        ) {
     _tap = TapGestureRecognizer()
       ..onTapDown = _handleTapDown
       ..onTap = _handleTap
@@ -186,7 +191,9 @@ class _RenderCustomSwitch extends RenderConstrainedBox {
   }
 
   double _trackWidth;
+
   double get trackWidth => _trackWidth;
+
   set trackWidth(double value) {
     assert(value != null);
     if (value == _trackWidth) return;
@@ -195,7 +202,9 @@ class _RenderCustomSwitch extends RenderConstrainedBox {
   }
 
   double _trackHeight;
+
   double get trackHeight => _trackHeight;
+
   set trackHeight(double value) {
     assert(value != null);
     if (value == _trackHeight) return;
@@ -204,10 +213,15 @@ class _RenderCustomSwitch extends RenderConstrainedBox {
   }
 
   double get _kTrackWidth => trackWidth;
+
   double get _kTrackHeight => trackHeight;
+
   double get _kTrackRadius => trackHeight / 2.0;
+
   double get _kTrackInnerStart => _kTrackHeight / 1.4;
+
   double get _kTrackInnerEnd => _kTrackWidth - _kTrackInnerStart;
+
   double get _kTrackInnerLength => _kTrackInnerEnd - _kTrackInnerStart;
 
   AnimationController _positionController;
@@ -218,6 +232,7 @@ class _RenderCustomSwitch extends RenderConstrainedBox {
 
   bool get value => _value;
   bool _value;
+
   set value(bool value) {
     assert(value != null);
     if (value == _value) return;
@@ -235,6 +250,7 @@ class _RenderCustomSwitch extends RenderConstrainedBox {
 
   TickerProvider get vsync => _vsync;
   TickerProvider _vsync;
+
   set vsync(TickerProvider value) {
     assert(value != null);
     if (value == _vsync) return;
@@ -245,6 +261,7 @@ class _RenderCustomSwitch extends RenderConstrainedBox {
 
   Color get activeColor => _activeColor;
   Color _activeColor;
+
   set activeColor(Color value) {
     assert(value != null);
     if (value == _activeColor) return;
@@ -254,6 +271,7 @@ class _RenderCustomSwitch extends RenderConstrainedBox {
 
   Color get trackColor => _trackColor;
   Color _trackColor;
+
   set trackColor(Color value) {
     assert(value != null);
     if (value == _trackColor) return;
@@ -263,6 +281,7 @@ class _RenderCustomSwitch extends RenderConstrainedBox {
 
   ValueChanged<bool> get onChanged => _onChanged;
   ValueChanged<bool> _onChanged;
+
   set onChanged(ValueChanged<bool> value) {
     if (value == _onChanged) return;
     final bool wasInteractive = isInteractive;
@@ -275,6 +294,7 @@ class _RenderCustomSwitch extends RenderConstrainedBox {
 
   TextDirection get textDirection => _textDirection;
   TextDirection _textDirection;
+
   set textDirection(TextDirection value) {
     assert(value != null);
     if (_textDirection == value) return;
@@ -283,6 +303,7 @@ class _RenderCustomSwitch extends RenderConstrainedBox {
   }
 
   DragStartBehavior get dragStartBehavior => _drag.dragStartBehavior;
+
   set dragStartBehavior(DragStartBehavior value) {
     assert(value != null);
     if (_drag.dragStartBehavior == value) return;
@@ -312,7 +333,7 @@ class _RenderCustomSwitch extends RenderConstrainedBox {
           break;
         case AnimationStatus.dismissed:
         case AnimationStatus.completed:
-        // nothing to do
+          // nothing to do
           break;
       }
     }
@@ -396,6 +417,8 @@ class _RenderCustomSwitch extends RenderConstrainedBox {
       case TargetPlatform.fuchsia:
       case TargetPlatform.android:
         break;
+      default:
+        break;
     }
   }
 
@@ -438,7 +461,8 @@ class _RenderCustomSwitch extends RenderConstrainedBox {
         break;
     }
 
-    final Paint paint = Paint()..color = Color.lerp(trackColor, activeColor, currentValue);
+    final Paint paint = Paint()
+      ..color = Color.lerp(trackColor, activeColor, currentValue);
 
     final Rect trackRect = Rect.fromLTWH(
       offset.dx + (size.width - trackWidth) / 2.0,
@@ -452,10 +476,14 @@ class _RenderCustomSwitch extends RenderConstrainedBox {
     );
     canvas.drawRRect(trackRRect, paint);
 
-    final double currentThumbExtension = CupertinoThumbPainter.extension * currentReactionValue;
+    final double currentThumbExtension =
+        CupertinoThumbPainter.extension * currentReactionValue;
     final double thumbLeft = lerpDouble(
       trackRect.left + _kTrackInnerStart - CupertinoThumbPainter.radius,
-      trackRect.left + _kTrackInnerEnd - CupertinoThumbPainter.radius / 1.5 - currentThumbExtension,
+      trackRect.left +
+          _kTrackInnerEnd -
+          CupertinoThumbPainter.radius / 1.5 -
+          currentThumbExtension,
       visualPosition,
     );
     final double thumbRight = lerpDouble(
@@ -479,8 +507,9 @@ class _RenderCustomSwitch extends RenderConstrainedBox {
       Offset.zero,
       thumbBounds,
       trackRRect,
-          (PaintingContext innerContext, Offset offset) {
-        const CupertinoThumbPainter.switchThumb().paint(innerContext.canvas, thumbBounds);
+      (PaintingContext innerContext, Offset offset) {
+        const CupertinoThumbPainter.switchThumb()
+            .paint(innerContext.canvas, thumbBounds);
       },
     );
   }

@@ -57,7 +57,7 @@ class _TimeLineState extends State<TimeLinePage>
                       padding: EdgeInsets.symmetric(vertical: 15),
                       child: Text(
                         week[i],
-                        style: theme.textTheme.title
+                        style: theme.textTheme.headline6
                             .copyWith(color: theme.accentColor),
                       ),
                     ),

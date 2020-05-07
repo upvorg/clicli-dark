@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:clicli_dark/widgets/loading2load.dart';
 import 'package:flutter/material.dart';
+import 'package:music_volume/music_volume.dart';
 import 'package:screen/screen.dart';
 import 'package:video_player/video_player.dart';
-import 'package:music_volume/music_volume.dart';
 
 import './chewie_player.dart';
 import './chewie_progress_colors.dart';
@@ -70,6 +70,7 @@ class _MaterialControlsState extends State<MaterialControls> {
   // bool showPop = false;
 
   final barHeight = 38.0;
+
   // final marginSize = 5.0;
 
   VideoPlayerController controller;
@@ -366,7 +367,7 @@ class _MaterialControlsState extends State<MaterialControls> {
                 color: chewieController.fontColor,
               ),
               onPressed: () {
-                Navigator.of(context).canPop() && Navigator.of(context).pop();
+                if (Navigator.of(context).canPop()) Navigator.of(context).pop();
               },
             ),
             Expanded(

@@ -2,8 +2,6 @@
 import 'dart:isolate';
 import 'dart:ui';
 
-// import 'package:clicli_dark/config.dart';
-// import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:clicli_dark/widgets/common_widget.dart';
 import 'package:flutter/material.dart';
@@ -74,6 +72,7 @@ class _DownloaderPageState extends State<DownloaderPage> {
   }
 
   final downloadedFileList = [];
+
   // Future<void> loadDownloadedFiles() async {
   //   final path = await Config.downloadPath();
   //   final list = Directory(path).listSync();

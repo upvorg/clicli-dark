@@ -16,27 +16,14 @@ class FAQPage extends StatelessWidget {
         padding: EdgeInsets.all(10),
         child: MarkdownBody(
           data: '''
-![](https://s1.ax1x.com/2020/03/28/GApV6H.jpg)
-
-## FAQ
-
-- 如遇到 error 错误，尝试更换网络或扶梯。
-
-- 注册请在网页端注册
-
-## 视频播放出错？
-
-尝试在网页观看，如果网页也无法观看可加 QQ 群报错或补档。
-
-## 视频下载路径
-
-- /Android/data/com.cy.clicli_dark/files/
-- 使用任意视频播放器打开即可。
-
 ## QQ 群列表
 
-- [CliCli ⑥ 群-异度侵入](https://jq.qq.com/?_wv=1027&k=5n8QbrB)
-- [CliCli ⑦ 群-来点学习资料](https://jq.qq.com/?_wv=1027&k=5BN7gor)
+- 可加入
+  - [CliCli ⑦ 群-月色真美](https://jq.qq.com/?_wv=1027&k=5BN7gor)
+
+- 车位已满
+  - [CliCli ⑥ 群-异度侵入](https://jq.qq.com/?_wv=1027&k=5n8QbrB)
+
 - [admin@clicli.us](mailto:admin@clicli.us)
       ''',
           onTapLink: (url) async {

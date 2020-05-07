@@ -53,6 +53,7 @@ class KLoading2Load extends StatefulWidget {
 
   final Function load;
   final Widget child;
+
   @override
   State<StatefulWidget> createState() => _KLoading2LoadState();
 }

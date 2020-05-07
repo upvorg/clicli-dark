@@ -71,7 +71,7 @@ class _RankPageState extends State<RankPage> {
                                     rankList[i]['title'].trimLeft(),
                                     style: Theme.of(context)
                                         .textTheme
-                                        .subhead
+                                        .subtitle1
                                         .copyWith(color: Colors.purple),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,

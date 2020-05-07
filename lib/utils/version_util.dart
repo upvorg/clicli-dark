@@ -1,8 +1,8 @@
 import 'dart:convert';
-
-import 'package:package_info/package_info.dart';
 import 'dart:math' show max;
+
 import 'package:clicli_dark/api/post.dart';
+import 'package:package_info/package_info.dart';
 
 class VersionManager {
   static Future<PackageInfo> getAppVersion() async {

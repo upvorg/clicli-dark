@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 
 class Response {
   Response(this.data);
+
   String data;
 }
 
