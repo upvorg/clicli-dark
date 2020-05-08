@@ -11,10 +11,6 @@ dependencies:
     sdk: flutter
   cupertino_icons: any
 
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-
   flutter_markdown: any
   url_launcher: any
   flutter_downloader: any
@@ -29,10 +25,14 @@ dev_dependencies:
   flutter_umplus: any
 
   # chewie
-  video_player: any
+  video_player: '>=0.10.0 <2.0.0'
   screen: any
   open_iconic_flutter: any
   auto_orientation: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
 
 flutter:
   uses-material-design: true

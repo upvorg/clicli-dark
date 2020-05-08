@@ -23,7 +23,7 @@ class _UGCPageState extends State<UGCPage> with AutomaticKeepAliveClientMixin {
   int page = 1;
 
   Future<void> getUGC() async {
-    final res = (await getPost('原创', '', page, 10)).data;
+    final res = (await getPost('原创', '', page, 20)).data;
     data.addAll(jsonDecode(res)['posts']);
     page += 1;
     setState(() {});

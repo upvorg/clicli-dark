@@ -23,7 +23,7 @@ packages:
     source: hosted
     version: "2.4.1"
   auto_orientation:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: auto_orientation
       url: "https://pub.flutter-io.cn"
@@ -37,7 +37,7 @@ packages:
     source: hosted
     version: "2.0.0"
   cached_network_image:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: cached_network_image
       url: "https://pub.flutter-io.cn"
@@ -86,7 +86,7 @@ packages:
     source: hosted
     version: "0.1.3"
   event_bus:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: event_bus
       url: "https://pub.flutter-io.cn"
@@ -112,21 +112,21 @@ packages:
     source: hosted
     version: "1.2.2"
   flutter_downloader:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_downloader
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.4.4"
   flutter_flexible_toast:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_flexible_toast
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.1.4"
   flutter_markdown:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_markdown
       url: "https://pub.flutter-io.cn"
@@ -138,7 +138,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_umplus:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_umplus
       url: "https://pub.flutter-io.cn"
@@ -178,7 +178,7 @@ packages:
     source: hosted
     version: "0.16.1"
   jpush_flutter:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: jpush_flutter
       url: "https://pub.flutter-io.cn"
@@ -213,21 +213,21 @@ packages:
     source: hosted
     version: "1.1.8"
   music_volume:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: music_volume
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.0.5"
   open_iconic_flutter:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: open_iconic_flutter
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.3.0"
   package_info:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: package_info
       url: "https://pub.flutter-io.cn"
@@ -241,7 +241,7 @@ packages:
     source: hosted
     version: "1.6.4"
   path_provider:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: path_provider
       url: "https://pub.flutter-io.cn"
@@ -304,14 +304,14 @@ packages:
     source: hosted
     version: "0.24.0"
   screen:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: screen
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.0.5"
   shared_preferences:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: shared_preferences
       url: "https://pub.flutter-io.cn"
@@ -414,7 +414,7 @@ packages:
     source: hosted
     version: "1.1.6"
   url_launcher:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: url_launcher
       url: "https://pub.flutter-io.cn"
@@ -456,7 +456,7 @@ packages:
     source: hosted
     version: "2.0.8"
   video_player:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: video_player
       url: "https://pub.flutter-io.cn"

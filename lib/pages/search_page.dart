@@ -146,7 +146,7 @@ class _TagPageState extends State<TagPage> {
 
   Future<void> getTagList() async {
     data.addAll(jsonDecode(
-        (await getPost('', widget.tag, page, 10, status: 'nowait'))
+        (await getPost('', widget.tag, page, 15, status: 'nowait'))
             .data)['posts']);
     setState(() {});
   }

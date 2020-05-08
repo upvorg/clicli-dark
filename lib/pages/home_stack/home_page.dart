@@ -38,13 +38,13 @@ class _HomePageState extends State<HomePage>
   }
 
   Future<void> initLoad() async {
-    final res = (await getPost('', tabs[0], 1, 10)).data;
+    final res = (await getPost('', tabs[0], 1, 20)).data;
     _reList = jsonDecode(res)['posts'];
     setState(() {});
   }
 
   Future<void> initNewList() async {
-    final res1 = (await getPost('bgm', '', 1, 10)).data;
+    final res1 = (await getPost('bgm', '', 1, 20)).data;
     _newList = jsonDecode(res1)['posts'];
     setState(() {});
   }
@@ -55,9 +55,9 @@ class _HomePageState extends State<HomePage>
     final _page = reset ? 1 : page[index] + 1;
 
     if (index == 0) {
-      res = (await getPost('', tabs[0], _page, 10)).data;
+      res = (await getPost('', tabs[0], _page, 15)).data;
     } else {
-      res = (await getPost('bgm', '', _page, 10)).data;
+      res = (await getPost('bgm', '', _page, 15)).data;
     }
 
     final List posts = jsonDecode(res)['posts'] ?? [];
