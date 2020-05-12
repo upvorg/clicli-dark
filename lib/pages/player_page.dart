@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:better_player/better_player.dart';
 import 'package:clicli_dark/api/post.dart';
 import 'package:clicli_dark/config.dart';
 import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/pages/search_page.dart';
-import 'package:clicli_dark/pkg/chewie/chewie.dart';
 import 'package:clicli_dark/utils/reg_utils.dart';
 import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:clicli_dark/widgets/appbar.dart';
@@ -16,9 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:screen/screen.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:video_player/video_player.dart';
 
 //https://stackoverflow.com/questions/52431109/flutter-video-player-fullscreen
 class PlayerPage extends StatefulWidget with WidgetsBindingObserver {
@@ -36,8 +34,6 @@ class PlayerPage extends StatefulWidget with WidgetsBindingObserver {
 //https://vt1.doubanio.com/201902111139/0c06a85c600b915d8c9cbdbbaf06ba9f/view/movie/M/302420330.mp4
 class _PlayerPageState extends State<PlayerPage>
     with TickerProviderStateMixin, WidgetsBindingObserver {
-  VideoPlayerController _videoPlayerController;
-  ChewieController _chewieController;
   TabController _tabController;
 
   String thumbnail;
@@ -46,12 +42,6 @@ class _PlayerPageState extends State<PlayerPage>
   Map videoSrc = {};
   int currPlayIndex = 0;
   bool showDownloadIcon = false;
-
-  toggleShowDownloadIcon() {
-    setState(() {
-      showDownloadIcon = !showDownloadIcon;
-    });
-  }
 
   Future<String> getVideoSrc(String _src) async {
     if (videoSrc[currPlayIndex] == null) {
@@ -66,16 +56,15 @@ class _PlayerPageState extends State<PlayerPage>
     videoList =
         jsonDecode((await getVideoList(widget.data['id'])).data)['videos'] ??
             [];
-    if (videoList.length > 0) {
-      Screen.keepOn(true);
-      _tabController = TabController(length: 2, vsync: this);
-      WidgetsBinding.instance.addObserver(this);
-    }
 
     if (mounted) {
-      isLoading = false;
-      setState(() {});
       if (videoList.length > 0) {
+        setState(() {
+//          Screen.keepOn(true);
+          WidgetsBinding.instance.addObserver(this);
+          _tabController = TabController(length: 2, vsync: this);
+          isLoading = false;
+        });
         setHistory();
         await initPlayer();
         widget.data['pv'] =
@@ -85,63 +74,67 @@ class _PlayerPageState extends State<PlayerPage>
     }
   }
 
+  BetterPlayerController _betterPlayerController;
+
   initPlayer() async {
     final String src = await getVideoSrc(videoList[currPlayIndex]['content']);
-    _videoPlayerController = VideoPlayerController.network(src);
-    // _videoPlayerController.addListener(autoNextLis);
 
-    _chewieController = ChewieController(
-      videoPlayerController: _videoPlayerController,
-      aspectRatio: 16 / 9,
-      autoPlay: true,
-      looping: false,
-      allowedScreenSleep: false,
-      allowFullScreen: true,
-      videoTitle: videoList[currPlayIndex]['title'],
-      fontColor: Colors.white,
-      allowMuting: false,
-      enableDLNA: true,
-      thumbnail: thumbnail,
+    BetterPlayerDataSource betterPlayerDataSource =
+        BetterPlayerDataSource(BetterPlayerDataSourceType.NETWORK, src);
+
+    _betterPlayerController = BetterPlayerController(
+      BetterPlayerConfiguration(
+        showControlsOnInitialize: false,
+        autoPlay: true,
+        aspectRatio: 16 / 9,
+        controlsConfiguration: BetterPlayerControlsConfiguration(
+          iconsColor: Colors.white,
+          enableMute: false,
+          controlBarColor: Colors.black.withOpacity(0.4),
+          enableProgressText: true,
+          controlBarDecoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.black.withOpacity(0.5), Colors.transparent],
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+            ),
+          ),
+          controlAppBarDecoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.transparent, Colors.black.withOpacity(0.5)],
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+            ),
+          ),
+        ),
+      ),
+      betterPlayerDataSource: betterPlayerDataSource,
     );
 
-    if (mounted) {
-      setState(() {});
-    } else {
-      _dispose();
-    }
-  }
+    _betterPlayerController
+        .setupAppBarTitle('${videoList[currPlayIndex]['title']}');
 
-  autoNextLis() {
-    if (!mounted) {
-      _chewieController?.dispose();
-      _videoPlayerController?.removeListener(autoNextLis);
-      _videoPlayerController?.dispose();
-      return;
-    }
-
-    int total = _videoPlayerController.value.duration?.inMilliseconds;
-    final int pos = _videoPlayerController.value.position?.inMilliseconds ?? 0;
-
-    if (total == null) total = 1;
-    if (total - pos <= 0) {
-      _videoPlayerController.removeListener(autoNextLis);
-      if (currPlayIndex + 1 < videoList.length) toggleVideo(currPlayIndex + 1);
-    }
+    setHistory();
   }
 
   toggleVideo(int i) async {
-    if (i == currPlayIndex ||
-        i > videoList.length - 1 ||
-        (!_videoPlayerController.value.initialized &&
-            !_videoPlayerController.value.hasError &&
-            _videoPlayerController != null)) return;
-    await _videoPlayerController.pause();
-    _chewieController = null;
+    if (i == currPlayIndex) return;
+
+    if(_betterPlayerController==null){// 网络错误加载失败
+      currPlayIndex = i;
+      initPlayer();
+      return;
+    }
+
+    _betterPlayerController
+        .setupAppBarTitle('${videoList[currPlayIndex]['title']}');
+    final String src = await getVideoSrc(videoList[currPlayIndex]['content']);
+    _betterPlayerController.setupDataSource(
+        BetterPlayerDataSource(BetterPlayerDataSourceType.NETWORK, src));
     setState(() {
       currPlayIndex = i;
     });
     setHistory();
-    await initPlayer();
   }
 
   setHistory() async {
@@ -194,15 +187,15 @@ class _PlayerPageState extends State<PlayerPage>
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state) {
       case AppLifecycleState.paused:
-        if (_videoPlayerController.value.isPlaying)
-          _videoPlayerController.pause();
+        if (await _betterPlayerController.isPlaying())
+          _betterPlayerController.pause();
         break;
       default:
-        if (!_videoPlayerController.value.isPlaying)
-          _videoPlayerController.play();
+        if (await _betterPlayerController.isPlaying())
+          _betterPlayerController.play();
         break;
     }
   }
@@ -214,26 +207,18 @@ class _PlayerPageState extends State<PlayerPage>
   }
 
   _dispose() {
-    // _videoPlayerController?.removeListener(autoNextLis);
-    _chewieController?.dispose();
-    _videoPlayerController?.dispose();
+    _betterPlayerController?.dispose();
     _tabController?.dispose();
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance?.removeObserver(this);
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(statusBarColor: Colors.transparent),
     );
-    Screen.keepOn(false);
+//    Screen.keepOn(false);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
-      return Scaffold(
-        body: Center(
-          child: loadingWidget,
-        ),
-      );
-    }
+    if (isLoading) return Scaffold(body: Center(child: loadingWidget));
     final detail = widget.data;
     return AnnotatedRegion(
       value: videoList.length > 0
@@ -254,8 +239,8 @@ class _PlayerPageState extends State<PlayerPage>
         child: videoList.length > 0
             ? Column(
                 children: <Widget>[
-                  _chewieController != null
-                      ? Chewie(controller: _chewieController)
+                  _betterPlayerController != null
+                      ? BetterPlayer(controller: _betterPlayerController)
                       : AspectRatio(
                           aspectRatio: 16 / 9,
                           child: Container(
@@ -302,7 +287,11 @@ class _PlayerPageState extends State<PlayerPage>
                             ),
                           ),
                           GestureDetector(
-                            onDoubleTap: toggleShowDownloadIcon,
+                            onDoubleTap: () {
+                              setState(() {
+                                showDownloadIcon = !showDownloadIcon;
+                              });
+                            },
                             child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 10),
                               child: ClipOval(
@@ -430,16 +419,16 @@ class _PlayerPageState extends State<PlayerPage>
             for (int i = 0; i < tags.length; i++)
               if (tags[i].length > 0)
                 GestureDetector(
-                  onTap: () {
-                    if (_videoPlayerController.value.isPlaying)
-                      _videoPlayerController.pause();
+                  onTap: () async {
+                    if (await _betterPlayerController.isPlaying())
+                      _betterPlayerController.pause();
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) =>
                             TagPage(tags[i] as String)));
                   },
-                  onDoubleTap: () {
-                    if (_videoPlayerController.value.isPlaying)
-                      _videoPlayerController.pause();
+                  onDoubleTap: () async {
+                    if (await _betterPlayerController.isPlaying())
+                      _betterPlayerController.pause();
 
                     Navigator.of(context).pop();
                     Navigator.of(context).push(MaterialPageRoute(

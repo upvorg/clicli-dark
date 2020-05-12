@@ -1,7 +1,7 @@
 name: clicli_dark
 description: CliCli Dark. clicli 纯黑.
 
-version: 2.0.0+8
+version: 2.0.0+9
 
 environment:
   sdk: '>=2.2.2 <3.0.0'
@@ -24,11 +24,16 @@ dependencies:
   jpush_flutter: any
   flutter_umplus: any
 
-  # chewie
-  video_player: '>=0.10.0 <2.0.0'
+  better_player:
+    git: https://github.com/shiyiya/betterplayer.git
+
+  #  open_iconic_flutter: '>=0.3.0 <0.4.0'
+  #  wakelock: '>=0.1.2 <0.2.0'
+  #  flutter_widgets: ^0.1.12
+  #  pedantic: ^1.8.0
+  #  meta: ^1.0.5
+  #  flutter_widget_from_html_core: ^0.3.3+2
   screen: any
-  open_iconic_flutter: any
-  auto_orientation: any
 
 dev_dependencies:
   flutter_test:

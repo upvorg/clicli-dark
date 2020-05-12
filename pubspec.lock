@@ -22,13 +22,15 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.4.1"
-  auto_orientation:
+  better_player:
     dependency: "direct main"
     description:
-      name: auto_orientation
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.6"
+      path: "."
+      ref: HEAD
+      resolved-ref: "695d2ec6cdd25eb51f7531f5037121cd87506b7a"
+      url: "https://github.com/shiyiya/betterplayer.git"
+    source: git
+    version: "0.0.8"
   boolean_selector:
     dependency: transitive
     description:
@@ -78,6 +80,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.4"
+  csslib:
+    dependency: transitive
+    description:
+      name: csslib
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.16.1"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -149,6 +158,27 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_widget_from_html_core:
+    dependency: transitive
+    description:
+      name: flutter_widget_from_html_core
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.3.3+3"
+  flutter_widgets:
+    dependency: transitive
+    description:
+      name: flutter_widgets
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.12"
+  html:
+    dependency: transitive
+    description:
+      name: html
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.14.0+3"
   http:
     dependency: transitive
     description:
@@ -220,7 +250,7 @@ packages:
     source: hosted
     version: "0.0.5"
   open_iconic_flutter:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: open_iconic_flutter
       url: "https://pub.flutter-io.cn"
@@ -232,7 +262,7 @@ packages:
       name: package_info
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.4.0+17"
+    version: "0.4.0+18"
   path:
     dependency: transitive
     description:
@@ -246,7 +276,7 @@ packages:
       name: path_provider
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.6.7"
+    version: "1.6.8"
   path_provider_macos:
     dependency: transitive
     description:
@@ -316,7 +346,7 @@ packages:
       name: shared_preferences
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.5.7+1"
+    version: "0.5.7+2"
   shared_preferences_macos:
     dependency: transitive
     description:
@@ -330,7 +360,7 @@ packages:
       name: shared_preferences_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.3"
+    version: "1.0.4"
   shared_preferences_web:
     dependency: transitive
     description:
@@ -419,7 +449,7 @@ packages:
       name: url_launcher
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "5.4.5"
+    version: "5.4.7"
   url_launcher_macos:
     dependency: transitive
     description:
@@ -433,14 +463,14 @@ packages:
       name: url_launcher_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.6"
+    version: "1.0.7"
   url_launcher_web:
     dependency: transitive
     description:
       name: url_launcher_web
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.1.1+4"
+    version: "0.1.1+5"
   uuid:
     dependency: transitive
     description:
@@ -455,27 +485,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.8"
-  video_player:
-    dependency: "direct main"
-    description:
-      name: video_player
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.10.9+2"
-  video_player_platform_interface:
+  wakelock:
     dependency: transitive
     description:
-      name: video_player_platform_interface
+      name: wakelock
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.5"
-  video_player_web:
-    dependency: transitive
-    description:
-      name: video_player_web
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.1.2+3"
+    version: "0.1.4+1"
   xml:
     dependency: transitive
     description:
