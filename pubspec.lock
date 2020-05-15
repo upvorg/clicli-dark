@@ -27,7 +27,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "695d2ec6cdd25eb51f7531f5037121cd87506b7a"
+      resolved-ref: "57d28613b4e240faee08c228567ba44d912001a9"
       url: "https://github.com/shiyiya/betterplayer.git"
     source: git
     version: "0.0.8"
@@ -213,7 +213,7 @@ packages:
       name: jpush_flutter
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.5.3"
+    version: "0.5.5"
   js:
     dependency: transitive
     description:
@@ -290,7 +290,7 @@ packages:
       name: path_provider_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.1"
+    version: "1.0.2"
   pedantic:
     dependency: transitive
     description:

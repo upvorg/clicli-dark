@@ -120,7 +120,8 @@ class _PlayerPageState extends State<PlayerPage>
   toggleVideo(int i) async {
     if (i == currPlayIndex) return;
 
-    if(_betterPlayerController==null){// 网络错误加载失败
+    if (_betterPlayerController == null) {
+      // 网络错误 || 加载失败
       currPlayIndex = i;
       initPlayer();
       return;
@@ -129,7 +130,7 @@ class _PlayerPageState extends State<PlayerPage>
     _betterPlayerController
         .setupAppBarTitle('${videoList[currPlayIndex]['title']}');
     final String src = await getVideoSrc(videoList[currPlayIndex]['content']);
-    _betterPlayerController.setupDataSource(
+    await _betterPlayerController.setupDataSource(
         BetterPlayerDataSource(BetterPlayerDataSourceType.NETWORK, src));
     setState(() {
       currPlayIndex = i;
