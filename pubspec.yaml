@@ -1,7 +1,7 @@
 name: clicli_dark
 description: CliCli Dark. clicli 纯黑.
 
-version: 2.0.0+9
+version: 2.0.1+1
 
 environment:
   sdk: '>=2.2.2 <3.0.0'
@@ -33,7 +33,6 @@ dependencies:
   #  pedantic: ^1.8.0
   #  meta: ^1.0.5
   #  flutter_widget_from_html_core: ^0.3.3+2
-  screen: any
 
 dev_dependencies:
   flutter_test:

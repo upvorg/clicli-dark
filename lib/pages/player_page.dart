@@ -43,12 +43,12 @@ class _PlayerPageState extends State<PlayerPage>
   int currPlayIndex = 0;
   bool showDownloadIcon = false;
 
-  Future<String> getVideoSrc(String _src) async {
-    if (videoSrc[currPlayIndex] == null) {
+  Future<String> getVideoSrc(String _src, int i) async {
+    if (videoSrc[i] == null) {
       final _videoSrc = (await getPlayUrl(_src)).data;
-      videoSrc[currPlayIndex] = jsonDecode(_videoSrc)['url'];
+      videoSrc[i] = jsonDecode(_videoSrc)['url'];
     }
-    return videoSrc[currPlayIndex];
+    return videoSrc[i];
   }
 
   getDetail() async {
@@ -77,7 +77,8 @@ class _PlayerPageState extends State<PlayerPage>
   BetterPlayerController _betterPlayerController;
 
   initPlayer() async {
-    final String src = await getVideoSrc(videoList[currPlayIndex]['content']);
+    final String src =
+        await getVideoSrc(videoList[currPlayIndex]['content'], currPlayIndex);
 
     BetterPlayerDataSource betterPlayerDataSource =
         BetterPlayerDataSource(BetterPlayerDataSourceType.NETWORK, src);
@@ -114,6 +115,7 @@ class _PlayerPageState extends State<PlayerPage>
     _betterPlayerController
         .setupAppBarTitle('${videoList[currPlayIndex]['title']}');
 
+    if (currPlayIndex > 0) showSnackBar('已自动定位到上次播放剧集');
     setHistory();
   }
 
@@ -127,14 +129,20 @@ class _PlayerPageState extends State<PlayerPage>
       return;
     }
 
+    print(i);
+    print(videoList[i]);
+
+    _betterPlayerController.setupAppBarTitle('${videoList[i]['title']}');
+    final String src = await getVideoSrc(videoList[i]['content'], i);
     _betterPlayerController
-        .setupAppBarTitle('${videoList[currPlayIndex]['title']}');
-    final String src = await getVideoSrc(videoList[currPlayIndex]['content']);
-    await _betterPlayerController.setupDataSource(
-        BetterPlayerDataSource(BetterPlayerDataSourceType.NETWORK, src));
-    setState(() {
-      currPlayIndex = i;
+        .setupDataSource(
+            BetterPlayerDataSource(BetterPlayerDataSourceType.NETWORK, src))
+        .then((value) {
+      setState(() {
+        currPlayIndex = i;
+      });
     });
+
     setHistory();
   }
 
@@ -182,7 +190,6 @@ class _PlayerPageState extends State<PlayerPage>
         if (history != null) currPlayIndex = history['curr'];
       }
     }
-    if (currPlayIndex > 0) showSnackBar('已自动定位到上次播放剧集');
     getDetail();
     getFollowBgi();
   }
