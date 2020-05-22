@@ -56,6 +56,7 @@ class _PlayerPageState extends State<PlayerPage>
         jsonDecode((await getVideoList(widget.data['id'])).data)['videos'] ??
             [];
 
+    print(videoList);
     if (mounted) {
       if (videoList.length > 0) {
         setState(() {
@@ -69,6 +70,10 @@ class _PlayerPageState extends State<PlayerPage>
         widget.data['pv'] =
             jsonDecode((await getPV(widget.data['id'])).data)['result']['pv'];
         setState(() {});
+      } else {
+        setState(() {
+          isLoading = false;
+        });
       }
     }
   }
@@ -84,7 +89,7 @@ class _PlayerPageState extends State<PlayerPage>
 
     _betterPlayerController = BetterPlayerController(
       BetterPlayerConfiguration(
-        showControlsOnInitialize: false,
+        showControlsOnInitialize: true,
         autoPlay: true,
         aspectRatio: 16 / 9,
         controlsConfiguration: BetterPlayerControlsConfiguration(
