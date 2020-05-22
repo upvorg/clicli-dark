@@ -1,5 +1,4 @@
 import 'package:clicli_dark/utils/toast_utils.dart';
-import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -8,10 +7,7 @@ class FAQPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
-        child: FixedAppBar(title: Text('FAQ')),
-      ),
+      appBar: AppBar(title: Text('FAQ')),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(10),
         child: MarkdownBody(

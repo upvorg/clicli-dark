@@ -9,7 +9,6 @@ import 'package:clicli_dark/pages/login_page.dart';
 import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:clicli_dark/utils/version_util.dart';
 import 'package:clicli_dark/widgets/CustomSwitch.dart';
-import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -109,14 +108,23 @@ class _MePageState extends State<MePage> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle =
+        TextStyle(color: Theme.of(context).accentColor, fontSize: 24);
     super.build(context);
     final ctx = Theme.of(context);
     return Scaffold(
-        body: SafeArea(
-      child: SingleChildScrollView(
-        child: Column(
+        appBar: AppBar(
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          title: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: <Widget>[Tab(child: Text('个人中心', style: textStyle))],
+            ),
+          ),
+        ),
+        body: ListView(
           children: <Widget>[
-            HomeStackTitleAppbar('个人中心'),
             Container(
               color: ctx.cardColor,
               child: ListTile(
@@ -221,8 +229,6 @@ class _MePageState extends State<MePage> with AutomaticKeepAliveClientMixin {
               ),
             )
           ],
-        ),
-      ),
-    ));
+        ));
   }
 }

@@ -39,9 +39,21 @@ class _TimeLineState extends State<TimeLinePage>
 
   @override
   Widget build(BuildContext context) {
+    final textStyle =
+        TextStyle(color: Theme.of(context).accentColor, fontSize: 24);
     super.build(context);
     final theme = Theme.of(context);
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        title: Container(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            children: <Widget>[Tab(child: Text('更新表', style: textStyle))],
+          ),
+        ),
+      ),
       body: KLoading2Load(
         load: getUGC,
         child: RefreshIndicator(

@@ -8,7 +8,6 @@ import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/pages/search_page.dart';
 import 'package:clicli_dark/utils/reg_utils.dart';
 import 'package:clicli_dark/utils/toast_utils.dart';
-import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:clicli_dark/widgets/common_widget.dart';
 import 'package:clicli_dark/widgets/loading2load.dart' show loadingWidget;
 import 'package:flutter/cupertino.dart';
@@ -80,7 +79,7 @@ class _PlayerPageState extends State<PlayerPage>
     final String src =
         await getVideoSrc(videoList[currPlayIndex]['content'], currPlayIndex);
 
-    BetterPlayerDataSource betterPlayerDataSource =
+    final BetterPlayerDataSource betterPlayerDataSource =
         BetterPlayerDataSource(BetterPlayerDataSourceType.NETWORK, src);
 
     _betterPlayerController = BetterPlayerController(
@@ -129,7 +128,6 @@ class _PlayerPageState extends State<PlayerPage>
       return;
     }
 
-    print(i);
     print(videoList[i]);
 
     _betterPlayerController.setupAppBarTitle('${videoList[i]['title']}');
@@ -243,108 +241,110 @@ class _PlayerPageState extends State<PlayerPage>
               systemNavigationBarColor: Colors.white,
             ),
       child: Scaffold(
+          appBar: videoList.length < 1
+              ? AppBar(
+                  title: Text(
+                    detail['title'],
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  actions: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.more_horiz),
+                      onPressed: () {
+                        showSnackBar('come soon ···');
+                      },
+                    )
+                  ],
+                )
+              : null,
           body: SafeArea(
-        child: videoList.length > 0
-            ? Column(
-                children: <Widget>[
-                  _betterPlayerController != null
-                      ? BetterPlayer(controller: _betterPlayerController)
-                      : AspectRatio(
-                          aspectRatio: 16 / 9,
-                          child: Container(
-                            color: Colors.black,
-                            child: Center(
-                                child: Text(
-                              'loading ···',
-                              style: TextStyle(color: Colors.white),
-                            )),
-                          ),
-                        ),
-                  Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        boxShadow: [
-                          BoxShadow(
-                            color:
-                                Theme.of(context).accentColor.withOpacity(0.2),
-                            offset: Offset(0, 10),
-                            blurRadius: 12,
-                            spreadRadius: -10,
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          TabBar(
-                            tabs: <Widget>[Tab(text: '剧集'), Tab(text: '简介')],
-                            controller: _tabController,
-                            isScrollable: true,
-                            indicatorSize: TabBarIndicatorSize.tab,
-                            labelColor: Theme.of(context).accentColor,
-                            indicatorPadding: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 0),
-                            labelStyle: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            unselectedLabelStyle: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                          GestureDetector(
-                            onDoubleTap: () {
-                              setState(() {
-                                showDownloadIcon = !showDownloadIcon;
-                              });
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: ClipOval(
-                                child: Image.network(
-                                  getAvatar(avatar: detail['uqq'] ?? ''),
-                                  width: 35,
-                                  height: 35,
-                                ),
+            child: videoList.length > 0
+                ? Column(
+                    children: <Widget>[
+                      _betterPlayerController != null
+                          ? BetterPlayer(controller: _betterPlayerController)
+                          : AspectRatio(
+                              aspectRatio: 16 / 9,
+                              child: Container(
+                                color: Colors.black,
+                                child: Center(
+                                    child: Text(
+                                  'loading ···',
+                                  style: TextStyle(color: Colors.white),
+                                )),
                               ),
                             ),
-                          )
-                        ],
-                      )),
-                  Expanded(
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: <Widget>[
-                        buildProfile(context),
-                        PlayerProfile(detail, videoList.length > 0)
-                      ],
-                    ),
-                  )
-                ],
-              )
-            : Column(
-                children: <Widget>[
-                  FixedAppBar(
-                    title: Text(
-                      detail['title'],
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    actions: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.more_horiz),
-                        onPressed: () {
-                          showSnackBar('come soon ···');
-                        },
+                      Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).cardColor,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Theme.of(context)
+                                    .accentColor
+                                    .withOpacity(0.2),
+                                offset: Offset(0, 10),
+                                blurRadius: 12,
+                                spreadRadius: -10,
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              TabBar(
+                                tabs: <Widget>[
+                                  Tab(text: '剧集'),
+                                  Tab(text: '简介')
+                                ],
+                                controller: _tabController,
+                                isScrollable: true,
+                                indicatorSize: TabBarIndicatorSize.tab,
+                                labelColor: Theme.of(context).accentColor,
+                                indicatorPadding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 0),
+                                labelStyle: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                unselectedLabelStyle: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                              GestureDetector(
+                                onDoubleTap: () {
+                                  setState(() {
+                                    showDownloadIcon = !showDownloadIcon;
+                                  });
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  child: ClipOval(
+                                    child: Image.network(
+                                      getAvatar(avatar: detail['uqq'] ?? ''),
+                                      width: 35,
+                                      height: 35,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          )),
+                      Expanded(
+                        child: TabBarView(
+                          controller: _tabController,
+                          children: <Widget>[
+                            buildProfile(context),
+                            PlayerProfile(detail, videoList.length > 0)
+                          ],
+                        ),
                       )
                     ],
-                  ),
-                  Expanded(child: PlayerProfile(detail, videoList.length > 0))
-                ],
-              ),
-      )),
+                  )
+                : PlayerProfile(detail, videoList.length > 0),
+          )),
     );
   }
 

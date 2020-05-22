@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/pages/player_page.dart';
-import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:clicli_dark/widgets/common_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -36,10 +35,7 @@ class _HistoryPageState extends State<HistoryPage> {
     final w = MediaQuery.of(context).size.width / 3;
     final color = Theme.of(context).cardColor;
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
-        child: FixedAppBar(title: Text('历史记录')),
-      ),
+      appBar: AppBar(title: Text('历史记录')),
       body: RefreshIndicator(
         child: ListView.builder(
           itemBuilder: (_, i) {

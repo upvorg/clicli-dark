@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:clicli_dark/api/post.dart';
-import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:clicli_dark/widgets/loading2load.dart';
 import 'package:clicli_dark/widgets/post_card.dart';
 import 'package:clicli_dark/widgets/refresh.dart';
@@ -164,23 +163,29 @@ class _TagPageState extends State<TagPage> {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle =
+        TextStyle(color: Theme.of(context).accentColor, fontSize: 24);
     return Scaffold(
-        body: Column(
-      children: <Widget>[
-        HomeStackTitleAppbar(widget.tag),
-        Expanded(
-          child: RefreshWrapper(
-            scrollController: _scrollController,
-            onRefresh: getTagList,
-            onLoadMore: getNextList,
-            child: Grid2RowView(
-              controller: _scrollController,
-              itemBuilder: (_, i) => PostCard(data[i]),
-              len: data.length,
-            ),
+      appBar: AppBar(
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        title: Container(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            children: <Widget>[Tab(child: Text(widget.tag, style: textStyle))],
           ),
         ),
-      ],
-    ));
+      ),
+      body: RefreshWrapper(
+        scrollController: _scrollController,
+        onRefresh: getTagList,
+        onLoadMore: getNextList,
+        child: Grid2RowView(
+          controller: _scrollController,
+          itemBuilder: (_, i) => PostCard(data[i]),
+          len: data.length,
+        ),
+      ),
+    );
   }
 }

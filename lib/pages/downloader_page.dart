@@ -2,7 +2,6 @@
 import 'dart:isolate';
 import 'dart:ui';
 
-import 'package:clicli_dark/widgets/appbar.dart';
 import 'package:clicli_dark/widgets/common_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -187,7 +186,7 @@ class _DownloaderPageState extends State<DownloaderPage> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
-        child: FixedAppBar(
+        child: AppBar(
           title: Text('下载管理'),
           actions: selectedTasks.length < 1
               ? [
