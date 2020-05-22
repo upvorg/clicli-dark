@@ -22,7 +22,6 @@ dependencies:
   package_info: any
   cached_network_image: any
   jpush_flutter: any
-  flutter_umplus: any
 
   better_player:
     git: https://github.com/shiyiya/betterplayer.git

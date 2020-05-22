@@ -146,13 +146,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_umplus:
-    dependency: "direct main"
-    description:
-      name: flutter_umplus
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.0.1"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
