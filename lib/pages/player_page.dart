@@ -56,7 +56,6 @@ class _PlayerPageState extends State<PlayerPage>
         jsonDecode((await getVideoList(widget.data['id'])).data)['videos'] ??
             [];
 
-    print(videoList);
     if (mounted) {
       if (videoList.length > 0) {
         setState(() {
@@ -65,7 +64,6 @@ class _PlayerPageState extends State<PlayerPage>
           _tabController = TabController(length: 2, vsync: this);
           isLoading = false;
         });
-        setHistory();
         await initPlayer();
         widget.data['pv'] =
             jsonDecode((await getPV(widget.data['id'])).data)['result']['pv'];
@@ -120,20 +118,20 @@ class _PlayerPageState extends State<PlayerPage>
         .setupAppBarTitle('${videoList[currPlayIndex]['title']}');
 
     if (currPlayIndex > 0) showSnackBar('已自动定位到上次播放剧集');
-    setHistory();
   }
 
   toggleVideo(int i) async {
     if (i == currPlayIndex) return;
 
-    if (_betterPlayerController == null) {
-      // 网络错误 || 加载失败
-      currPlayIndex = i;
-      initPlayer();
-      return;
-    }
+    // if (_betterPlayerController == null) {
+    //   // 网络错误 || 加载失败
+    //   currPlayIndex = i;
+    //   initPlayer();
+    //   return;
+    // }
 
-    print(videoList[i]);
+    currPlayIndex = i;
+    setHistory();
 
     _betterPlayerController.setupAppBarTitle('${videoList[i]['title']}');
     final String src = await getVideoSrc(videoList[i]['content'], i);
@@ -141,12 +139,8 @@ class _PlayerPageState extends State<PlayerPage>
         .setupDataSource(
             BetterPlayerDataSource(BetterPlayerDataSourceType.NETWORK, src))
         .then((value) {
-      setState(() {
-        currPlayIndex = i;
-      });
+      setState(() {});
     });
-
-    setHistory();
   }
 
   setHistory() async {
@@ -193,6 +187,7 @@ class _PlayerPageState extends State<PlayerPage>
         if (history != null) currPlayIndex = history['curr'];
       }
     }
+    setHistory();
     getDetail();
     getFollowBgi();
   }
