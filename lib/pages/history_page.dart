@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/pages/player_page.dart';
+import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:clicli_dark/widgets/common_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -29,13 +30,28 @@ class _HistoryPageState extends State<HistoryPage> {
     await Future.delayed(Duration(seconds: 1));
   }
 
+  clearAll() {
+    Instances.sp.remove('history');
+    hisList = [];
+    showSnackBar('（￣︶￣）↗　');
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size.height / 8;
     final w = MediaQuery.of(context).size.width / 3;
     final color = Theme.of(context).cardColor;
     return Scaffold(
-      appBar: AppBar(title: Text('历史记录')),
+      appBar: AppBar(
+        title: Text('历史记录'),
+        actions: <Widget>[
+          MaterialButton(
+            child: Text('清空'),
+            onPressed: clearAll,
+          )
+        ],
+      ),
       body: RefreshIndicator(
         child: ListView.builder(
           itemBuilder: (_, i) {

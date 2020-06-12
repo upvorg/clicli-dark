@@ -1,7 +1,7 @@
 name: clicli_dark
 description: CliCli Dark. clicli 纯黑.
 
-version: 2.0.1+4
+version: 2.0.1+5
 
 environment:
   sdk: '>=2.2.2 <3.0.0'

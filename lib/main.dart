@@ -1,5 +1,7 @@
 import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/pages/bgi_page.dart';
+import 'package:clicli_dark/pages/faq_page.dart';
+import 'package:clicli_dark/pages/history_page.dart';
 import 'package:clicli_dark/pages/home_stack/home_page.dart';
 import 'package:clicli_dark/pages/home_stack/me_page.dart';
 import 'package:clicli_dark/pages/home_stack/time_line_page.dart';
@@ -52,6 +54,9 @@ class _CliCliAppState extends State<CliCliApp> {
       'CliCli://player': (_) => PlayerPage(),
       'CliCli://login': (_) => LoginPage(),
       'CliCli://fav': (_) => BgiPage(),
+      'CliCli://timeline': (_) => TimeLinePage(),
+      'CliCli://history': (_) => HistoryPage(),
+      'CliCli://faq': (_) => FAQPage(),
       // '/webView': (_) {
       //   Map arg = settings.arguments;
       //   return WebviewScaffold(
@@ -104,11 +109,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   static const List<IconData> pagesIcon = [
     Icons.home,
-    Icons.timeline,
     Icons.explore,
+    Icons.live_tv,
     Icons.supervised_user_circle
   ];
-  final _pages = [HomePage(), TimeLinePage(), UGCPage(), MePage()];
+  final _pages = [HomePage(), UGCPage(), BgiPage(), MePage()];
 
   int _currentPageIndex = 0;
   final _pageController = PageController();
@@ -181,13 +186,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
         ),
-        floatingActionButton: _currentPageIndex != 0
-            ? null
-            : FloatingActionButton(
-                onPressed: () => Navigator.pushNamed(context, 'CliCli://fav'),
-                tooltip: 'FAV',
-                child: Icon(Icons.live_tv),
-              ),
       ),
     );
   }

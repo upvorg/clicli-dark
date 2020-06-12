@@ -2,9 +2,6 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clicli_dark/instance.dart';
-import 'package:clicli_dark/pages/bgi_page.dart';
-import 'package:clicli_dark/pages/faq_page.dart';
-import 'package:clicli_dark/pages/history_page.dart';
 import 'package:clicli_dark/pages/login_page.dart';
 import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:clicli_dark/utils/version_util.dart';
@@ -170,23 +167,17 @@ class _MePageState extends State<MePage> with AutomaticKeepAliveClientMixin {
                     onTap: toggleDarkMode,
                   ),
                   ListTile(
-                    title: Text('我的追番'),
+                    title: Text('更新表'),
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: () {
-                      Navigator.pushAndRemoveUntil(context,
-                          MaterialPageRoute(builder: (BuildContext context) {
-                        return BgiPage();
-                      }), (Route<dynamic> route) => true);
+                      Navigator.pushNamed(context, 'CliCli://timeline');
                     },
                   ),
                   ListTile(
                     title: Text('历史记录'),
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: () {
-                      Navigator.pushAndRemoveUntil(context,
-                          MaterialPageRoute(builder: (BuildContext context) {
-                        return HistoryPage();
-                      }), (Route<dynamic> route) => true);
+                      Navigator.pushNamed(context, 'CliCli://history');
                     },
                   ),
                   ListTile(
@@ -204,10 +195,7 @@ class _MePageState extends State<MePage> with AutomaticKeepAliveClientMixin {
                     title: Text('常见问题'),
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: () {
-                      Navigator.pushAndRemoveUntil(context,
-                          MaterialPageRoute(builder: (BuildContext context) {
-                        return FAQPage();
-                      }), (Route<dynamic> route) => true);
+                      Navigator.pushNamed(context, 'CliCli://faq');
                     },
                   ),
                   ListTile(

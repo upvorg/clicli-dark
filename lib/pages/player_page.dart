@@ -117,6 +117,7 @@ class _PlayerPageState extends State<PlayerPage>
     _betterPlayerController
         .setupAppBarTitle('${videoList[currPlayIndex]['title']}');
 
+    setHistory();
     if (currPlayIndex > 0) showSnackBar('已自动定位到上次播放剧集');
   }
 
@@ -187,7 +188,6 @@ class _PlayerPageState extends State<PlayerPage>
         if (history != null) currPlayIndex = history['curr'];
       }
     }
-    setHistory();
     getDetail();
     getFollowBgi();
   }
@@ -398,7 +398,7 @@ class _PlayerPageState extends State<PlayerPage>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              ellipsisText(detail['title']),
+              Expanded(child: ellipsisText(detail['title'])),
               InkWell(
                 onTap: followBgi,
                 child: Container(

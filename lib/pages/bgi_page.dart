@@ -10,7 +10,10 @@ class BgiPage extends StatefulWidget {
   _BgiPageState createState() => _BgiPageState();
 }
 
-class _BgiPageState extends State<BgiPage> {
+class _BgiPageState extends State<BgiPage> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   List bgiList = [];
   List hisList = [];
 
@@ -31,55 +34,124 @@ class _BgiPageState extends State<BgiPage> {
     await Future.delayed(Duration(seconds: 1));
   }
 
+  clearAll() {
+    Instances.sp.remove('followBgi');
+    bgiList = [];
+    Instances.scaffoldState.showSnackBar(
+      SnackBar(
+        duration: Duration(milliseconds: 1000),
+        content: Text('（￣︶￣）↗　'),
+      ),
+    );
+    setState(() {});
+  }
+
+  removeItem(DismissDirection _, int i) {
+    if (_ == DismissDirection.endToStart) {
+      bgiList.removeAt(i);
+      Instances.scaffoldState.showSnackBar(
+        SnackBar(
+          duration: Duration(milliseconds: 1000),
+          content: Text('（￣︶￣）↗　'),
+        ),
+      );
+      Instances.sp.setString('followBgi', jsonEncode(bgiList));
+    }
+  }
+
+  _toPlay(int i, int curr) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => PlayerPage(
+          data: bgiList[i]['data'],
+          pos: curr,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size.height / 8;
+    super.build(context);
+    final h = MediaQuery.of(context).size.height;
+    final size = h / 6;
     final w = MediaQuery.of(context).size.width / 3;
     final color = Theme.of(context).cardColor;
     return Scaffold(
-      appBar: AppBar(title: Text('我的追番')),
+      appBar: AppBar(
+        title: Text(
+          '我的追番',
+          style: TextStyle(color: Theme.of(context).accentColor),
+        ),
+        actions: <Widget>[
+          MaterialButton(
+            child: Text('清空',
+                style: TextStyle(color: Theme.of(context).accentColor)),
+            onPressed: clearAll,
+          )
+        ],
+      ),
       body: RefreshIndicator(
         child: ListView.builder(
           itemBuilder: (_, i) {
-            return GestureDetector(
-              onTap: () {
-                final int index =
-                    hisList.indexWhere((f) => f['id'] == bgiList[i]['id']);
-                Navigator.pushAndRemoveUntil(context,
-                    MaterialPageRoute(builder: (BuildContext context) {
-                  return PlayerPage(
-                    data: bgiList[i]['data'],
-                    pos: hisList[index]['curr'],
-                  );
-                }), (Route<dynamic> route) => true);
-              },
-              child: Container(
-                  color: color,
-                  margin: EdgeInsets.symmetric(vertical: 2),
-                  padding: EdgeInsets.all(5),
-                  height: size,
-                  child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(right: 20),
-                        child: Image.network(
-                          bgiList[i]['thumb'],
-                          fit: BoxFit.cover,
-                          width: w,
+            if (bgiList.length == 0)
+              return Container(
+                alignment: Alignment.center,
+                height: h / 1.5,
+                child: Text(
+                  '空空如也 (＃°Д°)',
+                  style: TextStyle(
+                    color: Theme.of(context).accentColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              );
+            if (i > bgiList.length - 1) return null;
+
+            final jj = hisList.firstWhere(
+                (element) => element['id'] == bgiList[i]['id'],
+                orElse: () => {'curr': 0});
+            return Dismissible(
+              direction: DismissDirection.endToStart,
+              key: Key('key_$i'),
+              onDismissed: (DismissDirection _) => removeItem(_, i),
+              child: GestureDetector(
+                onTap: () {
+                  _toPlay(i, jj['curr']);
+                },
+                child: Container(
+                    color: color,
+                    margin: EdgeInsets.symmetric(vertical: 5),
+                    padding: EdgeInsets.symmetric(horizontal: 5),
+                    height: size,
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(right: 20),
+                          child: Image.network(
+                            bgiList[i]['thumb'],
+                            fit: BoxFit.cover,
+                            width: w,
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[ellipsisText(bgiList[i]['name'])],
-                        ),
-                      )
-                    ],
-                  )),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              ellipsisText(bgiList[i]['name']),
+                              SizedBox(height: 10),
+                              Text("已观看到第 ${jj['curr'] + 1} 集"),
+                            ],
+                          ),
+                        )
+                      ],
+                    )),
+              ),
             );
           },
-          itemCount: bgiList.length,
+          itemCount: bgiList.length + 1,
         ),
         onRefresh: getBgi,
       ),
