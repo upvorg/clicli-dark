@@ -192,10 +192,11 @@ class _MePageState extends State<MePage> with AutomaticKeepAliveClientMixin {
                     },
                   ),
                   ListTile(
-                    title: Text('常见问题'),
+                    title: Text('番剧报错'),
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: () {
-                      Navigator.pushNamed(context, 'CliCli://faq');
+                      launch(
+                          'https://github.com/cliclitv/clicli-dark/issues/new?assignees=&labels=%E7%95%AA%E5%89%A7%E6%8A%A5%E9%94%99&template=----.md&title=');
                     },
                   ),
                   ListTile(

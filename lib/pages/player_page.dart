@@ -91,25 +91,25 @@ class _PlayerPageState extends State<PlayerPage>
         autoPlay: true,
         aspectRatio: 16 / 9,
         controlsConfiguration: BetterPlayerControlsConfiguration(
-          iconsColor: Colors.white,
-          enableMute: false,
-          controlBarColor: Colors.black.withOpacity(0.4),
-          enableProgressText: true,
-          controlBarDecoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.black.withOpacity(0.5), Colors.transparent],
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
+            iconsColor: Colors.white,
+            enableMute: false,
+            controlBarColor: Colors.black.withOpacity(0.4),
+            enableProgressText: true,
+            controlBarDecoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.black.withOpacity(0.5), Colors.transparent],
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+              ),
             ),
-          ),
-          controlAppBarDecoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.transparent, Colors.black.withOpacity(0.5)],
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
+            controlAppBarDecoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.transparent, Colors.black.withOpacity(0.5)],
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+              ),
             ),
-          ),
-        ),
+            defaultErrorText: '加载失败 (っ °Д °;)っ'),
       ),
       betterPlayerDataSource: betterPlayerDataSource,
     );
@@ -139,9 +139,9 @@ class _PlayerPageState extends State<PlayerPage>
     _betterPlayerController
         .setupDataSource(
             BetterPlayerDataSource(BetterPlayerDataSourceType.NETWORK, src))
-        .then((value) {
-      setState(() {});
-    });
+        .then((value) {})
+        .catchError((e) {});
+    setState(() {});
   }
 
   setHistory() async {
