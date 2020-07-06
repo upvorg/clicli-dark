@@ -3,6 +3,7 @@ import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
+import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Instances {
@@ -28,9 +29,16 @@ class Instances {
 
   static JPush jp = JPush();
 
+  static String appVersion = '';
+
   static init() async {
     Instances.jp.setup(appKey: Config.JPushKey, channel: 'developer-default');
     sp = await SharedPreferences.getInstance();
+    await PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+      final String v = packageInfo.version;
+      final String buildNumber = packageInfo.buildNumber;
+      appVersion = '$v.$buildNumber';
+    });
   }
 }
 

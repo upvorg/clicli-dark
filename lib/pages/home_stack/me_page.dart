@@ -18,8 +18,6 @@ class _MePageState extends State<MePage> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
-  String version = '';
-
   @override
   void initState() {
     super.initState();
@@ -27,12 +25,6 @@ class _MePageState extends State<MePage> with AutomaticKeepAliveClientMixin {
       getLocalProfile();
     });
 
-    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
-      final String v = packageInfo.version;
-      final String buildNumber = packageInfo.buildNumber;
-      version = '$v.$buildNumber';
-      setState(() {});
-    });
     getLocalProfile();
   }
 
@@ -170,7 +162,7 @@ class _MePageState extends State<MePage> with AutomaticKeepAliveClientMixin {
               alignment: Alignment.center,
               margin: EdgeInsets.only(top: 20),
               child: Text(
-                'APP VERSION $version',
+                'APP VERSION ${Instances.appVersion}',
                 style: Theme.of(context).textTheme.caption,
               ),
             )

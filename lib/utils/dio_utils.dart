@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:flutter/foundation.dart';
 
@@ -29,6 +30,7 @@ class NetUtils {
         ..persistentConnection = true;
       if (data != null) {
         request.headers.set('content-type', 'application/json');
+        request.headers.set('CLICLI-APP-CLIENT-VERSION', Instances.appVersion);
         request.add(utf8.encode((json.encode(data))));
       }
       response = await request.close();
