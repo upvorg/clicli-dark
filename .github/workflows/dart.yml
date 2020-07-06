@@ -23,7 +23,7 @@ jobs:
       - run: export JPUSH_KEY=${{ secrets.JPUSH_KEY }}
       - run: echo >> android/local.properties 'JPUSH_KEY=${{ secrets.JPUSH_KEY }}'
       # - run: echo >> lib/_key.dart 'const UMENG_KEY = "${{ secrets.UMENG_KEY }}";'
-      - run: flutter -v build apk --release --target-platform android-arm
+      - run: flutter -v build apk
       - name: Set Git Config
         run: git config --global user.name ${{ secrets.GIT_USER_NAME }} &&  git config --global user.email ${{ secrets.GIT_EMAL }}
       - name: Clone and push apk to clicli.me
