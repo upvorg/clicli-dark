@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/pages/login_page.dart';
-import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:clicli_dark/utils/version_util.dart';
 import 'package:clicli_dark/widgets/CustomSwitch.dart';
 import 'package:flutter/material.dart';
@@ -45,46 +44,6 @@ class _MePageState extends State<MePage> with AutomaticKeepAliveClientMixin {
         ? jsonDecode(u)
         : {'name': '点击登录', 'desc': '这个人很酷，没有签名', 'qq': '1'};
     setState(() {});
-  }
-
-  Future<void> checkAppUpdate(BuildContext ctx) async {
-    int status;
-
-    try {
-      status = await VersionManager.checkUpdate();
-      if (status > 0) {
-        showDialog(
-            barrierDismissible: false,
-            context: Instances.currentContext,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text('提示'),
-                content: Text('有新版本可更新！'),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text('下次一定'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  FlatButton(
-                    child: Text('更新'),
-                    onPressed: () async {
-                      if (await canLaunch('https://app.clicli.me/')) {
-                        await launch('https://app.clicli.me/');
-                      }
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            });
-      } else {
-        showSnackBar('已是最新版本');
-      }
-    } catch (e) {
-      showErrorSnackBar('检测更新失败');
-    }
   }
 
   bool isDarkTheme = Instances.sp.getBool('isDarkTheme') ?? false;
@@ -202,9 +161,7 @@ class _MePageState extends State<MePage> with AutomaticKeepAliveClientMixin {
                   ListTile(
                     title: Text('检查更新'),
                     trailing: Icon(Icons.keyboard_arrow_right),
-                    onTap: () {
-                      checkAppUpdate(context);
-                    },
+                    onTap: checkAppUpdate,
                   )
                 ],
               ),

@@ -8,6 +8,7 @@ import 'package:clicli_dark/pages/home_stack/time_line_page.dart';
 import 'package:clicli_dark/pages/home_stack/ugc_page.dart';
 import 'package:clicli_dark/pages/login_page.dart';
 import 'package:clicli_dark/pages/player_page.dart';
+import 'package:clicli_dark/utils/version_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -39,6 +40,7 @@ class _CliCliAppState extends State<CliCliApp> {
         isDarkTheme = e.val;
       });
     });
+    checkAppUpdate();
   }
 
   @override

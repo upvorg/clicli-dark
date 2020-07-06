@@ -1,8 +1,12 @@
 import 'dart:convert';
 import 'dart:math' show max;
 
+import 'package:clicli_dark/instance.dart';
+import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:clicli_dark/api/post.dart';
 import 'package:package_info/package_info.dart';
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class VersionManager {
   static Future<PackageInfo> getAppVersion() async {
@@ -48,5 +52,42 @@ class VersionManager {
     }
 
     return 0;
+  }
+}
+
+Future<void> checkAppUpdate() async {
+  int status;
+
+  try {
+    status = await VersionManager.checkUpdate();
+    if (status > 0) {
+      showDialog(
+          barrierDismissible: false,
+          context: Instances.currentContext,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('提示'),
+              content: Text('有新版本可用ヾ(≧ ▽ ≦)ゝ'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('更新'),
+                  onPressed: () async {
+                    await launch('https://app.clicli.me/');
+                  },
+                ),
+                FlatButton(
+                  child: Text('还是更新'),
+                  onPressed: () async {
+                    await launch('https://app.clicli.me/');
+                  },
+                ),
+              ],
+            );
+          });
+    } else {
+      showSnackBar('已是最新版本');
+    }
+  } catch (e) {
+    showErrorSnackBar('检测更新失败');
   }
 }
