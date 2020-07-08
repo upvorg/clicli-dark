@@ -86,19 +86,62 @@ class _BgiPageState extends State<BgiPage> with AutomaticKeepAliveClientMixin {
         ),
         actions: <Widget>[
           MaterialButton(
-            child: Text('清空',
-                style: TextStyle(color: Theme.of(context).accentColor)),
+            child: Text('清空', style: Theme.of(context).textTheme.caption),
             onPressed: clearAll,
           )
         ],
       ),
       body: RefreshIndicator(
-        child: ListView.builder(
-          itemBuilder: (_, i) {
-            if (bgiList.length == 0)
-              return Container(
+        child: bgiList.length > 0
+            ? ListView.builder(
+                itemBuilder: (_, i) {
+                  final jj = hisList.firstWhere(
+                      (element) => element['id'] == bgiList[i]['id'],
+                      orElse: () => {'curr': 0});
+                  return Dismissible(
+                    direction: DismissDirection.endToStart,
+                    key: Key('key_$i'),
+                    onDismissed: (DismissDirection _) => removeItem(_, i),
+                    child: GestureDetector(
+                      onTap: () {
+                        _toPlay(i, jj['curr']);
+                      },
+                      child: Container(
+                          color: color,
+                          margin: EdgeInsets.symmetric(vertical: 5),
+                          padding: EdgeInsets.symmetric(horizontal: 5),
+                          height: size,
+                          child: Row(
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(right: 20),
+                                child: Image.network(
+                                  bgiList[i]['thumb'],
+                                  fit: BoxFit.cover,
+                                  width: w,
+                                ),
+                              ),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    ellipsisText(bgiList[i]['name']),
+                                    SizedBox(height: 10),
+                                    Text("已观看到第 ${jj['curr'] + 1} 集"),
+                                  ],
+                                ),
+                              )
+                            ],
+                          )),
+                    ),
+                  );
+                },
+                itemCount: bgiList.length,
+              )
+            : Container(
                 alignment: Alignment.center,
-                height: h / 1.5,
+                height: double.infinity,
                 child: Text(
                   '空空如也 (＃°Д°)',
                   style: TextStyle(
@@ -106,53 +149,7 @@ class _BgiPageState extends State<BgiPage> with AutomaticKeepAliveClientMixin {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              );
-            if (i > bgiList.length - 1) return null;
-
-            final jj = hisList.firstWhere(
-                (element) => element['id'] == bgiList[i]['id'],
-                orElse: () => {'curr': 0});
-            return Dismissible(
-              direction: DismissDirection.endToStart,
-              key: Key('key_$i'),
-              onDismissed: (DismissDirection _) => removeItem(_, i),
-              child: GestureDetector(
-                onTap: () {
-                  _toPlay(i, jj['curr']);
-                },
-                child: Container(
-                    color: color,
-                    margin: EdgeInsets.symmetric(vertical: 5),
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    height: size,
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(right: 20),
-                          child: Image.network(
-                            bgiList[i]['thumb'],
-                            fit: BoxFit.cover,
-                            width: w,
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              ellipsisText(bgiList[i]['name']),
-                              SizedBox(height: 10),
-                              Text("已观看到第 ${jj['curr'] + 1} 集"),
-                            ],
-                          ),
-                        )
-                      ],
-                    )),
               ),
-            );
-          },
-          itemCount: bgiList.length + 1,
-        ),
         onRefresh: getBgi,
       ),
     );

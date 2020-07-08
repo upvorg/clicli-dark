@@ -23,6 +23,7 @@ dependencies:
   cached_network_image: any
   jpush_flutter: any
 
+  dlna: any
   better_player:
     git: https://github.com/shiyiya/betterplayer.git
 

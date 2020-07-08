@@ -6,7 +6,6 @@ import 'package:clicli_dark/pages/login_page.dart';
 import 'package:clicli_dark/utils/version_util.dart';
 import 'package:clicli_dark/widgets/CustomSwitch.dart';
 import 'package:flutter/material.dart';
-import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MePage extends StatefulWidget {
