@@ -114,10 +114,15 @@ class _PlayerPageState extends State<PlayerPage>
       betterPlayerDataSource: betterPlayerDataSource,
       videoListLen: videoList.length,
       ganerateVideoFn: toggleVideo,
+      currentVideoIndex: currPlayIndex,
     );
 
     _betterPlayerController
         .setupAppBarTitle('${videoList[currPlayIndex]['title']}');
+
+    _betterPlayerController.addEventsListener((_) => {
+          if (!mounted) {_dispose()}
+        });
 
     setHistory();
     if (currPlayIndex > 0) showSnackBar('已自动定位到上次播放剧集');

@@ -139,14 +139,18 @@ class _BgiPageState extends State<BgiPage> with AutomaticKeepAliveClientMixin {
                 },
                 itemCount: bgiList.length,
               )
-            : Container(
-                alignment: Alignment.center,
-                height: double.infinity,
-                child: Text(
-                  '空空如也 (＃°Д°)',
-                  style: TextStyle(
-                    color: Theme.of(context).accentColor,
-                    fontWeight: FontWeight.bold,
+            : SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 500,
+                  width: double.infinity,
+                  child: Text(
+                    '空空如也 (＃°Д°)',
+                    style: TextStyle(
+                      color: Theme.of(context).accentColor,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
