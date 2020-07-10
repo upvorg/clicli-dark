@@ -27,7 +27,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: d961aa401a4a7156cde5156f3af13503d4407595
+      resolved-ref: da8196fff78cb8a80988d2c276780ce5eb2d2e45
       url: "https://github.com/shiyiya/betterplayer.git"
     source: git
     version: "0.0.8"
