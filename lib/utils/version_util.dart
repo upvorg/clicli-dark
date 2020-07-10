@@ -65,23 +65,26 @@ Future<void> checkAppUpdate() async {
           barrierDismissible: false,
           context: Instances.currentContext,
           builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('提示'),
-              content: Text('有新版本可用ヾ(≧ ▽ ≦)ゝ'),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text('更新'),
-                  onPressed: () async {
-                    await launch('https://app.clicli.me/');
-                  },
-                ),
-                FlatButton(
-                  child: Text('还是更新'),
-                  onPressed: () async {
-                    await launch('https://app.clicli.me/');
-                  },
-                ),
-              ],
+            return WillPopScope(
+              onWillPop: () async => false,
+              child: AlertDialog(
+                title: Text('提示'),
+                content: Text('有新版本可用ヾ(≧ ▽ ≦)ゝ'),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('更新'),
+                    onPressed: () async {
+                      await launch('https://app.clicli.me/');
+                    },
+                  ),
+                  FlatButton(
+                    child: Text('还是更新'),
+                    onPressed: () async {
+                      await launch('https://app.clicli.me/');
+                    },
+                  ),
+                ],
+              ),
             );
           });
     } else {

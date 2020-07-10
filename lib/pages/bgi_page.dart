@@ -142,9 +142,8 @@ class _BgiPageState extends State<BgiPage> with AutomaticKeepAliveClientMixin {
             : SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Container(
-                  alignment: Alignment.center,
-                  height: 500,
-                  width: double.infinity,
+                  alignment: Alignment.bottomCenter,
+                  height: MediaQuery.of(context).size.height / 2,
                   child: Text(
                     '空空如也 (＃°Д°)',
                     style: TextStyle(

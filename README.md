@@ -2,7 +2,7 @@
 
 <p align='center'> :zap: CliCli 纯黑 | <a href='https://app.clicli.me'>Download</a></p>
 
-![deploy]](https://github.com/cliclitv/clicli-dark/workflows/Dart%20CI/badge.svg)
+![deploy](https://github.com/cliclitv/clicli-dark/workflows/Dart%20CI/badge.svg)
 
 ## Commands
 

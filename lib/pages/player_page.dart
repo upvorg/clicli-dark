@@ -120,35 +120,41 @@ class _PlayerPageState extends State<PlayerPage>
     _betterPlayerController
         .setupAppBarTitle('${videoList[currPlayIndex]['title']}');
 
-    _betterPlayerController.addEventsListener((_) => {
-          if (!mounted) {_dispose()}
-        });
+    _betterPlayerController.addEventsListener((e) {
+      if (!mounted) {
+        _dispose();
+      }
+      if (e.betterPlayerEventType == BetterPlayerEventType.FINISHED) {
+        toggleVideo(currPlayIndex + 1);
+      }
+    });
 
     setHistory();
     if (currPlayIndex > 0) showSnackBar('已自动定位到上次播放剧集');
   }
 
+  bool isToggle = false;
   toggleVideo(int i) async {
-    if (i == currPlayIndex) return;
+    if (i == currPlayIndex || i > videoList.length - 1 || isToggle) {
+      return;
+    }
 
-    // if (_betterPlayerController == null) {
-    //   // 网络错误 || 加载失败
-    //   currPlayIndex = i;
-    //   initPlayer();
-    //   return;
-    // }
+    isToggle = true;
 
     currPlayIndex = i;
     setHistory();
 
     _betterPlayerController.setupAppBarTitle('${videoList[i]['title']}');
     final String src = await getVideoSrc(videoList[i]['content'], i);
+    _betterPlayerController.setupVideoListIndex(i);
     _betterPlayerController
         .setupDataSource(
             BetterPlayerDataSource(BetterPlayerDataSourceType.NETWORK, src))
         .then((value) {})
         .catchError((e) {});
     setState(() {});
+
+    isToggle = false;
   }
 
   setHistory() async {
@@ -220,6 +226,7 @@ class _PlayerPageState extends State<PlayerPage>
   }
 
   _dispose() {
+    _betterPlayerController.pause();
     _betterPlayerController?.dispose();
     _tabController?.dispose();
     WidgetsBinding.instance?.removeObserver(this);
