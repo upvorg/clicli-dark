@@ -112,6 +112,8 @@ class _PlayerPageState extends State<PlayerPage>
             defaultErrorText: '加载失败 (っ °Д °;)っ'),
       ),
       betterPlayerDataSource: betterPlayerDataSource,
+      videoListLen: videoList.length,
+      ganerateVideoFn: toggleVideo,
     );
 
     _betterPlayerController
