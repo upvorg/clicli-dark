@@ -1,7 +1,7 @@
 name: clicli_dark
 description: CliCli Dark. clicli 纯黑.
 
-version: 2.8.0
+version: 2.8.1
 
 environment:
   sdk: '>=2.2.2 <3.0.0'
@@ -26,6 +26,7 @@ dependencies:
   dlna: any
   better_player:
     git: https://github.com/shiyiya/betterplayer.git
+    # path: ../betterplayer/
 
   #  open_iconic_flutter: '>=0.3.0 <0.4.0'
   #  wakelock: '>=0.1.2 <0.2.0'
@@ -43,3 +44,4 @@ flutter:
   assets:
     - assets/loading.gif
     - assets/error.png
+    - assets/login_bg.webp

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clicli_dark/instance.dart';
-import 'package:clicli_dark/pages/login_page.dart';
 import 'package:clicli_dark/utils/version_util.dart';
 import 'package:clicli_dark/widgets/CustomSwitch.dart';
 import 'package:flutter/material.dart';
@@ -61,14 +60,8 @@ class _MePageState extends State<MePage> with AutomaticKeepAliveClientMixin {
     final ctx = Theme.of(context);
     return Scaffold(
         appBar: AppBar(
-          elevation: 0,
           automaticallyImplyLeading: false,
-          title: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: <Widget>[Tab(child: Text('个人中心', style: textStyle))],
-            ),
-          ),
+          title: Text('个人中心', style: textStyle),
         ),
         body: ListView(
           children: <Widget>[
@@ -82,12 +75,7 @@ class _MePageState extends State<MePage> with AutomaticKeepAliveClientMixin {
                 },
                 onTap: () {
                   if (userInfo['qq'] == '1' || userInfo['qq'] == null)
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => LoginPage(),
-                      ),
-                    );
+                    Navigator.pushNamed(context, 'CliCli://login');
                 },
                 leading: CachedNetworkImage(
                   imageUrl:

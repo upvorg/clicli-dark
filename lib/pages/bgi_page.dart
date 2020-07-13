@@ -34,17 +34,17 @@ class _BgiPageState extends State<BgiPage> with AutomaticKeepAliveClientMixin {
     await Future.delayed(Duration(seconds: 1));
   }
 
-  clearAll() {
-    Instances.sp.remove('followBgi');
-    bgiList = [];
-    Instances.scaffoldState.showSnackBar(
-      SnackBar(
-        duration: Duration(milliseconds: 1000),
-        content: Text('（￣︶￣）↗　'),
-      ),
-    );
-    setState(() {});
-  }
+  // clearAll() {
+  //   Instances.sp.remove('followBgi');
+  //   bgiList = [];
+  //   Instances.scaffoldState.showSnackBar(
+  //     SnackBar(
+  //       duration: Duration(milliseconds: 1000),
+  //       content: Text('（￣︶￣）↗　'),
+  //     ),
+  //   );
+  //   setState(() {});
+  // }
 
   removeItem(DismissDirection _, int i) {
     if (_ == DismissDirection.endToStart) {
@@ -78,18 +78,18 @@ class _BgiPageState extends State<BgiPage> with AutomaticKeepAliveClientMixin {
     final size = h / 6;
     final w = MediaQuery.of(context).size.width / 3;
     final color = Theme.of(context).cardColor;
+    final textStyle =
+        TextStyle(color: Theme.of(context).accentColor, fontSize: 24);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          '我的追番',
-          style: TextStyle(color: Theme.of(context).accentColor),
-        ),
-        actions: <Widget>[
-          MaterialButton(
-            child: Text('清空', style: Theme.of(context).textTheme.caption),
-            onPressed: clearAll,
-          )
-        ],
+        title: Text('追番', style: textStyle),
+        // actions: <Widget>[
+        //   MaterialButton(
+        //     child: Text('清空', style: Theme.of(context).textTheme.caption),
+        //     onPressed: clearAll,
+        //   )
+        // ],
       ),
       body: RefreshIndicator(
         child: bgiList.length > 0

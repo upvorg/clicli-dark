@@ -171,9 +171,7 @@ class _TagPageState extends State<TagPage> {
         automaticallyImplyLeading: false,
         title: Container(
           padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            children: <Widget>[Tab(child: Text(widget.tag, style: textStyle))],
-          ),
+          child: Text(widget.tag, style: textStyle),
         ),
       ),
       body: RefreshWrapper(

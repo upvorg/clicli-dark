@@ -1,6 +1,5 @@
 import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/pages/bgi_page.dart';
-import 'package:clicli_dark/pages/faq_page.dart';
 import 'package:clicli_dark/pages/history_page.dart';
 import 'package:clicli_dark/pages/home_stack/home_page.dart';
 import 'package:clicli_dark/pages/home_stack/me_page.dart';
@@ -58,7 +57,6 @@ class _CliCliAppState extends State<CliCliApp> {
       'CliCli://fav': (_) => BgiPage(),
       'CliCli://timeline': (_) => TimeLinePage(),
       'CliCli://history': (_) => HistoryPage(),
-      'CliCli://faq': (_) => FAQPage(),
       // '/webView': (_) {
       //   Map arg = settings.arguments;
       //   return WebviewScaffold(

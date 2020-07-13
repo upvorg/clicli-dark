@@ -30,9 +30,7 @@ class _RankPageState extends State<RankPage> {
         automaticallyImplyLeading: false,
         title: Container(
           padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            children: <Widget>[Tab(child: Text('排行榜', style: textStyle))],
-          ),
+          child: Text('排行榜', style: textStyle),
         ),
       ),
       body: KLoading2Load(

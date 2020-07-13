@@ -41,14 +41,8 @@ class _UGCPageState extends State<UGCPage> with AutomaticKeepAliveClientMixin {
     super.build(context);
     return Scaffold(
         appBar: AppBar(
-          elevation: 0,
           automaticallyImplyLeading: false,
-          title: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: <Widget>[Tab(child: Text('UGC', style: textStyle))],
-            ),
-          ),
+          title: Text('UGC', style: textStyle),
         ),
         body: RefreshWrapper(
           onLoadMore: getUGC,

@@ -49,9 +49,7 @@ class _TimeLineState extends State<TimeLinePage>
         automaticallyImplyLeading: false,
         title: Container(
           padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            children: <Widget>[Tab(child: Text('更新表', style: textStyle))],
-          ),
+          child: Text('更新表', style: textStyle),
         ),
       ),
       body: KLoading2Load(

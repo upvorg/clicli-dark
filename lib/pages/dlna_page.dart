@@ -1,4 +1,3 @@
-import 'package:clicli_dark/instance.dart';
 import 'package:dlna/dlna.dart';
 import 'package:flutter/material.dart';
 
@@ -11,44 +10,48 @@ class _DLNAPageState extends State<DLNAPage> {
   List<DLNADevice> _devices = [];
   DLNADevice _dlnaDevice;
   String errMsg = '';
+  DLNAManager dlnaManager = new DLNAManager()..enableCache();
 
   setDlnaDevice(DLNADevice value) {
     _dlnaDevice = value;
-    Instances.dlnaManager.setDevice(value);
+    dlnaManager.setDevice(value);
     setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
-    Instances.dlnaManager.setRefresher(DeviceRefresher(
-        onDeviceAdd: (dlnaDevice) {
-          if (!_devices.contains(dlnaDevice)) {
-            print('add ' + dlnaDevice.toString());
-            _devices.add(dlnaDevice);
-          }
-          setState(() {});
-        },
-        onDeviceRemove: (dlnaDevice) {
-          print('remove ' + dlnaDevice.toString());
-          _devices.remove(dlnaDevice);
-          setState(() {});
-        },
-        onDeviceUpdate: (dlnaDevice) {
-          print('update ' + dlnaDevice.toString());
-          setState(() {});
-        },
-        onSearchError: (error) {
-          print('error ' + error);
-        },
-        onPlayProgress: (positionInfo) {}));
+    dlnaManager.setRefresher(
+      DeviceRefresher(
+          onDeviceAdd: (dlnaDevice) {
+            if (!_devices.contains(dlnaDevice)) {
+              print('add ' + dlnaDevice.toString());
+              _devices.add(dlnaDevice);
+            }
+            setState(() {});
+          },
+          onDeviceRemove: (dlnaDevice) {
+            print('remove ' + dlnaDevice.toString());
+            _devices.remove(dlnaDevice);
+            setState(() {});
+          },
+          onDeviceUpdate: (dlnaDevice) {
+            print('update ' + dlnaDevice.toString());
+            setState(() {});
+          },
+          onSearchError: (error) {
+            print('error ' + error);
+          },
+          onPlayProgress: (positionInfo) {}),
+    );
 
-    Instances.dlnaManager.startSearch();
+    dlnaManager.startSearch();
   }
 
   @override
   void dispose() {
-    Instances.dlnaManager.stopSearch();
+    dlnaManager.stopSearch();
+    dlnaManager.release();
     super.dispose();
   }
 
@@ -103,23 +106,23 @@ class _DLNAPageState extends State<DLNAPage> {
                 icon: Icon(Icons.play_circle_filled),
                 onPressed: () async {
                   final u = VideoObject(
-                      'cpdd 你是唯一',
-                      'https://vt1.doubanio.com/201902111139/0c06a85c600b915d8c9cbdbbaf06ba9f/view/movie/M/302420330.mp4',
-                      VideoObject.VIDEO_MP4);
+                    'cpdd 你是唯一',
+                    'https://vt1.doubanio.com/201902111139/0c06a85c600b915d8c9cbdbbaf06ba9f/view/movie/M/302420330.mp4',
+                    VideoObject.VIDEO_MP4,
+                  );
                   u.refreshPosition = true;
-                  final e = await Instances.dlnaManager.actSetVideoUrl(u);
+                  final e = await dlnaManager.actSetVideoUrl(u);
                   errMsg = e.toString();
                   setState(() {});
-                  final ee = await Instances.dlnaManager.actPlay();
+                  final ee = await dlnaManager.actPlay();
                   errMsg = ee.toString();
                   setState(() {});
-                  // _dlnaManager.release();
                 },
               ),
               // IconButton(
               //   iconSize: 40,
               //   icon: Icon(Icons.pause),
-              //   onPressed: () => Instances.dlnaManager.actPlay(),
+              //   onPressed: () =>dlnaManager.actPlay(),
               // ),
               // IconButton(
               //   iconSize: 40,
@@ -135,7 +138,7 @@ class _DLNAPageState extends State<DLNAPage> {
               children: <Widget>[
                 Text('选择投屏设备', style: theme.textTheme.caption),
                 IconButton(
-                  onPressed: Instances.dlnaManager.startSearch,
+                  onPressed: dlnaManager.startSearch,
                   icon: Icon(Icons.refresh),
                 )
               ],

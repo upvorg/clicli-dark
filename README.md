@@ -4,6 +4,11 @@
 
 ![deploy](https://github.com/cliclitv/clicli-dark/workflows/Dart%20CI/badge.svg)
 
+<table>
+  <th><image src='./screenshort/UGC.jpg' /></th>
+  <th><image src='./screenshort/player.jpg' /></th>
+</table>
+
 ## Commands
 
 - kill Gradle daemon.

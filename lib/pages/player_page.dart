@@ -123,6 +123,7 @@ class _PlayerPageState extends State<PlayerPage>
     _betterPlayerController.addEventsListener((e) {
       if (!mounted) {
         _dispose();
+        return;
       }
       if (e.betterPlayerEventType == BetterPlayerEventType.FINISHED) {
         toggleVideo(currPlayIndex + 1);
@@ -226,7 +227,7 @@ class _PlayerPageState extends State<PlayerPage>
   }
 
   _dispose() {
-    _betterPlayerController.pause();
+    _betterPlayerController?.videoPlayerController?.pause();
     _betterPlayerController?.dispose();
     _tabController?.dispose();
     WidgetsBinding.instance?.removeObserver(this);
@@ -413,11 +414,14 @@ class _PlayerPageState extends State<PlayerPage>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(child: ellipsisText(detail['title'])),
-              InkWell(
+              GestureDetector(
                 onTap: followBgi,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                  color: theme.accentColor.withOpacity(0.4),
+                  padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: theme.accentColor.withOpacity(0.4),
+                    borderRadius: BorderRadius.all(Radius.circular(1.5)),
+                  ),
                   child: Text(
                     hasFollowBgi ? '已追番' : '追番',
                     style: TextStyle(color: theme.accentColor),
@@ -432,7 +436,7 @@ class _PlayerPageState extends State<PlayerPage>
               Text('GV${widget.data['id']}  ', style: caption),
               Text(' $m-$d  ', style: caption),
               Icon(Icons.whatshot, size: 12, color: theme.accentColor),
-              Text('${detail['pv']?.toString() ?? 0} ℃',
+              Text('${detail['pv']?.toString() ?? '∞'} ℃',
                   style: caption.copyWith(color: theme.accentColor)),
             ],
           ),
@@ -459,16 +463,14 @@ class _PlayerPageState extends State<PlayerPage>
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(4)),
-                      color: Theme.of(context).accentColor.withOpacity(0.2),
+                      borderRadius: BorderRadius.all(Radius.circular(2)),
+                      color: Theme.of(context).accentColor.withOpacity(0.4),
                     ),
                     margin: EdgeInsets.symmetric(horizontal: 2),
                     padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     child: Text(
                       tags[i],
-                      style: TextStyle(
-                        color: Theme.of(context).accentColor.withOpacity(0.6),
-                      ),
+                      style: TextStyle(color: Theme.of(context).accentColor),
                     ),
                   ),
                 )
@@ -483,6 +485,9 @@ class _PlayerPageState extends State<PlayerPage>
     return Column(
         children: List.generate(videoList.length, (int i) {
       return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(2)),
+        ),
         margin: EdgeInsets.symmetric(vertical: 5),
         child: InkWell(
             splashColor: color.withOpacity(0.6),
@@ -508,7 +513,7 @@ class _PlayerPageState extends State<PlayerPage>
                     ),
                   ),
                   if (showDownloadIcon)
-                    InkWell(
+                    GestureDetector(
                       child: Icon(Icons.file_download, color: color),
                       onTap: () {
                         downloadByUrl(videoList[i]['content'],

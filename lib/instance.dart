@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:dlna/dlna.dart';
 
 class Instances {
   static final homeStackscaffoldKey = GlobalKey<ScaffoldState>();
@@ -32,8 +31,6 @@ class Instances {
 
   static String appVersion = '';
 
-  static DLNAManager dlnaManager;
-
   static init() async {
     jp.setup(appKey: Config.JPushKey, channel: 'developer-default');
     sp = await SharedPreferences.getInstance();
@@ -42,8 +39,6 @@ class Instances {
       final String buildNumber = packageInfo.buildNumber;
       appVersion = '$v.$buildNumber';
     });
-    // dlnaManager = new DLNAManager();
-    // dlnaManager.enableCache();
   }
 
   static clear() {}
