@@ -184,47 +184,45 @@ class _DownloaderPageState extends State<DownloaderPage> {
   Widget build(BuildContext context) {
     final hasDoingTask = hasDoingTasks();
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
-        child: AppBar(
-          title: Text('下载管理'),
-          actions: selectedTasks.length < 1
-              ? [
-                  IconButton(
-                    icon: Icon(hasDoingTask ? Icons.pause : Icons.play_arrow),
-                    onPressed: () async {
-                      if (hasDoingTask) {
-                        await pauseAllPausedTask();
-                      } else {
-                        await startAllPausedTask();
-                      }
-                      setState(() {});
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.select_all),
-                    onPressed: () {
-                      _tasks.forEach((t) {
-                        selectedTasks.add(t.taskId);
-                      });
-                      setState(() {});
-                    },
-                  )
-                ]
-              : [
-                  IconButton(
-                    icon: Icon(Icons.delete_outline),
-                    onPressed: removeSelectedTasks,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.cancel),
-                    onPressed: () {
-                      selectedTasks = [];
-                      setState(() {});
-                    },
-                  ),
-                ],
-        ),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('下载管理'),
+        actions: selectedTasks.length < 1
+            ? [
+                IconButton(
+                  icon: Icon(hasDoingTask ? Icons.pause : Icons.play_arrow),
+                  onPressed: () async {
+                    if (hasDoingTask) {
+                      await pauseAllPausedTask();
+                    } else {
+                      await startAllPausedTask();
+                    }
+                    setState(() {});
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.select_all),
+                  onPressed: () {
+                    _tasks.forEach((t) {
+                      selectedTasks.add(t.taskId);
+                    });
+                    setState(() {});
+                  },
+                )
+              ]
+            : [
+                IconButton(
+                  icon: Icon(Icons.delete_outline),
+                  onPressed: removeSelectedTasks,
+                ),
+                IconButton(
+                  icon: Icon(Icons.cancel),
+                  onPressed: () {
+                    selectedTasks = [];
+                    setState(() {});
+                  },
+                ),
+              ],
       ),
       body: ListView.builder(
         itemBuilder: (ctx, i) {

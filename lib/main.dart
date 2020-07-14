@@ -1,13 +1,14 @@
 import 'package:clicli_dark/instance.dart';
-import 'package:clicli_dark/pages/bgi_page.dart';
+import 'package:clicli_dark/pages/home_stack/bgi_page.dart';
 import 'package:clicli_dark/pages/history_page.dart';
 import 'package:clicli_dark/pages/home_stack/home_page.dart';
 import 'package:clicli_dark/pages/home_stack/me_page.dart';
-import 'package:clicli_dark/pages/home_stack/time_line_page.dart';
+import 'package:clicli_dark/pages/time_line_page.dart';
 import 'package:clicli_dark/pages/home_stack/ugc_page.dart';
 import 'package:clicli_dark/pages/login_page.dart';
 import 'package:clicli_dark/pages/player_page.dart';
 import 'package:clicli_dark/utils/version_util.dart';
+import 'package:clicli_dark/widgets/WebView.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -49,6 +50,7 @@ class _CliCliAppState extends State<CliCliApp> {
   }
 
   Route _onGenerateRoute(RouteSettings settings) {
+    final Map arg = settings.arguments;
     final Map<String, WidgetBuilder> routes = {
       'CliCli://': (_) => HomePage(),
       'CliCli://home': (_) => HomePage(),
@@ -57,21 +59,7 @@ class _CliCliAppState extends State<CliCliApp> {
       'CliCli://fav': (_) => BgiPage(),
       'CliCli://timeline': (_) => TimeLinePage(),
       'CliCli://history': (_) => HistoryPage(),
-      // '/webView': (_) {
-      //   Map arg = settings.arguments;
-      //   return WebviewScaffold(
-      //     url: arg['url'],
-      //     appBar: AppBar(
-      //       textTheme: TextTheme(
-      //         title: TextStyle(
-      //           color: Colors.white,
-      //           fontSize: 18,
-      //         ),
-      //       ),
-      //       title: Text(arg['title']),
-      //     ),
-      //   );
-      // },
+      'CliCli://webView': (_) => CWebView(url: arg['url'])
     };
 
     final WidgetBuilder widget = routes[settings.name];

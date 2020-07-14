@@ -28,10 +28,7 @@ class _RankPageState extends State<RankPage> {
       appBar: AppBar(
         elevation: 0,
         automaticallyImplyLeading: false,
-        title: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Text('排行榜', style: textStyle),
-        ),
+        title: Text('排行榜', style: textStyle),
       ),
       body: KLoading2Load(
         load: getRankInfo,

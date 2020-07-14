@@ -13,11 +13,7 @@ class TimeLinePage extends StatefulWidget {
   }
 }
 
-class _TimeLineState extends State<TimeLinePage>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
+class _TimeLineState extends State<TimeLinePage> {
   static const List week = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
   List<List> data = [[], [], [], [], [], [], []];
 
@@ -41,16 +37,11 @@ class _TimeLineState extends State<TimeLinePage>
   Widget build(BuildContext context) {
     final textStyle =
         TextStyle(color: Theme.of(context).accentColor, fontSize: 24);
-    super.build(context);
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
         automaticallyImplyLeading: false,
-        title: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Text('更新表', style: textStyle),
-        ),
+        title: Text('更新表', style: textStyle),
       ),
       body: KLoading2Load(
         load: getUGC,

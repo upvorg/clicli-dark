@@ -169,10 +169,7 @@ class _TagPageState extends State<TagPage> {
       appBar: AppBar(
         elevation: 0,
         automaticallyImplyLeading: false,
-        title: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Text(widget.tag, style: textStyle),
-        ),
+        title: Text(widget.tag, style: textStyle),
       ),
       body: RefreshWrapper(
         scrollController: _scrollController,

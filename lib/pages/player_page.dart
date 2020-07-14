@@ -8,6 +8,7 @@ import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/pages/search_page.dart';
 import 'package:clicli_dark/utils/reg_utils.dart';
 import 'package:clicli_dark/utils/toast_utils.dart';
+import 'package:clicli_dark/widgets/WebView.dart';
 import 'package:clicli_dark/widgets/common_widget.dart';
 import 'package:clicli_dark/widgets/loading2load.dart' show loadingWidget;
 import 'package:flutter/cupertino.dart';
@@ -15,7 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 //https://stackoverflow.com/questions/52431109/flutter-video-player-fullscreen
 class PlayerPage extends StatefulWidget with WidgetsBindingObserver {
@@ -109,7 +109,7 @@ class _PlayerPageState extends State<PlayerPage>
                 end: Alignment.topCenter,
               ),
             ),
-            defaultErrorText: '加载失败 (っ °Д °;)っ'),
+            defaultErrorText: '出错了, 试试点击投稿人头像吧 (っ °Д °;)っ'),
       ),
       betterPlayerDataSource: betterPlayerDataSource,
       videoListLen: videoList.length,
@@ -333,6 +333,13 @@ class _PlayerPageState extends State<PlayerPage>
                                   setState(() {
                                     showDownloadIcon = !showDownloadIcon;
                                   });
+                                },
+                                onTap: () {
+                                  toWebView(
+                                    context,
+                                    url:
+                                        'https://clicli.me/play/gv${widget.data['id']}',
+                                  );
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 10),
@@ -579,34 +586,8 @@ class _PlayerProfile extends State<PlayerProfile>
       child: MarkdownBody(
           // selectable: true,
           data: meta + content,
-          onTapLink: (url) async {
-            showDialog<Null>(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text('提示'),
-                    content: Text('是否使用外部打开该链接？\r\n\r\n $url'),
-                    actions: <Widget>[
-                      FlatButton(
-                        child: Text('取消'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      FlatButton(
-                        child: Text('确定'),
-                        onPressed: () async {
-                          if (await canLaunch(url)) {
-                            await launch(url);
-                          } else {
-                            showErrorSnackBar('打开链接失败');
-                          }
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                });
+          onTapLink: (url) {
+            toWebView(context, url: url);
           },
           styleSheetTheme: MarkdownStyleSheetBaseTheme.platform,
           styleSheet: MarkdownStyleSheet(
