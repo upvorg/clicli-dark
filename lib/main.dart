@@ -59,7 +59,7 @@ class _CliCliAppState extends State<CliCliApp> {
       'CliCli://fav': (_) => BgiPage(),
       'CliCli://timeline': (_) => TimeLinePage(),
       'CliCli://history': (_) => HistoryPage(),
-      'CliCli://webView': (_) => CWebView(url: arg['url'])
+      'CliCli://webview': (_) => CWebView(url: arg['url'])
     };
 
     final WidgetBuilder widget = routes[settings.name];
