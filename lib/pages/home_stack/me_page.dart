@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clicli_dark/instance.dart';
 import 'package:clicli_dark/utils/version_util.dart';
 import 'package:clicli_dark/widgets/CustomSwitch.dart';
-import 'package:clicli_dark/widgets/WebView.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -124,17 +123,6 @@ class _MePageState extends State<MePage> with AutomaticKeepAliveClientMixin {
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: () =>
                         launch('https://jq.qq.com/?_wv=1027&k=5lfSD1B'),
-                  ),
-                  ListTile(
-                    title: Text('番剧报错'),
-                    trailing: Icon(Icons.keyboard_arrow_right),
-                    onTap: () {
-                      toWebView(
-                        context,
-                        url:
-                            'https://github.com/cliclitv/clicli-dark/issues/new?assignees=&labels=%E7%95%AA%E5%89%A7%E6%8A%A5%E9%94%99&template=----.md&title=',
-                      );
-                    },
                   ),
                   ListTile(
                     title: Text('检查更新'),

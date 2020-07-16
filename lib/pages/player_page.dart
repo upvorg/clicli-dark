@@ -109,7 +109,7 @@ class _PlayerPageState extends State<PlayerPage>
                 end: Alignment.topCenter,
               ),
             ),
-            defaultErrorText: '出错了, 试试点击投稿人头像吧 (っ °Д °;)っ'),
+            defaultErrorText: '出错了 (っ °Д °;)っ'),
       ),
       betterPlayerDataSource: betterPlayerDataSource,
       videoListLen: videoList.length,
@@ -333,13 +333,6 @@ class _PlayerPageState extends State<PlayerPage>
                                   setState(() {
                                     showDownloadIcon = !showDownloadIcon;
                                   });
-                                },
-                                onTap: () {
-                                  toWebView(
-                                    context,
-                                    url:
-                                        'https://clicli.me/play/gv${widget.data['id']}',
-                                  );
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 10),

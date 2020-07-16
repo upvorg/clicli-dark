@@ -6,7 +6,7 @@ import 'package:clicli_dark/utils/toast_utils.dart';
 import 'package:clicli_dark/api/post.dart';
 import 'package:package_info/package_info.dart';
 import 'package:flutter/material.dart';
-import 'package:clicli_dark/widgets/WebView.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class VersionManager {
   static Future<PackageInfo> getAppVersion() async {
@@ -74,15 +74,13 @@ Future<void> checkAppUpdate() async {
                   FlatButton(
                     child: Text('更新'),
                     onPressed: () {
-                      toWebView(context,
-                          url: 'https://admin.clicli.me/register');
+                      launch('https://admin.clicli.me/register');
                     },
                   ),
                   FlatButton(
                     child: Text('还是更新'),
                     onPressed: () {
-                      toWebView(context,
-                          url: 'https://admin.clicli.me/register');
+                      launch('https://admin.clicli.me/register');
                     },
                   ),
                 ],
