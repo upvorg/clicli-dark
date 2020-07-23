@@ -25,7 +25,7 @@ void showErrorSnackBar(String text) {
     toastLength: Toast.LENGTH_LONG,
     toastGravity: ToastGravity.BOTTOM,
     icon: ICON.ERROR,
-    radius: 100,
+    radius: 10,
     elevation: 10,
     textColor: Colors.white,
     backgroundColor: Colors.black,
