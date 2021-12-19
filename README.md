@@ -1,8 +1,9 @@
-<h2 align='center'> CliCli Dark </h2>
+<h2 align='center'> :ZAP: </h2>
 
-<p align='center'> :zap: CliCli 纯黑 | <a href='https://app.clicli.me'>Download</a></p>
+<p align='center'> :zap: | <a href=''>Download</a></p>
 
 **本软件不得用于商业用途,仅做学习交流**
+**开源不易，请遵守开源协议**
 
 ![deploy](https://github.com/cliclitv/clicli-dark/workflows/Dart%20CI/badge.svg)
 
