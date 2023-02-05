@@ -1,11 +1,9 @@
-<h2 align='center'> :ZAP: </h2>
+<h2 align='center'> 🍡 </h2>
 
-<p align='center'> :zap: | <a href=''>Download</a></p>
+<p><a href='https://cdn.jsdelivr.net/gh/upvorg/cdn@master/apk/app-arm64-v8a-release.apk'>Download</a></p>
 
 **本软件不得用于商业用途,仅做学习交流**
 **开源不易，请遵守开源协议**
-
-![deploy](https://github.com/cliclitv/clicli-dark/workflows/Dart%20CI/badge.svg)
 
 <table>
   <th><image src='./screenshort/UGC.jpg' /></th>
