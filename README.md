@@ -7,8 +7,8 @@
 > **本软件不得用于商业用途,仅做学习交流。 开源不易，请遵守开源协议**  
 
 <table>
-  <th><image src='./screenshort/UGC.jpg' /></th>
-  <th><image src='./screenshort/player.jpg' /></th>
+  <th><image src='https://github.com/upvorg/upv/raw/enime/screenshort/Home.jpg' /></th>
+  <th><image src='https://github.com/upvorg/upv/raw/enime/screenshort/Popular.jpg' /></th>
 </table>
 
 ## License
